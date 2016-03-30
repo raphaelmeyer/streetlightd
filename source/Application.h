@@ -8,14 +8,16 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
+#include "SensorListener.h"
 #include "Presentation.h"
 
-class Application
+class Application :
+    public SensorListener
 {
 public:
   Application(Presentation &presentation);
 
-  void brightness(double value);
+  void brightness(double value) override;
 
 private:
   Presentation &presentation;

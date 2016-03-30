@@ -8,6 +8,10 @@
 #include "Mqtt.h"
 #include "StreetlightProxy.h"
 
+#include "Application.h"
+#include "KeyValueEncoder.h"
+#include "Session.h"
+
 #include <dbus-c++/dbus.h>
 #include <dbus-c++/api.h>
 #include <dbus-c++-1/dbus-c++/dbus.h>
@@ -21,23 +25,39 @@ class Brightness :
     public DBus::ObjectProxy
 {
 public:
-  Brightness(Mqtt &_mqtt, DBus::Connection& connection) :
+  Brightness(SensorListener &_sensorListener, DBus::Connection& connection) :
     DBus::ObjectProxy(connection, "/StreetLight", "ch.bbv.StreetLight.Brightness"),
-    mqtt{_mqtt}
+    sensorListener{_sensorListener}
   {
   }
 
   void update(const double& value) override
   {
-    const std::string topic{"devices/Device1/messages/devicebound/test"};
-    std::stringstream stream;
-    stream << "brightness " << value << std::endl;
-    const std::string message{stream.str()};
+    sensorListener.brightness(value);
+  }
+
+private:
+   SensorListener &sensorListener;
+};
+
+class AzureMqtt :
+    public Session
+{
+public:
+  AzureMqtt(Mqtt &_mqtt) :
+    mqtt{_mqtt}
+  {
+  }
+
+  void send(const std::string &message) override
+  {
     mqtt.publish(nullptr, topic.c_str(), message.size(), message.c_str(), 2, false);
   }
 
 private:
-   Mqtt &mqtt;
+  Mqtt &mqtt;
+  const std::string topic{"devices/Device1/messages/devicebound/test"};
+
 };
 
 int main()
@@ -49,7 +69,11 @@ int main()
   DBus::default_dispatcher = &dispatcher;
   DBus::Connection connection = DBus::Connection::SessionBus();
 
-  Brightness brightness(mqtt, connection);
+  AzureMqtt session{mqtt};
+  KeyValueEncoder presentation{session};
+  Application application{presentation};
+
+  Brightness brightness(application, connection);
 
   mqtt.loop_start();
   dispatcher.enter();

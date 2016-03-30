@@ -15,11 +15,18 @@ LIBS += -pthread
 
 SOURCES += \
     source/main.cpp \
-    source/Mqtt.cpp
+    source/Mqtt.cpp \
+    source/Application.cpp \
+    source/KeyValueEncoder.cpp
 
 HEADERS += \
     source/Mqtt.h \
-    source/StreetlightProxy.h
+    source/StreetlightProxy.h \
+    source/Application.h \
+    source/KeyValueEncoder.h \
+    source/Presentation.h \
+    source/Session.h \
+    source/SensorListener.h
 
 DISTFILES += \
     streetlight.dbus.xml
