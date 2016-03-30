@@ -8,14 +8,16 @@
 #ifndef KEYVALUEENCODER_H
 #define KEYVALUEENCODER_H
 
+#include "Presentation.h"
 #include "Session.h"
 
-class KeyValueEncoder
+class KeyValueEncoder :
+    public Presentation
 {
 public:
   KeyValueEncoder(Session &session);
 
-  void brightness(double value);
+  void brightness(double value) override;
 
 private:
   Session &session;

@@ -12,10 +12,15 @@ LIBS += -lgmock_main -lgmock -lpthread
 
 SOURCES += \
     source/KeyValueEncoder_Test.cpp \
-    source/KeyValueEncoder.cpp
+    source/KeyValueEncoder.cpp \
+    source/Application_Test.cpp \
+    source/Application.cpp
 
 HEADERS += \
     source/Session_Mock.h \
     source/Session.h \
-    source/KeyValueEncoder.h
+    source/KeyValueEncoder.h \
+    source/Application.h \
+    source/Presentation_Mock.h \
+    source/Presentation.h
 
