@@ -1,0 +1,6 @@
+
+streetlightd has to be in the path
+
+You can do this for example with:
+  export PATH=$PATH:<path to your build directory>
+
