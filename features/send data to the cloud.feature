@@ -9,16 +9,23 @@ Feature: Send data to the cloud
   In order to selectively turn street lamps on or off
 
 
-Scenario: Receive a brightness value
+Scenario Outline: Receive a brightness value
   Given I have a DBus brightness sensor
   And I subscribe to the azure receive topic on the local mqtt broker
   And I start streetlightd
 
-  When I signal a new brightness value of 0.34
+  When I signal a new brightness value of <value>
 
   Then I expect one mqtt message with the content:
     """
-    brightness 0.34
+    brightness <value>
 
     """
+
+  Examples:
+    | value |
+    | 0     |
+    | 0.42  |
+    | 0.57  |
+    | 1     |
 

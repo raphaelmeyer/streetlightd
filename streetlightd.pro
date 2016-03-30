@@ -10,11 +10,17 @@ CONFIG -= qt
 CONFIG += c++11
 
 LIBS += -lmosquittopp
+LIBS += -ldbus-c++-1
+LIBS += -pthread
 
 SOURCES += \
     source/main.cpp \
     source/Mqtt.cpp
 
 HEADERS += \
-    source/Mqtt.h
+    source/Mqtt.h \
+    source/StreetlightProxy.h
+
+DISTFILES += \
+    streetlight.dbus.xml
 

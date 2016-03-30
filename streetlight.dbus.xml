@@ -1,0 +1,15 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+
+<node name="/StreetLight">
+  <interface name="ch.bbv.StreetLight.Brightness">
+    <signal name="update">
+      <arg type="d" name="value" />
+    </signal>
+  </interface>
+  <interface name="ch.bbv.StreetLight.Lamp">
+    <method name="set">
+      <arg direction="in"  type="d" name="value" />
+    </method>
+  </interface>
+</node>
