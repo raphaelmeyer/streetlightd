@@ -41,6 +41,7 @@ int main()
 
   Application application{brightness, presentation};
 
+  //TODO Timer is used for acceptance tests, use own timer when not under test
   Timer timer{connection, application};
 
   session.start();

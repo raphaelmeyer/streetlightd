@@ -15,6 +15,7 @@ class Session
 public:
   virtual ~Session() = default;
 
+  //TODO do not use a string (in the case somebody wants to send binary data)
   virtual void send(const std::string &message) = 0;
 
 };

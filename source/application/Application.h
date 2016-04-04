@@ -12,6 +12,10 @@
 #include "Brightness.h"
 #include "Presentation.h"
 
+/**
+ * Simple application logic that reads all values on a timeout and forwards it.
+ * Same for receiving.
+ */
 class Application :
     public TimerListener
 {

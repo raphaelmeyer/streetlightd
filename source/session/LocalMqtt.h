@@ -12,6 +12,9 @@
 
 #include <mosquittopp.h>
 
+/**
+ * Simple mqtt session implementation that connects to a local mqtt server.
+ */
 class LocalMqtt :
     public Session,
     private mosqpp::mosquittopp

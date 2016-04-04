@@ -12,6 +12,13 @@
 
 #include <application/Presentation.h>
 
+/**
+ * Own representation of key-value pairs that never should be used.
+ *
+ * document := { entry }
+ * entry := identifier value '\n'
+ * value := identifier | number
+ */
 class KeyValueEncoder :
     public Presentation
 {
