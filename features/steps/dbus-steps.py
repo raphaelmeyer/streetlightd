@@ -10,7 +10,8 @@ import subprocess
 
 @given(u'I have a DBus brightness sensor')
 def step_impl(context):
-	context.dbus = subprocess.Popen(['python', 'features/steps/streetlight.py'])
+	#TODO make it independent of working directory
+	context.dbus = subprocess.Popen(['python', 'steps/streetlight.py'])
 
 @given(u'the brightness is {value:g}')
 def step_impl(context, value):
