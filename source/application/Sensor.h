@@ -5,15 +5,15 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef BRIGHTNESS_H
-#define BRIGHTNESS_H
+#ifndef SENSOR_H
+#define SENSOR_H
 
-class Brightness
+class Sensor
 {
 public:
-  virtual ~Brightness() = default;
+  virtual ~Sensor() = default;
 
-  virtual double value() = 0;
+  virtual double get() = 0;
 
 };
 

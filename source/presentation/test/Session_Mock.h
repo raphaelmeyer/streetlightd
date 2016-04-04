@@ -16,7 +16,12 @@ class SessionMock :
     public Session
 {
 public:
+  MOCK_METHOD0(setUp, void());
+  MOCK_METHOD0(connect, void());
   MOCK_METHOD1(send, void(const std::string &));
+  MOCK_METHOD1(subscribe, void(const std::string&));
+  MOCK_METHOD0(close, void());
+  MOCK_METHOD1(setMessageCallback, void(std::function<void(const std::string&)>));
 
 };
 

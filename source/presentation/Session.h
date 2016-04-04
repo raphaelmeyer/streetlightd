@@ -9,10 +9,13 @@
 #define SESSION
 
 #include <string>
+#include <functional>
 
 class Session
 {
 public:
+  typedef std::function<void(const std::string&)> Callback;
+
   virtual ~Session() = default;
   
   //TODO Following are method stubs, they may be altered to fit our needs
@@ -25,7 +28,7 @@ public:
   virtual void send(const std::string &message) = 0;
   virtual void subscribe(const std::string& target) = 0;
   virtual void close() = 0;
-  virtual void setMessageCallback(std::function<void(const std::string&)> function) = 0;
+  virtual void setMessageCallback(Callback function) = 0;
 
 };
 

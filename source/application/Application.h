@@ -9,7 +9,9 @@
 #define APPLICATION_H
 
 #include "TimerListener.h"
-#include "Brightness.h"
+#include "PresentationListener.h"
+#include "Sensor.h"
+#include "Actor.h"
 #include "Presentation.h"
 
 /**
@@ -17,15 +19,18 @@
  * Same for receiving.
  */
 class Application :
-    public TimerListener
+    public TimerListener,
+    public PresentationListener
 {
 public:
-  Application(Brightness &brightness, Presentation &presentation);
+  Application(Sensor &brightness_, Actor &luminosity, Presentation &presentation);
 
   void timeout() override;
+  void luminosity(double) override;
 
 private:
-  Brightness &brightness_;
+  Sensor &brightness_;
+  Actor &luminosity_;
   Presentation &presentation;
 
 };

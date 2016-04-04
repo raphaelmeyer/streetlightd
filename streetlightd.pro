@@ -7,7 +7,8 @@ TEMPLATE = app
 CONFIG += console
 CONFIG -= app_bundle
 CONFIG -= qt
-CONFIG += c++11
+
+QMAKE_CXXFLAGS += -std=c++14
 
 INCLUDEPATH += /usr/include/dbus-c++-1/
 INCLUDEPATH += source/
@@ -22,11 +23,13 @@ SOURCES += \
     source/dbus/BrightnessSensor.cpp \
     source/dbus/Timer.cpp \
     source/presentation/KeyValueEncoder.cpp \
-    source/session/LocalMqtt.cpp
+    source/session/LocalMqtt.cpp \
+    source/presentation/KeyValueDecoder.cpp \
+    source/dbus/LuminosityActor.cpp
 
 HEADERS += \
     source/application/Application.h \
-    source/application/Brightness.h \
+    source/application/Sensor.h \
     source/application/Presentation.h \
     source/application/TimerListener.h \
     source/dbus/BrightnessSensor.h \
@@ -35,7 +38,9 @@ HEADERS += \
     source/dbus/Timer.h \
     source/presentation/KeyValueEncoder.h \
     source/presentation/Session.h \
-    source/session/LocalMqtt.h
+    source/session/LocalMqtt.h \
+    source/presentation/KeyValueDecoder.h \
+    source/dbus/LuminosityActor.h
 
 OTHER_FILES += \
     streetlight.dbus.xml \

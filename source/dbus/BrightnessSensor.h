@@ -10,7 +10,7 @@
 
 #include "StreetlightProxy.h"
 
-#include <application/Brightness.h>
+#include <application/Sensor.h>
 
 #include <dbus-c++/dbus.h>
 
@@ -18,14 +18,14 @@ class BrightnessSensor :
     public ch::bbv::StreetLight::Brightness_proxy,
     public DBus::IntrospectableProxy,
     public DBus::ObjectProxy,
-    public Brightness
+    public Sensor
 {
 public:
   BrightnessSensor(DBus::Connection& connection);
 
   void update(const double& value);
 
-  double value() override;
+  double get() override;
 
 };
 

@@ -4,9 +4,7 @@
   <interface name="ch.bbv.StreetLight.Brightness">
     <property name="value" type="d" access="read"/>
   </interface>
-  <interface name="ch.bbv.StreetLight.Lamp">
-    <method name="set">
-      <arg direction="in"  type="d" name="value" />
-    </method>
+  <interface name="ch.bbv.luminosity">
+    <property name="scaled" type="d" access="readwrite"/>
   </interface>
 </node>

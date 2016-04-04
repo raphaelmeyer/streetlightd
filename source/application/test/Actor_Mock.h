@@ -5,18 +5,18 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef BRIGHTNESS_MOCK_H
-#define BRIGHTNESS_MOCK_H
+#ifndef ACTOR_MOCK_H
+#define ACTOR_MOCK_H
 
-#include "../Brightness.h"
+#include "../Actor.h"
 
 #include <gmock/gmock.h>
 
-class BrightnessMock :
-    public Brightness
+class ActorMock :
+    public Actor
 {
 public:
-  MOCK_METHOD0(value, double());
+  MOCK_METHOD1(set, void(double));
 
 };
 

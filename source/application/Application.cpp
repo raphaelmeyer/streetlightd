@@ -7,14 +7,20 @@
 
 #include "Application.h"
 
-Application::Application(Brightness &_brightness, Presentation &_presentation) :
+Application::Application(Sensor &_brightness, Actor &_luminosity, Presentation &_presentation) :
   brightness_{_brightness},
+  luminosity_{_luminosity},
   presentation{_presentation}
 {
 }
 
 void Application::timeout()
 {
-  const auto brightnessValue = brightness_.value();
+  const auto brightnessValue = brightness_.get();
   presentation.brightness(brightnessValue);
+}
+
+void Application::luminosity(double value)
+{
+  luminosity_.set(value);
 }

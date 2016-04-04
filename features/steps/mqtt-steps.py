@@ -14,6 +14,7 @@ class AzureMqtt:
 		self.client.on_connect = self.on_connect
 		self.client.on_subscribe = self.on_subscribe
 		self.client.on_message = self.on_message
+		self.client.on_publish = self.on_publish
 		self.client.connect("localhost", 1883, 60)
 
 		while not self.subscribed:
@@ -21,6 +22,13 @@ class AzureMqtt:
 
 	def waitForMessage(self):
 		while not self.messages:
+			self.client.loop(1)
+
+
+	def publish(self, message):
+		self.published = False
+		self.client.publish("streetlight/1/data", payload=message, qos=2, retain=True)
+		while not self.published:
 			self.client.loop(1)
 
 	def on_connect(self, client, userdata, flags, rc):
@@ -36,10 +44,17 @@ class AzureMqtt:
 	def on_message(self, client, userdata, msg):
 		self.messages.append(msg)
 
+	def on_publish(self, mosq, obj, mid):
+		self.published = True
 
-@given(u'I subscribe to the azure receive topic on the local mqtt broker')
+
+@given(u'I connect to the local mqtt broker')
 def step_impl(context):
 	context.mqtt = AzureMqtt();
+
+@when(u'I send a mqtt message with the content')
+def step_impl(context):
+	context.mqtt.publish(context.text)
 
 @then(u'I expect one mqtt message with the content')
 def step_impl(context):

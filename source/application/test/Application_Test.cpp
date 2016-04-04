@@ -7,7 +7,8 @@
 
 #include "../Application.h"
 #include "Presentation_Mock.h"
-#include "Brightness_Mock.h"
+#include "Sensor_Mock.h"
+#include "Actor_Mock.h"
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
@@ -17,17 +18,25 @@ class Application_Test:
     public testing::Test
 {
 public:
-  testing::StrictMock<BrightnessMock> brightness{};
+  testing::StrictMock<SensorMock> brightness{};
+  testing::StrictMock<ActorMock> luminosity{};
   testing::StrictMock<PresentationMock> presentation{};
-  Application testee{brightness, presentation};
+  Application testee{brightness, luminosity, presentation};
 
 };
 
 
 TEST_F(Application_Test, the_brightness_is_read_when_a_timout_occurs)
 {
-  EXPECT_CALL(brightness, value()).WillOnce(testing::Return(0.12));
+  EXPECT_CALL(brightness, get()).WillOnce(testing::Return(0.12));
   EXPECT_CALL(presentation, brightness(0.12));
 
   testee.timeout();
+}
+
+TEST_F(Application_Test, writes_the_luminosity_when_received_a_new_value)
+{
+  EXPECT_CALL(luminosity, set(0.45));
+
+  testee.luminosity(0.45);
 }

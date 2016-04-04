@@ -9,10 +9,10 @@ Feature: Send data to the cloud
   In order to selectively turn street lamps on or off
 
 
-Scenario Outline: Receive a brightness value
-  Given I have a DBus brightness sensor
+Scenario Outline: Forward a brightness value to the cloud
+  Given I have a DBus streetlight
   And the brightness is <value>
-  And I subscribe to the azure receive topic on the local mqtt broker
+  And I connect to the local mqtt broker
   And I start streetlightd
 
   When I tell streetlightd to update

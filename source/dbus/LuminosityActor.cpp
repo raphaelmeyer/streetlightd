@@ -5,18 +5,14 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "BrightnessSensor.h"
+#include "LuminosityActor.h"
 
-BrightnessSensor::BrightnessSensor(DBus::Connection &connection) :
+LuminosityActor::LuminosityActor(DBus::Connection &connection) :
   DBus::ObjectProxy(connection, "/StreetLight", "ch.bbv.StreetLight")
 {
 }
 
-void BrightnessSensor::update(const double &value)
+void LuminosityActor::set(double value)
 {
-}
-
-double BrightnessSensor::get()
-{
-  return value();
+  scaled(value);
 }

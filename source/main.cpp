@@ -7,10 +7,12 @@
 
 #include "application/Application.h"
 #include "presentation/KeyValueEncoder.h"
+#include "presentation/KeyValueDecoder.h"
 #include "session/LocalMqtt.h"
 
 #include "dbus/Timer.h"
 #include "dbus/BrightnessSensor.h"
+#include "dbus/LuminosityActor.h"
 
 #include <dbus-c++/dbus.h>
 #include <dbus-c++/api.h>
@@ -33,13 +35,19 @@ int main()
   DBus::default_dispatcher = &dispatcher;
 
   LocalMqtt session{};
-  KeyValueEncoder presentation{session};
+  KeyValueEncoder presentationEncoder{session};
 
   DBus::Connection connection = DBus::Connection::SessionBus();
   connection.request_name("ch.bbv.streetlightd");
-  BrightnessSensor brightness(connection);
+  BrightnessSensor brightness{connection};
+  LuminosityActor luminosity{connection};
 
-  Application application{brightness, presentation};
+  Application application{brightness, luminosity, presentationEncoder};
+
+  KeyValueDecoder presentationDecoder{application};
+  session.setMessageCallback([&presentationDecoder](const std::string &message){
+    presentationDecoder.decode(message);
+  });
 
   //TODO Timer is used for acceptance tests, use own timer when not under test
   Timer timer{connection, application};
