@@ -5,30 +5,30 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "MqttTest.h"
+#include "LocalMqtt.h"
 
-MqttTest::MqttTest() :
+LocalMqtt::LocalMqtt() :
   mosqpp::mosquittopp{nullptr}
 {
   connect("localhost");
 }
 
-MqttTest::~MqttTest()
+LocalMqtt::~LocalMqtt()
 {
   disconnect();
 }
 
-void MqttTest::send(const std::string &message)
+void LocalMqtt::send(const std::string &message)
 {
   publish(nullptr, topic.c_str(), message.size(), message.c_str(), 2, false);
 }
 
-void MqttTest::start()
+void LocalMqtt::start()
 {
   loop_start();
 }
 
-void MqttTest::stop()
+void LocalMqtt::stop()
 {
   loop_stop();
 }

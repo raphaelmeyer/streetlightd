@@ -7,7 +7,7 @@
 
 #include "Timer.h"
 #include "BrightnessSensor.h"
-#include "MqttTest.h"
+#include "LocalMqtt.h"
 
 #include "Application.h"
 #include "KeyValueEncoder.h"
@@ -33,7 +33,7 @@ int main()
 
   DBus::default_dispatcher = &dispatcher;
 
-  MqttTest session{};
+  LocalMqtt session{};
   KeyValueEncoder presentation{session};
 
   DBus::Connection connection = DBus::Connection::SessionBus();

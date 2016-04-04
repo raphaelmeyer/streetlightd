@@ -20,8 +20,8 @@ SOURCES += \
     source/Application.cpp \
     source/KeyValueEncoder.cpp \
     source/BrightnessSensor.cpp \
-    source/MqttTest.cpp \
-    source/Timer.cpp
+    source/Timer.cpp \
+    source/LocalMqtt.cpp
 
 HEADERS += \
     source/StreetlightProxy.h \
@@ -30,10 +30,10 @@ HEADERS += \
     source/Presentation.h \
     source/Session.h \
     source/BrightnessSensor.h \
-    source/MqttTest.h \
     source/TimerAdaptor.h \
     source/Timer.h \
-    source/TimerListener.h
+    source/TimerListener.h \
+    source/LocalMqtt.h
 
 DISTFILES += \
     streetlight.dbus.xml

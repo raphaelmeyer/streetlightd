@@ -12,13 +12,13 @@
 
 #include <mosquittopp.h>
 
-class MqttTest :
+class LocalMqtt :
     public Session,
     private mosqpp::mosquittopp
 {
 public:
-  MqttTest();
-  ~MqttTest();
+  LocalMqtt();
+  ~LocalMqtt();
 
   void send(const std::string &message) override;
 
