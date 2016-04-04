@@ -13,14 +13,14 @@ def step_impl(context):
 	#TODO make it independent of working directory
 	context.dbus = subprocess.Popen(['python', 'steps/streetlight.py'])
 	bus = dbus.SessionBus()
-	while not (dbus.UTF8String('ch.bbv.StreetLight') in bus.list_names()):
+	while not (dbus.UTF8String('ch.bbv.streetlight') in bus.list_names()):
 		time.sleep(0.01)
 
 @given(u'the brightness is {value:g}')
 def step_impl(context, value):
 	bus = dbus.SessionBus()
-	streetlightd = bus.get_object('ch.bbv.StreetLight', '/StreetLight')
-	streetlightd.Set('ch.bbv.StreetLight.Brightness', 'value', dbus.Double(value), dbus_interface=dbus.PROPERTIES_IFACE)
+	streetlightd = bus.get_object('ch.bbv.streetlight', '/ch/bbv/streetlight')
+	streetlightd.Set('ch.bbv.brightness', 'scaled', dbus.Double(value), dbus_interface=dbus.PROPERTIES_IFACE)
 
 @when(u'I tell streetlightd to update')
 def step_impl(context):
@@ -32,6 +32,6 @@ def step_impl(context):
 def step_impl(context, value):
 	time.sleep(0.1)		#TODO is there a better way than sleep?
 	bus = dbus.SessionBus()
-	streetlightd = bus.get_object('ch.bbv.StreetLight', '/StreetLight')
+	streetlightd = bus.get_object('ch.bbv.streetlight', '/ch/bbv/streetlight')
 	luminosity = streetlightd.Get('ch.bbv.luminosity', 'scaled', dbus_interface=dbus.PROPERTIES_IFACE)
 	assert value == luminosity, 'expected luminosity: ' + str(value) + ', got: ' + str(luminosity)

@@ -6,17 +6,14 @@
  */
 
 #include "BrightnessSensor.h"
+#include "DbusData.h"
 
 BrightnessSensor::BrightnessSensor(DBus::Connection &connection) :
-  DBus::ObjectProxy(connection, "/StreetLight", "ch.bbv.StreetLight")
-{
-}
-
-void BrightnessSensor::update(const double &value)
+  DBus::ObjectProxy(connection, DbusName, DbusService.c_str())
 {
 }
 
 double BrightnessSensor::get()
 {
-  return value();
+  return scaled();
 }

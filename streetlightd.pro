@@ -40,7 +40,8 @@ HEADERS += \
     source/presentation/Session.h \
     source/session/LocalMqtt.h \
     source/presentation/KeyValueDecoder.h \
-    source/dbus/LuminosityActor.h
+    source/dbus/LuminosityActor.h \
+    source/dbus/DbusData.h
 
 OTHER_FILES += \
     streetlight.dbus.xml \

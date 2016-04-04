@@ -11,27 +11,26 @@
 
 namespace ch {
 namespace bbv {
-namespace StreetLight {
 
-class Brightness_proxy
+class brightness_proxy
 : public ::DBus::InterfaceProxy
 {
 public:
 
-    Brightness_proxy()
-    : ::DBus::InterfaceProxy("ch.bbv.StreetLight.Brightness")
+    brightness_proxy()
+    : ::DBus::InterfaceProxy("ch.bbv.brightness")
     {
     }
 
 public:
 
     /* properties exported by this interface */
-        const double value() {
+        const double scaled() {
             ::DBus::CallMessage call ;
              call.member("Get"); call.interface("org.freedesktop.DBus.Properties");
             ::DBus::MessageIter wi = call.writer(); 
-            const std::string interface_name = "ch.bbv.StreetLight.Brightness";
-            const std::string property_name  = "value";
+            const std::string interface_name = "ch.bbv.brightness";
+            const std::string property_name  = "scaled";
             wi << interface_name;
             wi << property_name;
             ::DBus::Message ret = this->invoke_method (call);
@@ -57,7 +56,7 @@ private:
      */
 };
 
-} } } 
+} } 
 namespace ch {
 namespace bbv {
 

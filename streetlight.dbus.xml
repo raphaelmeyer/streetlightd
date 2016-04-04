@@ -1,8 +1,8 @@
 <!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 
-<node name="/StreetLight">
-  <interface name="ch.bbv.StreetLight.Brightness">
-    <property name="value" type="d" access="read"/>
+<node name="/ch/bbv/streetlight">
+  <interface name="ch.bbv.brightness">
+    <property name="scaled" type="d" access="read"/>
   </interface>
   <interface name="ch.bbv.luminosity">
     <property name="scaled" type="d" access="readwrite"/>

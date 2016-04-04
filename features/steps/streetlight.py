@@ -16,8 +16,8 @@ class Streetlight(dbus.service.Object):
         self.session_bus = dbus.SessionBus()
 	self.brightness = -1
 	self.luminosity = -1
-        name = dbus.service.BusName("ch.bbv.StreetLight", bus=self.session_bus)
-        dbus.service.Object.__init__(self, name, '/StreetLight')
+        name = dbus.service.BusName("ch.bbv.streetlight", bus=self.session_bus)
+        dbus.service.Object.__init__(self, name, '/ch/bbv/streetlight')
 
     @dbus.service.method(dbus.PROPERTIES_IFACE, in_signature='ss', out_signature='v')
     def Get(self, interface_name, property_name):
@@ -25,8 +25,8 @@ class Streetlight(dbus.service.Object):
 
     @dbus.service.method(dbus.PROPERTIES_IFACE, in_signature='ssv')
     def Set(self, interface_name, property_name, value):
-        if interface_name == 'ch.bbv.StreetLight.Brightness':
-            if property_name == 'value':
+        if interface_name == 'ch.bbv.brightness':
+            if property_name == 'scaled':
                 self.brightness = value
         if interface_name == 'ch.bbv.luminosity':
             if property_name == 'scaled':
@@ -35,8 +35,8 @@ class Streetlight(dbus.service.Object):
 
     @dbus.service.method(dbus.PROPERTIES_IFACE, in_signature='s', out_signature='a{sv}')
     def GetAll(self, interface_name):
-	if interface_name == 'ch.bbv.StreetLight.Brightness':
-	        return { 'value': dbus.Double(self.brightness) }
+	if interface_name == 'ch.bbv.brightness':
+	        return { 'scaled': dbus.Double(self.brightness) }
 	elif interface_name == 'ch.bbv.luminosity':
 	        return { 'scaled': dbus.Double(self.luminosity) }
 	else:

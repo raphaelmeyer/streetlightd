@@ -6,9 +6,10 @@
  */
 
 #include "LuminosityActor.h"
+#include "DbusData.h"
 
 LuminosityActor::LuminosityActor(DBus::Connection &connection) :
-  DBus::ObjectProxy(connection, "/StreetLight", "ch.bbv.StreetLight")
+  DBus::ObjectProxy(connection, DbusName, DbusService.c_str())
 {
 }
 

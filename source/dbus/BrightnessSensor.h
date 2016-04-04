@@ -15,15 +15,13 @@
 #include <dbus-c++/dbus.h>
 
 class BrightnessSensor :
-    public ch::bbv::StreetLight::Brightness_proxy,
+    public ch::bbv::brightness_proxy,
     public DBus::IntrospectableProxy,
     public DBus::ObjectProxy,
     public Sensor
 {
 public:
   BrightnessSensor(DBus::Connection& connection);
-
-  void update(const double& value);
 
   double get() override;
 
