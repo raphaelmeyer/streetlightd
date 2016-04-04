@@ -9,7 +9,7 @@
 #define TIMER_H
 
 #include "TimerAdaptor.h"
-#include "TimerListener.h"
+#include <application/TimerListener.h>
 
 #include <dbus-c++/dbus.h>
 

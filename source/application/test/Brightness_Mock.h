@@ -5,20 +5,19 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef PRESENTATION_MOCK
-#define PRESENTATION_MOCK
+#ifndef BRIGHTNESS_MOCK_H
+#define BRIGHTNESS_MOCK_H
 
-#include "Presentation.h"
+#include "../Brightness.h"
 
 #include <gmock/gmock.h>
 
-class PresentationMock :
-    public Presentation
+class BrightnessMock :
+    public Brightness
 {
 public:
-  MOCK_METHOD1(brightness, void(double));
+  MOCK_METHOD0(value, double());
 
 };
 
 #endif
-

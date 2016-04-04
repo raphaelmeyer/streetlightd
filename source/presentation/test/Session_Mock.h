@@ -5,19 +5,20 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef BRIGHTNESS_MOCK_H
-#define BRIGHTNESS_MOCK_H
+#ifndef SESSION_MOCK
+#define SESSION_MOCK
 
-#include "Brightness.h"
+#include "../Session.h"
 
 #include <gmock/gmock.h>
 
-class BrightnessMock :
-    public Brightness
+class SessionMock :
+    public Session
 {
 public:
-  MOCK_METHOD0(value, double());
+  MOCK_METHOD1(send, void(const std::string &));
 
 };
 
 #endif
+

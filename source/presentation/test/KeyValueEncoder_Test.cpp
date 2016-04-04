@@ -5,7 +5,7 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "KeyValueEncoder.h"
+#include "../KeyValueEncoder.h"
 #include "Session_Mock.h"
 
 #include <gtest/gtest.h>

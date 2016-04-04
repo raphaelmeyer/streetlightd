@@ -5,7 +5,7 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "Application.h"
+#include "../Application.h"
 #include "Presentation_Mock.h"
 #include "Brightness_Mock.h"
 

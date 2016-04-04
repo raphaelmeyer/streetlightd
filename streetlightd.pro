@@ -10,6 +10,7 @@ CONFIG -= qt
 CONFIG += c++11
 
 INCLUDEPATH += /usr/include/dbus-c++-1/
+INCLUDEPATH += source/
 
 LIBS += -lmosquittopp
 LIBS += -ldbus-c++-1
@@ -17,27 +18,26 @@ LIBS += -pthread
 
 SOURCES += \
     source/main.cpp \
-    source/Application.cpp \
-    source/KeyValueEncoder.cpp \
-    source/BrightnessSensor.cpp \
-    source/Timer.cpp \
-    source/LocalMqtt.cpp
+    source/application/Application.cpp \
+    source/dbus/BrightnessSensor.cpp \
+    source/dbus/Timer.cpp \
+    source/presentation/KeyValueEncoder.cpp \
+    source/session/LocalMqtt.cpp
 
 HEADERS += \
-    source/StreetlightProxy.h \
-    source/Application.h \
-    source/KeyValueEncoder.h \
-    source/Presentation.h \
-    source/Session.h \
-    source/BrightnessSensor.h \
-    source/TimerAdaptor.h \
-    source/Timer.h \
-    source/TimerListener.h \
-    source/LocalMqtt.h
-
-DISTFILES += \
-    streetlight.dbus.xml
+    source/application/Application.h \
+    source/application/Brightness.h \
+    source/application/Presentation.h \
+    source/application/TimerListener.h \
+    source/dbus/BrightnessSensor.h \
+    source/dbus/StreetlightProxy.h \
+    source/dbus/TimerAdaptor.h \
+    source/dbus/Timer.h \
+    source/presentation/KeyValueEncoder.h \
+    source/presentation/Session.h \
+    source/session/LocalMqtt.h
 
 OTHER_FILES += \
+    streetlight.dbus.xml \
     streetlightd.dbus.xml
 

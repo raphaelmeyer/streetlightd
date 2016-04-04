@@ -5,13 +5,12 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "Timer.h"
-#include "BrightnessSensor.h"
-#include "LocalMqtt.h"
+#include "application/Application.h"
+#include "presentation/KeyValueEncoder.h"
+#include "session/LocalMqtt.h"
 
-#include "Application.h"
-#include "KeyValueEncoder.h"
-#include "Session.h"
+#include "dbus/Timer.h"
+#include "dbus/BrightnessSensor.h"
 
 #include <dbus-c++/dbus.h>
 #include <dbus-c++/api.h>

@@ -9,7 +9,8 @@
 #define BRIGHTNESSSENSOR_H
 
 #include "StreetlightProxy.h"
-#include "Brightness.h"
+
+#include <application/Brightness.h>
 
 #include <dbus-c++/dbus.h>
 

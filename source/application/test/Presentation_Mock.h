@@ -5,18 +5,18 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef SESSION_MOCK
-#define SESSION_MOCK
+#ifndef PRESENTATION_MOCK
+#define PRESENTATION_MOCK
 
-#include "Session.h"
+#include "../Presentation.h"
 
 #include <gmock/gmock.h>
 
-class SessionMock :
-    public Session
+class PresentationMock :
+    public Presentation
 {
 public:
-  MOCK_METHOD1(send, void(const std::string &));
+  MOCK_METHOD1(brightness, void(double));
 
 };
 
