@@ -21,6 +21,8 @@ include_directories("$(PROJECT_BINARY_DIR)")
 include_directories(".")
 include_directories("/usr/include/dbus-c++-1")
 
+add_subdirectory("${PROJECT_SOURCE_DIR}/amqp/")
+
 file(GLOB RAW_SOURCES
     *.h
     protocolstack/*.h

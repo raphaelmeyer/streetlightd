@@ -1,0 +1,3 @@
+[submodule "source/amqp/azure-iot-sdks"]
+	path = source/amqp/azure-iot-sdks
+	url = https://github.com/Azure/azure-iot-sdks.git
