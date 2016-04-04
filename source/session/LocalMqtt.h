@@ -38,8 +38,6 @@ public:
   void close() override {}
 
 private:
-  const std::string topic{"devices/Device1/messages/devicebound/test"};
-
   Callback listener{};
 
   void on_connect(int) override;

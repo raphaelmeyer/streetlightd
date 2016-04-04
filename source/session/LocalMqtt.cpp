@@ -7,6 +7,8 @@
 
 #include "LocalMqtt.h"
 
+//TODO throw exceptions on error
+
 LocalMqtt::LocalMqtt() :
   mosqpp::mosquittopp{nullptr}
 {
@@ -20,7 +22,7 @@ LocalMqtt::~LocalMqtt()
 
 void LocalMqtt::send(const std::string &message)
 {
-  publish(nullptr, topic.c_str(), message.size(), message.c_str(), 2, false);
+  publish(nullptr, "streetlight/sensor", message.size(), message.c_str(), 2, false);
 }
 
 void LocalMqtt::setMessageCallback(Callback function)
@@ -30,7 +32,7 @@ void LocalMqtt::setMessageCallback(Callback function)
 
 void LocalMqtt::on_connect(int)
 {
-  mosqpp::mosquittopp::subscribe(nullptr, "#", 2);
+  mosqpp::mosquittopp::subscribe(nullptr, "streetlight/actor", 2);
 }
 
 void LocalMqtt::on_message(const mosquitto_message *message)

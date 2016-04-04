@@ -5,7 +5,7 @@
 
 import paho.mqtt.client as mqtt
 
-class AzureMqtt:
+class LocalMqtt:
 	def __init__(self):
 		self.messages = []
 		self.subscribed = False
@@ -27,7 +27,7 @@ class AzureMqtt:
 
 	def publish(self, message):
 		self.published = False
-		self.client.publish("streetlight/1/data", payload=message, qos=2, retain=True)
+		self.client.publish("streetlight/actor", payload=message, qos=2, retain=True)
 		while not self.published:
 			self.client.loop(1)
 
@@ -35,7 +35,7 @@ class AzureMqtt:
 		if rc <> 0:
 			raise NotImplementedError('could not connect: ' + str(rc))
 
-		self.client.subscribe("devices/Device1/messages/devicebound/#")
+		self.client.subscribe("streetlight/sensor")
 		self.connected = True
 
 	def on_subscribe(self, client, userdata, mid, granted_qos):
@@ -50,7 +50,7 @@ class AzureMqtt:
 
 @given(u'I connect to the local mqtt broker')
 def step_impl(context):
-	context.mqtt = AzureMqtt();
+	context.mqtt = LocalMqtt();
 
 @when(u'I send a mqtt message with the content')
 def step_impl(context):
