@@ -11,10 +11,11 @@ Feature: Send data to the cloud
 
 Scenario Outline: Receive a brightness value
   Given I have a DBus brightness sensor
+  And the brightness is <value>
   And I subscribe to the azure receive topic on the local mqtt broker
   And I start streetlightd
 
-  When I signal a new brightness value of <value>
+  When I tell streetlightd to update
 
   Then I expect one mqtt message with the content:
     """

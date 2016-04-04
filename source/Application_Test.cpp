@@ -7,6 +7,7 @@
 
 #include "Application.h"
 #include "Presentation_Mock.h"
+#include "Brightness_Mock.h"
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
@@ -16,16 +17,17 @@ class Application_Test:
     public testing::Test
 {
 public:
+  testing::StrictMock<BrightnessMock> brightness{};
   testing::StrictMock<PresentationMock> presentation{};
-  Application testee{presentation};
+  Application testee{brightness, presentation};
 
 };
 
 
-TEST_F(Application_Test, an_update_on_the_brightness_is_directly_forwarded)
+TEST_F(Application_Test, the_brightness_is_read_when_a_timout_occurs)
 {
+  EXPECT_CALL(brightness, value()).WillOnce(testing::Return(0.12));
   EXPECT_CALL(presentation, brightness(0.12));
 
-  testee.brightness(0.12);
+  testee.timeout();
 }
-

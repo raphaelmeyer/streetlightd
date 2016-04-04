@@ -7,12 +7,14 @@
 
 #include "Application.h"
 
-Application::Application(Presentation &_presentation) :
+Application::Application(Brightness &_brightness, Presentation &_presentation) :
+  brightness_{_brightness},
   presentation{_presentation}
 {
 }
 
-void Application::brightness(double value)
+void Application::timeout()
 {
-  presentation.brightness(value);
+  const auto brightnessValue = brightness_.value();
+  presentation.brightness(brightnessValue);
 }

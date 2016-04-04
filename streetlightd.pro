@@ -9,6 +9,8 @@ CONFIG -= app_bundle
 CONFIG -= qt
 CONFIG += c++11
 
+INCLUDEPATH += /usr/include/dbus-c++-1/
+
 LIBS += -lmosquittopp
 LIBS += -ldbus-c++-1
 LIBS += -pthread
@@ -18,7 +20,8 @@ SOURCES += \
     source/Application.cpp \
     source/KeyValueEncoder.cpp \
     source/BrightnessSensor.cpp \
-    source/MqttTest.cpp
+    source/MqttTest.cpp \
+    source/Timer.cpp
 
 HEADERS += \
     source/StreetlightProxy.h \
@@ -26,10 +29,15 @@ HEADERS += \
     source/KeyValueEncoder.h \
     source/Presentation.h \
     source/Session.h \
-    source/SensorListener.h \
     source/BrightnessSensor.h \
-    source/MqttTest.h
+    source/MqttTest.h \
+    source/TimerAdaptor.h \
+    source/Timer.h \
+    source/TimerListener.h
 
 DISTFILES += \
     streetlight.dbus.xml
+
+OTHER_FILES += \
+    streetlightd.dbus.xml
 

@@ -7,13 +7,16 @@
 
 #include "BrightnessSensor.h"
 
-BrightnessSensor::BrightnessSensor(DBus::Connection &connection, SensorListener &_sensorListener) :
-  DBus::ObjectProxy(connection, "/StreetLight", "ch.bbv.StreetLight.Brightness"),
-  sensorListener{_sensorListener}
+BrightnessSensor::BrightnessSensor(DBus::Connection &connection) :
+  DBus::ObjectProxy(connection, "/StreetLight", "ch.bbv.StreetLight")
 {
 }
 
 void BrightnessSensor::update(const double &value)
 {
-  sensorListener.brightness(value);
+}
+
+double BrightnessSensor::value()
+{
+  return this->ch::bbv::StreetLight::Brightness_proxy::value();
 }

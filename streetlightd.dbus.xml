@@ -1,0 +1,7 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+
+<node name="/ch/bbv/streetlightd">
+  <interface name="ch.bbv.timer">
+    <method name="timeout" />
+  </interface>
+</node>

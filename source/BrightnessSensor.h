@@ -9,22 +9,23 @@
 #define BRIGHTNESSSENSOR_H
 
 #include "StreetlightProxy.h"
-#include "SensorListener.h"
+#include "Brightness.h"
 
 #include <dbus-c++/dbus.h>
 
 class BrightnessSensor :
     public ch::bbv::StreetLight::Brightness_proxy,
     public DBus::IntrospectableProxy,
-    public DBus::ObjectProxy
+    public DBus::ObjectProxy,
+    public Brightness
 {
 public:
-  BrightnessSensor(DBus::Connection& connection, SensorListener &sensorListener);
+  BrightnessSensor(DBus::Connection& connection);
 
-  void update(const double& value) override;
+  void update(const double& value);
 
-private:
-   SensorListener &sensorListener;
+  double value() override;
+
 };
 
 #endif

@@ -4,6 +4,8 @@
 # SPDX-License-Identifier:	GPL-3.0+
 
 def after_scenario(context, scenario):
-	context.proc.kill()
-	context.dbus.remove_from_connection()
+	if hasattr(context, 'application'):
+		context.application.kill()
+	if hasattr(context, 'dbus'):
+		context.dbus.kill()
 

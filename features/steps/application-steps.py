@@ -7,5 +7,5 @@ import subprocess
 
 @given(u'I start streetlightd')
 def step_impl(context):
-	context.proc = subprocess.Popen(['streetlightd'])
+	context.application = subprocess.Popen(['streetlightd'])
 

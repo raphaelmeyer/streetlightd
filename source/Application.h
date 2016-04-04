@@ -8,18 +8,20 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-#include "SensorListener.h"
+#include "TimerListener.h"
+#include "Brightness.h"
 #include "Presentation.h"
 
 class Application :
-    public SensorListener
+    public TimerListener
 {
 public:
-  Application(Presentation &presentation);
+  Application(Brightness &brightness, Presentation &presentation);
 
-  void brightness(double value) override;
+  void timeout() override;
 
 private:
+  Brightness &brightness_;
   Presentation &presentation;
 
 };

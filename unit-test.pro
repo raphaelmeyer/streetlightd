@@ -22,5 +22,7 @@ HEADERS += \
     source/KeyValueEncoder.h \
     source/Application.h \
     source/Presentation_Mock.h \
-    source/Presentation.h
+    source/Presentation.h \
+    source/Brightness_Mock.h \
+    source/Brightness.h
 

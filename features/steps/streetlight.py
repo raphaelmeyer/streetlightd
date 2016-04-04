@@ -17,6 +17,10 @@ class Streetlight(dbus.service.Object):
     def Get(self, interface_name, property_name):
         return dbus.Double(self.brightness)
 
+    @dbus.service.method(dbus.PROPERTIES_IFACE, in_signature='ssv')
+    def Set(self, interface_name, property_name, value):
+        self.brightness = value
+
     @dbus.service.method(dbus.PROPERTIES_IFACE, in_signature='s', out_signature='a{sv}')
     def GetAll(self, interface_name):
 	if interface_name == 'ch.bbv.StreetLight.Brightness':
@@ -35,14 +39,9 @@ class Streetlight(dbus.service.Object):
         pass
 
 
-def tick(streetlight):
-    streetlight.update(0.5)
-    return True
-
 if __name__ == '__main__':
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
     loop = gobject.MainLoop()
     streetlight = Streetlight()
-    glib.timeout_add_seconds(1, tick, streetlight)
     loop.run()
 
