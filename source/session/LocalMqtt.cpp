@@ -7,22 +7,23 @@
 
 #include "LocalMqtt.h"
 
-//TODO throw exceptions on error
-
 LocalMqtt::LocalMqtt() :
   mosqpp::mosquittopp{nullptr}
 {
-   mosqpp::mosquittopp::connect("localhost");
+  const auto result = mosqpp::mosquittopp::connect("localhost");
+  throwIfError("connect", result);
 }
 
 LocalMqtt::~LocalMqtt()
 {
-  disconnect();
+  const auto result = disconnect();
+  throwIfError("disconnect", result);
 }
 
 void LocalMqtt::send(const std::string &message)
 {
-  publish(nullptr, "streetlight/sensor", message.size(), message.c_str(), 2, false);
+  const auto result = publish(nullptr, "streetlight/sensor", message.size(), message.c_str(), 2, false);
+  throwIfError("publish", result);
 }
 
 void LocalMqtt::setMessageCallback(Callback function)
@@ -32,7 +33,8 @@ void LocalMqtt::setMessageCallback(Callback function)
 
 void LocalMqtt::on_connect(int)
 {
-  mosqpp::mosquittopp::subscribe(nullptr, "streetlight/actor", 2);
+  const auto result = subscribe(nullptr, "streetlight/actor", 2);
+  throwIfError("subscribe", result);
 }
 
 void LocalMqtt::on_message(const mosquitto_message *message)
@@ -44,10 +46,25 @@ void LocalMqtt::on_message(const mosquitto_message *message)
 
 void LocalMqtt::start()
 {
-  loop_start();
+  const auto result = loop_start();
+  throwIfError("loop_start", result);
 }
 
 void LocalMqtt::stop()
 {
-  loop_stop();
+  const auto result = loop_stop();
+  throwIfError("loop_stop", result);
 }
+
+void LocalMqtt::on_error()
+{
+  throw std::runtime_error("undefined error in LocalMqtt");
+}
+
+void LocalMqtt::throwIfError(const std::string &operation, int result)
+{
+  if (result != MOSQ_ERR_SUCCESS) {
+    throw std::runtime_error("LocalMqtt " + operation + ": " + mosqpp::strerror(result));
+  }
+}
+

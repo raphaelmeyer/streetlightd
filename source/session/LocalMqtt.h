@@ -41,6 +41,9 @@ private:
 
   void on_connect(int) override;
   void on_message(const struct mosquitto_message *message) override;
+  void on_error() override;
+
+  void throwIfError(const std::string &operation, int result);
 
 };
 
