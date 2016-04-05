@@ -34,7 +34,6 @@ public:
 
   void setUp() override {}
   void connect() override {}
-  void subscribe(const std::string&) override {}
   void close() override {}
 
 private:
