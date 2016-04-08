@@ -22,13 +22,15 @@ class AMQPSession: public Session {
         virtual void send(const std::string& message) override;
         virtual void close() override;
         virtual void setMessageCallback(std::function<void(const std::string&)> function) override;
-        //virtual IOTHUBMESSAGE_DISPOSITION_RESULT internalMessageCallback(IOTHUB_MESSAGE_HANDLE message, void* userContextCallback);
+        /** Internal message callback which is executed when a message is received 
+         * @param message a handle to the message received
+         * @param userContextCallback this will hold a pointer to a AMQPSession
+         * @return IOTHUBMESSAGE_ACCEPTED if everything went well
+         */
         static IOTHUBMESSAGE_DISPOSITION_RESULT internalMessageCallback(IOTHUB_MESSAGE_HANDLE message, void* userContextCallback);
 
     private:
         std::string connectionString{};
         IOTHUB_CLIENT_HANDLE iotHubClientHandle_; ///!< Our internal connection handle
-        int receiveContext_ = 0;
-        //bool(*receivedFunction_)(std::string*);
         std::function<void(const std::string&)> receivedFunction_; ///!< Function to execute on receiving
 };
