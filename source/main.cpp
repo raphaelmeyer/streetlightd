@@ -52,9 +52,9 @@ int main()
   //TODO Timer is used for acceptance tests, use own timer when not under test
   Timer timer{connection, application};
 
-  session.start();
+  session.connect();
   dispatcher.enter();
-  session.stop();
+  session.close();
 
   return 0;
 }

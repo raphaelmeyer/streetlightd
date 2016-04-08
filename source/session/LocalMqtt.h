@@ -24,17 +24,14 @@ class LocalMqtt :
 {
 public:
   LocalMqtt();
-  ~LocalMqtt();
 
   void send(const std::string &message) override;
-  void setMessageCallback(Callback function) override;
-
-  void start();
-  void stop();
 
   void setUp() override {}
-  void connect() override {}
-  void close() override {}
+  void connect() override;
+  void close() override;
+
+  void setMessageCallback(Callback function) override;
 
 private:
   Callback listener{};
