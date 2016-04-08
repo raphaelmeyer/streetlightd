@@ -18,6 +18,16 @@ It might also be useful to show people how to connect to the Azure Cloud.
 
 This program is authored by [bbv Software Services AG](https://www.bbv.ch).
 
+#Prerequisites
+
+Installed version **1.4.8** of libmosquitto-dev, libmosquittopp0-dev, libmosquittopp0 libdus-c++ on Ubuntu Xenial this is done by the command
+
+    sudo apt-get install libmosquittopp0-dev libmosquittopp0 libmosquitto-dev libdbus-c++
+    
+*There might be more prerequisites for the project at the moment, let us now if you find any which should be included here.*
+    
+    
+
 #License 
 
 This program is licensed under the GNU V3 license.
