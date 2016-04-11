@@ -29,7 +29,6 @@
 #include <csignal>
 #include <memory>
 
-
 static DBus::BusDispatcher dispatcher;
 
 static void niam(int)
@@ -54,10 +53,10 @@ Configuration parseCommandline( const std::vector<std::string> &arg)
 
 int main(int argc, char **argv)
 {
+  DBus::default_dispatcher = &dispatcher;
+
   signal(SIGTERM, niam);
   signal(SIGINT, niam);
-
-  DBus::default_dispatcher = &dispatcher;
 
   const std::vector<std::string> arg{argv, argv+argc};
 
@@ -86,6 +85,8 @@ int main(int argc, char **argv)
   stack.session->connect();
   dispatcher.enter();
   stack.session->close();
+
+  stack.application.release();
 
   return 0;
 }

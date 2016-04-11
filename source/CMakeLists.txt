@@ -8,6 +8,7 @@ set (Main_VERSION_MINOR 1)
 
 set (CMAKE_CXX_STANDARD 14)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 add_definitions(-DNO_LOGGING)
 #include_directories ("${PROJECT_SOURCE_DIR}/amqp/")
 include_directories ("${PROJECT_SOURCE_DIR}/mqtt/")
