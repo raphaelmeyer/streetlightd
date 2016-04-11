@@ -14,7 +14,7 @@
 #include "TimerAdaptor.h"
 #pragma GCC diagnostic pop
 
-#include <application/TimerListener.h>
+#include <protocolstack/application/TimerListener.h>
 
 #include <dbus-c++/dbus.h>
 

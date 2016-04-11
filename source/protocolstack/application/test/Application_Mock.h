@@ -8,7 +8,7 @@
 #ifndef APPLICATION_MOCK_H
 #define APPLICATION_MOCK_H
 
-#include <application/Application.h>
+#include <protocolstack/application/Application.h>
 
 #include <gmock/gmock.h>
 

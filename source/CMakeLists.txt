@@ -21,14 +21,15 @@ include_directories(".")
 include_directories("/usr/include/dbus-c++-1")
 
 file(GLOB RAW_SOURCES
-    *.h
-    session/*.cpp
-    session/*.h
+    protocolstack/*.h
+    protocolstack/*.cpp
+    protocolstack/session/*.cpp
+    protocolstack/session/*.h
     dbus/*.cpp
-    presentation/*.cpp
-    presentation/*.h
-    application/*.cpp
-    application/*.h
+    protocolstack/presentation/*.cpp
+    protocolstack/presentation/*.h
+    protocolstack/application/*.cpp
+    protocolstack/application/*.h
     infrastructure/*.cpp
     )
 
@@ -37,9 +38,9 @@ file(GLOB_RECURSE TEST_SOURCES
     *_Mock.h
     infrastructure/CommandLineParser.cpp
     infrastructure/Factory.h
-    application/Forwarder.cpp
-    presentation/KeyValueEncoder.cpp
-    presentation/KeyValueDecoder.cpp
+    protocolstack/application/Forwarder.cpp
+    protocolstack/presentation/KeyValueEncoder.cpp
+    protocolstack/presentation/KeyValueDecoder.cpp
     )
 
 add_executable(streetlightd main.cpp ${RAW_SOURCES})

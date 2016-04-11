@@ -5,12 +5,13 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "application/Forwarder.h"
-#include "application/ActiveApplication.h"
-#include "presentation/KeyValueEncoder.h"
-#include "presentation/KeyValueDecoder.h"
-#include "session/LocalMqtt.h"
-#include "ProtocolStack.h"
+#include "protocolstack/application/Forwarder.h"
+#include "protocolstack/application/ActiveApplication.h"
+#include "protocolstack/presentation/KeyValueEncoder.h"
+#include "protocolstack/presentation/KeyValueDecoder.h"
+#include "protocolstack/session/LocalMqtt.h"
+#include "protocolstack/ProtocolStack.h"
+#include "protocolstack/StackFactory.h"
 
 #include "dbus/Timer.h"
 #include "dbus/BrightnessSensor.h"
@@ -20,7 +21,6 @@
 #include "infrastructure/ActiveObject.h"
 #include "infrastructure/Factory.h"
 #include "infrastructure/CommandLineParser.h"
-#include "infrastructure/StackFactory.h"
 
 #include <dbus-c++/dbus.h>
 #include <dbus-c++/api.h>

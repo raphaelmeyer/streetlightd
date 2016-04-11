@@ -14,7 +14,7 @@
 #include "StreetlightProxy.h"
 #pragma GCC diagnostic pop
 
-#include <application/Sensor.h>
+#include <protocolstack/application/Sensor.h>
 
 #include <dbus-c++/dbus.h>
 

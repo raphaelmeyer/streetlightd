@@ -8,7 +8,7 @@
 #ifndef PRESENTATION
 #define PRESENTATION
 
-#include "IncomingMessage.h"
+#include "../application/IncomingMessage.h"
 
 #include <functional>
 #include <string>

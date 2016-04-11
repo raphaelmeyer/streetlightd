@@ -7,12 +7,12 @@
 
 #include "../CommandLineParser.h"
 #include "Factory_Mock.h"
-#include "../../application/test/Application_Mock.h"
-#include "../../session/test/Session_Mock.h"
+#include <protocolstack/application/test/Application_Mock.h>
+#include <protocolstack/session/test/Session_Mock.h>
 
-#include <application/Application.h>
-#include <presentation/Presentation.h>
-#include <session/Session.h>
+#include <protocolstack/application/Application.h>
+#include <protocolstack/presentation/Presentation.h>
+#include <protocolstack/session/Session.h>
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>

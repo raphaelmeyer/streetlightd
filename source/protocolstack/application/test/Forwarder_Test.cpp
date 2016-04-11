@@ -6,7 +6,7 @@
  */
 
 #include "../Forwarder.h"
-#include "IncomingMessage.h"
+#include "../IncomingMessage.h"
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>

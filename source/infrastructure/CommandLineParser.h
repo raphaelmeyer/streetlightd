@@ -9,9 +9,9 @@
 #define COMMANDLINEPARSER_H
 
 #include "Factory.h"
-#include <application/Application.h>
-#include <presentation/Presentation.h>
-#include <session/Session.h>
+#include <protocolstack/application/Application.h>
+#include <protocolstack/presentation/Presentation.h>
+#include <protocolstack/session/Session.h>
 
 #include <ostream>
 #include <vector>
