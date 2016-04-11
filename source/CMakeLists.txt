@@ -33,7 +33,7 @@ file(GLOB_RECURSE TEST_SOURCES
     *_Mock.h
     infrastructure/CommandLineParser.cpp
     infrastructure/Factory.h
-    application/Application.cpp
+    application/Forwarder.cpp
     presentation/KeyValueEncoder.cpp
     presentation/KeyValueDecoder.cpp
     )

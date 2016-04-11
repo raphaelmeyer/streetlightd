@@ -8,14 +8,11 @@
 #ifndef ACTIVEAPPLICATION_H
 #define ACTIVEAPPLICATION_H
 
-#include "TimerListener.h"
-#include "PresentationListener.h"
 #include "Application.h"
 #include "../infrastructure/ActiveObject.h"
 
 class ActiveApplication :
-    public TimerListener,
-    public PresentationListener
+    public Application
 {
 public:
   ActiveApplication(Application &application);

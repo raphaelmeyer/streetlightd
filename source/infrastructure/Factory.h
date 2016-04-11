@@ -21,6 +21,8 @@ class Factory
 public:
   typedef std::function<T*()> Worker;
 
+  virtual ~Factory() = default;
+
   void add(const std::string &product)
   {
     worker[product] = []{return nullptr;};
@@ -31,14 +33,14 @@ public:
     this->worker[product] = worker;
   }
 
-  std::set<std::string> workers() const
+  virtual std::set<std::string> workers() const
   {
     std::set<std::string> result{};
     std::transform(worker.begin(), worker.end(), std::inserter(result, result.end()), [](const auto &pair){return pair.first;});
     return result;
   }
 
-  T* produce(const std::string &product) const
+  virtual T* produce(const std::string &product) const
   {
     const auto pos = worker.find(product);
     if (pos == worker.end()) {

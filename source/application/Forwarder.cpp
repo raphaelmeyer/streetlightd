@@ -5,22 +5,23 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "Application.h"
+#include "Forwarder.h"
 
-Application::Application(Sensor &_brightness, Actor &_luminosity, Presentation &_presentation) :
+Forwarder::Forwarder(Sensor &_brightness, Actor &_luminosity, Presentation &_presentation) :
   brightness_{_brightness},
   luminosity_{_luminosity},
   presentation{_presentation}
 {
 }
 
-void Application::timeout()
+void Forwarder::timeout()
 {
   const auto brightnessValue = brightness_.get();
   presentation.brightness(brightnessValue);
 }
 
-void Application::luminosity(double value)
+void Forwarder::luminosity(double value)
 {
   luminosity_.set(value);
 }
+
