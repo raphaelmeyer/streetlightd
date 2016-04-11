@@ -14,9 +14,9 @@
 #include "TimerAdaptor.h"
 #pragma GCC diagnostic pop
 
-#include <protocolstack/application/TimerListener.h>
-
 #include <dbus-c++/dbus.h>
+
+#include <functional>
 
 class Timer :
     public DBus::ObjectAdaptor,
@@ -24,12 +24,16 @@ class Timer :
     public ch::bbv::timer_adaptor
 {
 public:
-  Timer(DBus::Connection& connection, TimerListener &timerListener);
+  typedef std::function<void()> Callback;
+
+  Timer(DBus::Connection& connection);
 
   void timeout() override;
 
+  void setCallback(Callback value);
+
 private:
-  TimerListener &timerListener;
+  Callback callback;
 
 };
 

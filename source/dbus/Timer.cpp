@@ -7,13 +7,17 @@
 
 #include "Timer.h"
 
-Timer::Timer(DBus::Connection &connection, TimerListener &_timerListener) :
-  DBus::ObjectAdaptor{connection, "/ch/bbv/streetlightd"},
-  timerListener{_timerListener}
+Timer::Timer(DBus::Connection &connection) :
+  DBus::ObjectAdaptor{connection, "/ch/bbv/streetlightd"}
 {
 }
 
 void Timer::timeout()
 {
-  timerListener.timeout();
+  callback();
+}
+
+void Timer::setCallback(Timer::Callback value)
+{
+  callback = value;
 }

@@ -8,19 +8,20 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-#include "TimerListener.h"
 #include "IncomingMessage.h"
 
 #include <functional>
 
-class Application :
-    public TimerListener
+class Application
 {
 public:
   typedef std::function<double()> Sensor;
   typedef std::function<void(double)> Actor;
   typedef std::function<void(double brightness)> Listener;
 
+  virtual ~Application() = default;
+
+  virtual void timeout() = 0;
   virtual void received(const Incoming::Message &message) = 0;
 
   virtual void setBrightnessSensor(Sensor value) = 0;

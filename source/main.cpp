@@ -69,6 +69,8 @@ int main(int argc, char **argv)
   connection.request_name("ch.bbv.streetlightd");
   BrightnessSensor brightness{connection};
   LuminosityActor luminosity{connection};
+  //TODO Timer is used for acceptance tests, use own timer when not under test
+  Timer timer{connection};
 
   // connection
   stack.application->setBrightnessSensor([&brightness]{
@@ -77,9 +79,9 @@ int main(int argc, char **argv)
   stack.application->setLuminosityActor([&luminosity](double value){
     luminosity.set(value);
   });
-
-  //TODO Timer is used for acceptance tests, use own timer when not under test
-  Timer timer{connection, *stack.application};
+  timer.setCallback([&stack]{
+    stack.application->timeout();
+  });
 
   stack.session->connect();
   dispatcher.enter();
