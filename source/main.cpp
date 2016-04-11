@@ -6,6 +6,7 @@
  */
 
 #include "application/Application.h"
+#include "application/ActiveApplication.h"
 #include "presentation/KeyValueEncoder.h"
 #include "presentation/KeyValueDecoder.h"
 #include "session/LocalMqtt.h"
@@ -13,6 +14,9 @@
 #include "dbus/Timer.h"
 #include "dbus/BrightnessSensor.h"
 #include "dbus/LuminosityActor.h"
+
+#include "infrastructure/Queue.h"
+#include "infrastructure/ActiveObject.h"
 
 #include <dbus-c++/dbus.h>
 #include <dbus-c++/api.h>
@@ -43,14 +47,15 @@ int main()
   LuminosityActor luminosity{connection};
 
   Application application{brightness, luminosity, presentationEncoder};
+  ActiveApplication activeApplication{application};
 
-  KeyValueDecoder presentationDecoder{application};
+  KeyValueDecoder presentationDecoder{activeApplication};
   session.setMessageCallback([&presentationDecoder](const std::string &message){
     presentationDecoder.decode(message);
   });
 
   //TODO Timer is used for acceptance tests, use own timer when not under test
-  Timer timer{connection, application};
+  Timer timer{connection, activeApplication};
 
   session.connect();
   dispatcher.enter();
