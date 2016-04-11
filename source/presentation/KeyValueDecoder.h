@@ -10,20 +10,22 @@
 
 #include "SessionListener.h"
 
-#include <application/PresentationListener.h>
-
+#include <functional>
 #include <string>
 
 class KeyValueDecoder :
     public SessionListener
 {
 public:
-  KeyValueDecoder(PresentationListener &listener);
+  typedef std::function<void(double luminosity)> Listener;
+
+  void setListener(Listener value);
 
   void decode(const std::string &message) override;
 
 private:
-  PresentationListener &listener;
+  Listener listener{};
+
 };
 
 #endif

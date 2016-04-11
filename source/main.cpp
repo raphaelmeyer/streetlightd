@@ -65,7 +65,10 @@ int main(int argc, char **argv)
   Forwarder application{brightness, luminosity, presentationEncoder};
   ActiveApplication activeApplication{application};
 
-  KeyValueDecoder presentationDecoder{activeApplication};
+  KeyValueDecoder presentationDecoder{};
+  presentationDecoder.setListener([&activeApplication](double luminosity){
+    activeApplication.luminosity(luminosity);
+  });
   session->setMessageCallback([&presentationDecoder](const std::string &message){
     presentationDecoder.decode(message);
   });

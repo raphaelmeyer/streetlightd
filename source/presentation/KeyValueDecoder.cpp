@@ -9,9 +9,9 @@
 
 #include <sstream>
 
-KeyValueDecoder::KeyValueDecoder(PresentationListener &_listener) :
-  listener{_listener}
+void KeyValueDecoder::setListener(KeyValueDecoder::Listener value)
 {
+  listener = value;
 }
 
 void KeyValueDecoder::decode(const std::string &message)
@@ -25,7 +25,7 @@ void KeyValueDecoder::decode(const std::string &message)
     stream >> key >> value;
 
     if (key == "luminosity") {
-      listener.luminosity(value);
+      listener(value);
     }
   }
 }
