@@ -11,10 +11,21 @@
 #include "TimerListener.h"
 #include "PresentationListener.h"
 
+#include <functional>
+
 class Application :
     public TimerListener,
     public PresentationListener
 {
+public:
+  typedef std::function<double()> Sensor;
+  typedef std::function<void(double)> Actor;
+  typedef std::function<void(double brightness)> Listener;
+
+  virtual void setBrightnessSensor(Sensor value) = 0;
+  virtual void setLuminosityActor(Actor value) = 0;
+  virtual void setListener(Listener value) = 0;
+
 };
 
 #endif

@@ -17,7 +17,11 @@ class ApplicationMock :
 {
 public:
   MOCK_METHOD0(timeout, void());
-  MOCK_METHOD1(luminosity, void(double));
+  MOCK_METHOD1(received, void(const Incoming::Message &));
+
+  MOCK_METHOD1(setBrightnessSensor, void(Sensor));
+  MOCK_METHOD1(setLuminosityActor, void(Actor));
+  MOCK_METHOD1(setListener, void(Listener));
 
 };
 

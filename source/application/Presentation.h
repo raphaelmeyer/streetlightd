@@ -8,14 +8,19 @@
 #ifndef PRESENTATION
 #define PRESENTATION
 
-class Presentation
+#include "IncomingMessage.h"
+
+#include <functional>
+#include <string>
+
+namespace Presentation
 {
-public:
-  virtual ~Presentation() = default;
 
-  virtual void brightness(double value) = 0;
+  typedef std::function<std::string(double brightness)> Encoder;
+  typedef std::function<Incoming::Message(const std::string &message)> Decoder;
+  typedef std::pair<Encoder,Decoder>  EncoderAndDecoder;
 
-};
+}
 
 #endif
 

@@ -25,6 +25,7 @@ file(GLOB RAW_SOURCES
     dbus/*.cpp
     presentation/*.cpp
     application/*.cpp
+    application/*.h
     infrastructure/*.cpp
     )
 

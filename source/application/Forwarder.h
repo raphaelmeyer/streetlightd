@@ -20,16 +20,12 @@ class Forwarder :
     public Application
 {
 public:
-  typedef std::function<double()> Sensor;
-  typedef std::function<void(double)> Actor;
-  typedef std::function<void(double brightness)> Listener;
-
   void timeout() override;
-  void luminosity(double) override;
+  void received(const Incoming::Message &message) override;
 
-  void setBrightnessSensor(Sensor value);
-  void setLuminosityActor(Actor value);
-  void setListener(Listener value);
+  void setBrightnessSensor(Sensor value) override;
+  void setLuminosityActor(Actor value) override;
+  void setListener(Listener value) override;
 
 private:
   Sensor brightnessSensor{};

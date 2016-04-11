@@ -9,15 +9,14 @@
 
 #include <sstream>
 
-void KeyValueDecoder::setListener(KeyValueDecoder::Listener value)
+namespace KeyValue
 {
-  listener = value;
-}
 
-void KeyValueDecoder::decode(const std::string &message)
+Incoming::Message decode(const std::string &message)
 {
+  Incoming::Message result{};
+
   std::stringstream stream{message};
-
   while (!stream.eof()) {
     std::string key;
     double value;
@@ -25,7 +24,11 @@ void KeyValueDecoder::decode(const std::string &message)
     stream >> key >> value;
 
     if (key == "luminosity") {
-      listener(value);
+      result[Incoming::Type::Luminosity] = value;
     }
   }
+
+  return result;
+}
+
 }

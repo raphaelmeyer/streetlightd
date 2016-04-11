@@ -8,7 +8,6 @@
 #include "../CommandLineParser.h"
 #include "Factory_Mock.h"
 #include "../../application/test/Application_Mock.h"
-#include "../../application/test/Presentation_Mock.h"
 #include "../../presentation/test/Session_Mock.h"
 
 #include <application/Application.h>
@@ -24,9 +23,9 @@ class CommandLineParser_Test:
     public testing::Test
 {
 public:
-  testing::NiceMock<FactoryMock<Application>> applicationFactory{};
-  testing::NiceMock<FactoryMock<Presentation>> presentationFactory{};
-  testing::NiceMock<FactoryMock<Session>> sessionFactory{};
+  testing::NiceMock<FactoryMock<Application*>> applicationFactory{};
+  testing::NiceMock<FactoryMock<Presentation::EncoderAndDecoder>> presentationFactory{};
+  testing::NiceMock<FactoryMock<Session*>> sessionFactory{};
   std::stringstream output{};
   CommandLineParser testee{output, applicationFactory, presentationFactory, sessionFactory};
 
@@ -114,13 +113,14 @@ TEST_F(CommandLineParser_Test, create_specified_application)
 
 TEST_F(CommandLineParser_Test, create_specified_presentation)
 {
-  PresentationMock presentation;
+  Presentation::Encoder encoder{[](double){return "test";}};
+  Presentation::Decoder decoder{[](const std::string&){return Incoming::Message{};}};
   EXPECT_CALL(presentationFactory, produce("the presentation"))
-      .WillOnce(testing::Return(&presentation));
+      .WillOnce(testing::Return(Presentation::EncoderAndDecoder{encoder, decoder}));
 
   testee.parse({"", "", "the presentation", ""});
 
-  ASSERT_EQ(&presentation, testee.getPresentation());
+  ASSERT_EQ("test", testee.getPresentation().first(0));
 }
 
 TEST_F(CommandLineParser_Test, create_specified_session)

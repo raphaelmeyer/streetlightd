@@ -8,24 +8,15 @@
 #ifndef KEYVALUEDECODER_H
 #define KEYVALUEDECODER_H
 
-#include "SessionListener.h"
+#include <application/IncomingMessage.h>
 
-#include <functional>
 #include <string>
 
-class KeyValueDecoder :
-    public SessionListener
+namespace KeyValue
 {
-public:
-  typedef std::function<void(double luminosity)> Listener;
 
-  void setListener(Listener value);
+  Incoming::Message decode(const std::string &message);
 
-  void decode(const std::string &message) override;
-
-private:
-  Listener listener{};
-
-};
+}
 
 #endif

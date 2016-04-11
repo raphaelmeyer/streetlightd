@@ -25,6 +25,17 @@
 #include <dbus-c++-1/dbus-c++/dbus.h>
 
 #include <csignal>
+#include <memory>
+
+class ProtocolStack
+{
+public:
+  std::unique_ptr<Application> application;
+  Presentation::Encoder encoder;
+  Presentation::Decoder decoder;
+  std::unique_ptr<Session> session;
+};
+
 
 static DBus::BusDispatcher dispatcher;
 
@@ -40,47 +51,47 @@ int main(int argc, char **argv)
 
   DBus::default_dispatcher = &dispatcher;
 
-  Factory<Application> applicationFactory;
-//  applicationFactory.add("forwarder", []{return new Forwarder();});
-  applicationFactory.add("forwarder", []{return nullptr;});
-  Factory<Presentation> presentationFactory;
-//  presentationFactory.add("key-value", []{return new KeyValueEncoder();});
-  presentationFactory.add("key-value", []{return nullptr;});
-  Factory<Session> sessionFactory;
+  Factory<Application*> applicationFactory;
+  applicationFactory.add("forwarder", []{return new Forwarder();});
+  Factory<Presentation::EncoderAndDecoder> encoderFactory;
+  encoderFactory.add("key-value", []{ return Presentation::EncoderAndDecoder{KeyValue::encode, KeyValue::decode};});
+  Factory<Session*> sessionFactory;
   sessionFactory.add("mqtt-local", []{return new LocalMqtt();});
-  CommandLineParser parser{std::cout, applicationFactory, presentationFactory, sessionFactory};
+  CommandLineParser parser{std::cout, applicationFactory, encoderFactory, sessionFactory};
 
   const std::vector<std::string> arg{argv, argv+argc};
   parser.parse(arg);
 
-  Session *session = parser.getSession();
-  KeyValueEncoder presentationEncoder{};
-  presentationEncoder.setListener([&session](const std::string &message){session->send(message);});
+  // Stack creation
+  std::unique_ptr<Session> session{parser.getSession()};
+  Presentation::Encoder encoder = parser.getPresentation().first;
+  Presentation::Decoder decoder = parser.getPresentation().second;
+  std::unique_ptr<Application> application{parser.getApplication()};
+  ActiveApplication activeApplication{std::move(application)};
 
+  // DBus creation
   DBus::Connection connection = DBus::Connection::SessionBus();
   connection.request_name("ch.bbv.streetlightd");
   BrightnessSensor brightness{connection};
   LuminosityActor luminosity{connection};
 
-  Forwarder application{};
-  application.setBrightnessSensor([&brightness]{
+  // connection
+  activeApplication.setBrightnessSensor([&brightness]{
     return brightness.get();
   });
-  application.setLuminosityActor([&luminosity](double value){
+  activeApplication.setLuminosityActor([&luminosity](double value){
     luminosity.set(value);
   });
-  application.setListener([&presentationEncoder](double brightness){
-    presentationEncoder.brightness(brightness);
+  activeApplication.setListener([encoder, &session](double brightness){
+    const auto message = encoder(brightness);
+    session->send(message);
   });
-  ActiveApplication activeApplication{application};
 
-  KeyValueDecoder presentationDecoder{};
-  presentationDecoder.setListener([&activeApplication](double luminosity){
-    activeApplication.luminosity(luminosity);
+  session->setMessageCallback([decoder, &activeApplication](const std::string &message){
+    const auto decoded = decoder(message);
+    activeApplication.received(decoded);
   });
-  session->setMessageCallback([&presentationDecoder](const std::string &message){
-    presentationDecoder.decode(message);
-  });
+
 
   //TODO Timer is used for acceptance tests, use own timer when not under test
   Timer timer{connection, activeApplication};
@@ -88,8 +99,6 @@ int main(int argc, char **argv)
   session->connect();
   dispatcher.enter();
   session->close();
-
-  delete session;
 
   return 0;
 }

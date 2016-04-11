@@ -9,14 +9,19 @@
 #define SESSIONLISTENER_H
 
 #include <string>
+#include <functional>
 
 class SessionListener
 {
 public:
+  typedef std::function<void(double luminosity)> Listener;
+
   virtual ~SessionListener() = default;
 
   //TODO do not use a string (in the case somebody wants to send binary data)
   virtual void decode(const std::string &) = 0;
+
+  virtual void setListener(Listener value) = 0;
 
 };
 

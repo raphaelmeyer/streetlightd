@@ -11,19 +11,24 @@
 #include "Application.h"
 #include "../infrastructure/ActiveObject.h"
 
+#include <memory>
+
 class ActiveApplication :
     public Application
 {
 public:
-  ActiveApplication(Application &application);
+  ActiveApplication(std::unique_ptr<Application> &&application);
 
   void timeout() override;
+  void received(const Incoming::Message &message) override;
 
-  void luminosity(double value) override;
+  void setBrightnessSensor(Sensor value) override;
+  void setLuminosityActor(Actor value) override;
+  void setListener(Listener value) override;
 
 private:
   ActiveObject active;
-  Application &application;
+  std::unique_ptr<Application> application;
 
 };
 

@@ -7,7 +7,7 @@
 
 #include "CommandLineParser.h"
 
-CommandLineParser::CommandLineParser(std::ostream &_output, Factory<Application> &_application, Factory<Presentation> &_presentation, Factory<Session> &_session) :
+CommandLineParser::CommandLineParser(std::ostream &_output, Factory<Application *> &_application, Factory<Presentation::EncoderAndDecoder> &_presentation, Factory<Session *> &_session) :
   output{_output},
   applicationFactory{_application},
   presentationFactory{_presentation},
@@ -49,7 +49,7 @@ Application *CommandLineParser::getApplication() const
   return application;
 }
 
-Presentation *CommandLineParser::getPresentation() const
+Presentation::EncoderAndDecoder CommandLineParser::getPresentation() const
 {
   return presentation;
 }

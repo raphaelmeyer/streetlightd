@@ -18,7 +18,7 @@ class FactoryMock :
 {
 public:
   MOCK_CONST_METHOD0(workers, std::set<std::string>());
-  MOCK_CONST_METHOD1_T(produce, T*(const std::string &product));
+  MOCK_CONST_METHOD1_T(produce, T(const std::string &product));
 
 };
 

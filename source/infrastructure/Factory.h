@@ -19,14 +19,9 @@ template<class T>
 class Factory
 {
 public:
-  typedef std::function<T*()> Worker;
+  typedef std::function<T()> Worker;
 
   virtual ~Factory() = default;
-
-  void add(const std::string &product)
-  {
-    worker[product] = []{return nullptr;};
-  }
 
   void add(const std::string &product, Worker worker)
   {
@@ -40,7 +35,7 @@ public:
     return result;
   }
 
-  virtual T* produce(const std::string &product) const
+  virtual T produce(const std::string &product) const
   {
     const auto pos = worker.find(product);
     if (pos == worker.end()) {

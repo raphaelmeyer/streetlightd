@@ -8,18 +8,33 @@
 #include "ActiveApplication.h"
 
 
-ActiveApplication::ActiveApplication(Application &_application) :
+ActiveApplication::ActiveApplication(std::unique_ptr<Application> &&_application) :
   active{},
-  application{_application}
+  application{std::move(_application)}
 {
 }
 
 void ActiveApplication::timeout()
 {
-  active.put([this]{application.timeout();});
+  active.put([this]{application->timeout();});
 }
 
-void ActiveApplication::luminosity(double value)
+void ActiveApplication::received(const Incoming::Message &message)
 {
-  active.put([this, value]{application.luminosity(value);});
+  active.put([this, message]{application->received(message);});
+}
+
+void ActiveApplication::setBrightnessSensor(Application::Sensor value)
+{
+  application->setBrightnessSensor(value);
+}
+
+void ActiveApplication::setLuminosityActor(Application::Actor value)
+{
+  application->setLuminosityActor(value);
+}
+
+void ActiveApplication::setListener(Application::Listener value)
+{
+  application->setListener(value);
 }

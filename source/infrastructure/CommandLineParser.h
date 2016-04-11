@@ -21,22 +21,22 @@
 class CommandLineParser
 {
 public:
-  CommandLineParser(std::ostream &output, Factory<Application> &applicationFactory, Factory<Presentation> &presentationFactory, Factory<Session> &sessionFactory);
+  CommandLineParser(std::ostream &output, Factory<Application*> &applicationFactory, Factory<Presentation::EncoderAndDecoder> &presentationFactory, Factory<Session*> &sessionFactory);
 
   void parse(const std::vector<std::string> &arguments);
 
   Application *getApplication() const;
-  Presentation *getPresentation() const;
+  Presentation::EncoderAndDecoder getPresentation() const;
   Session *getSession() const;
 
 private:
   std::ostream &output;
-  Factory<Application> &applicationFactory;
-  Factory<Presentation> &presentationFactory;
-  Factory<Session> &sessionFactory;
+  Factory<Application*> &applicationFactory;
+  Factory<Presentation::EncoderAndDecoder> &presentationFactory;
+  Factory<Session*> &sessionFactory;
 
   Application *application{nullptr};
-  Presentation *presentation{nullptr};
+  Presentation::EncoderAndDecoder presentation{};
   Session *session{nullptr};
 
   void printLayer(const std::string &name, const std::set<std::string> &list) const;

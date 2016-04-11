@@ -13,28 +13,7 @@
 #include <string>
 #include <vector>
 
-class KeyValueEncoder_Test:
-    public testing::Test
+TEST(KeyValueEncoder_Test, encode_brightness)
 {
-public:
-  typedef std::vector<std::string> vs;
-
-  void SetUp() override
-  {
-    testee.setListener([this](const std::string &message){
-      messages.push_back(message);
-    });
-  }
-
-  KeyValueEncoder testee{};
-  vs messages;
-
-};
-
-
-TEST_F(KeyValueEncoder_Test, encode_brightness)
-{
-  testee.brightness(0.78);
-
-  ASSERT_EQ(vs{"brightness 0.78\n"}, messages);
+  ASSERT_EQ("brightness 0.78\n", KeyValue::encode(0.78));
 }

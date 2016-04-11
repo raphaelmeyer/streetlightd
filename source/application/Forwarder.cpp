@@ -13,9 +13,12 @@ void Forwarder::timeout()
   listener(brightnessValue);
 }
 
-void Forwarder::luminosity(double value)
+void Forwarder::received(const Incoming::Message &message)
 {
-  luminosityActor(value);
+  const auto luminosity = message.find(Incoming::Type::Luminosity);   //TODO use contains
+  if (luminosity != message.end()) {
+    luminosityActor(luminosity->second);
+  }
 }
 
 void Forwarder::setBrightnessSensor(Forwarder::Sensor value)

@@ -8,10 +8,7 @@
 #ifndef KEYVALUEENCODER_H
 #define KEYVALUEENCODER_H
 
-#include <application/Presentation.h>
-
 #include <string>
-#include <functional>
 
 /**
  * Own representation of key-value pairs that never should be used.
@@ -20,19 +17,12 @@
  * entry := identifier value '\n'
  * value := identifier | number
  */
-class KeyValueEncoder :
-    public Presentation
+
+namespace KeyValue
 {
-public:
-  typedef std::function<void(const std::string&)> Listener;
 
-  void setListener(Listener value);
+  std::string encode(double brightness);
 
-  void brightness(double value) override;
-
-private:
-  Listener message{};
-
-};
+}
 
 #endif

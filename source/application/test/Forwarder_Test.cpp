@@ -6,9 +6,7 @@
  */
 
 #include "../Forwarder.h"
-#include "Presentation_Mock.h"
-#include "Sensor_Mock.h"
-#include "Actor_Mock.h"
+#include "IncomingMessage.h"
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
@@ -51,9 +49,20 @@ TEST_F(Forwarder_Test, the_brightness_is_read_when_a_timout_occurs)
   ASSERT_EQ(vd{0.12}, listenerBrightness);
 }
 
+TEST_F(Forwarder_Test, does_not_write_the_luminosity_when_not_set)
+{
+  const Incoming::Message message{};
+
+  testee.received(message);
+
+  ASSERT_EQ(vd{}, luminosity);
+}
+
 TEST_F(Forwarder_Test, writes_the_luminosity_when_received_a_new_value)
 {
-  testee.luminosity(0.45);
+  const Incoming::Message message{{Incoming::Type::Luminosity, 0.45}};
+
+  testee.received(message);
 
   ASSERT_EQ(vd{0.45}, luminosity);
 }

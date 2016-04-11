@@ -9,16 +9,15 @@
 
 #include <sstream>
 
-void KeyValueEncoder::setListener(KeyValueEncoder::Listener value)
+namespace KeyValue
 {
-  message = value;
-}
 
-void KeyValueEncoder::brightness(double value)
+std::string encode(double brightness)
 {
   std::stringstream stream;
-  stream << "brightness " << value << std::endl;
+  stream << "brightness " << brightness << std::endl;
 
-  message(stream.str());
+  return stream.str();
 }
 
+}
