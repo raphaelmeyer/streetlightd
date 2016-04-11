@@ -25,8 +25,8 @@ file(GLOB RAW_SOURCES
     application/*.cpp
     )
 
-add_executable(Streetlightd main.cpp ${RAW_SOURCES})
+add_executable(streetlightd main.cpp ${RAW_SOURCES})
 
-target_link_libraries( Streetlightd mosquittopp dbus-c++-1 pthread) 
+target_link_libraries(streetlightd mosquittopp dbus-c++-1 pthread)
 
 set(EXECUTABLE_OUTPUT_PATH "../")
