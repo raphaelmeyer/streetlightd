@@ -13,7 +13,16 @@
 #include <string>
 #include <vector>
 
+TEST(KeyValueEncoder_Test, encode_empty_message)
+{
+  const Outgoing::Message message{};
+
+  ASSERT_EQ("", KeyValue::encode(message));
+}
+
 TEST(KeyValueEncoder_Test, encode_brightness)
 {
-  ASSERT_EQ("brightness 0.78\n", KeyValue::encode(0.78));
+  const Outgoing::Message message{{Outgoing::Type::Brightness, 0.78}};
+
+  ASSERT_EQ("brightness 0.78\n", KeyValue::encode(message));
 }

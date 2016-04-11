@@ -17,6 +17,7 @@ class Forwarder_Test:
 {
 public:
   typedef std::vector<double> vd;
+  typedef std::vector<Outgoing::Message> vm;
 
   void SetUp() override
   {
@@ -26,8 +27,8 @@ public:
     testee.setLuminosityActor([this](double value){
       luminosity.push_back(value);
     });
-    testee.setListener([this](double brightness){
-      listenerBrightness.push_back(brightness);
+    testee.setSender([this](const Outgoing::Message &message){
+      sender.push_back(message);
     });
   }
 
@@ -35,18 +36,19 @@ public:
 
   double brightness{-1};
   vd luminosity{};
-  vd listenerBrightness{};
+  vm sender{};
 
 };
 
 
 TEST_F(Forwarder_Test, the_brightness_is_read_when_a_timout_occurs)
 {
+  vm expected = vm{{{Outgoing::Type::Brightness, 0.12}}};
   brightness = 0.12;
 
   testee.timeout();
 
-  ASSERT_EQ(vd{0.12}, listenerBrightness);
+  ASSERT_EQ(expected, sender);
 }
 
 TEST_F(Forwarder_Test, does_not_write_the_luminosity_when_not_set)

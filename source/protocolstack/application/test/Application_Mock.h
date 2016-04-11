@@ -21,7 +21,7 @@ public:
 
   MOCK_METHOD1(setBrightnessSensor, void(Sensor));
   MOCK_METHOD1(setLuminosityActor, void(Actor));
-  MOCK_METHOD1(setListener, void(Listener));
+  MOCK_METHOD1(setSender, void(Sender));
 
 };
 

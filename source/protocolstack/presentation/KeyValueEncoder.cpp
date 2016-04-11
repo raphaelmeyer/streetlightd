@@ -12,10 +12,14 @@
 namespace KeyValue
 {
 
-std::string encode(double brightness)
+std::string encode(const Outgoing::Message &message)
 {
   std::stringstream stream;
-  stream << "brightness " << brightness << std::endl;
+
+  const auto &brightness = message.find(Outgoing::Type::Brightness);
+  if (brightness != message.end()) {
+    stream << "brightness " << brightness->second << std::endl;
+  }
 
   return stream.str();
 }

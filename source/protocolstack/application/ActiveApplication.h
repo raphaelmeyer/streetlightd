@@ -24,7 +24,7 @@ public:
 
   void setBrightnessSensor(Sensor value) override;
   void setLuminosityActor(Actor value) override;
-  void setListener(Listener value) override;
+  void setSender(Sender value) override;
 
 private:
   ActiveObject active;

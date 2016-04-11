@@ -9,6 +9,7 @@
 #define APPLICATION_H
 
 #include "IncomingMessage.h"
+#include "OutgoingMessage.h"
 
 #include <functional>
 
@@ -17,7 +18,7 @@ class Application
 public:
   typedef std::function<double()> Sensor;
   typedef std::function<void(double)> Actor;
-  typedef std::function<void(double brightness)> Listener;
+  typedef std::function<void(const Outgoing::Message &message)> Sender;
 
   virtual ~Application() = default;
 
@@ -26,7 +27,7 @@ public:
 
   virtual void setBrightnessSensor(Sensor value) = 0;
   virtual void setLuminosityActor(Actor value) = 0;
-  virtual void setListener(Listener value) = 0;
+  virtual void setSender(Sender value) = 0;
 
 };
 

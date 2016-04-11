@@ -8,6 +8,8 @@
 #ifndef KEYVALUEENCODER_H
 #define KEYVALUEENCODER_H
 
+#include <protocolstack/application/OutgoingMessage.h>
+
 #include <string>
 
 /**
@@ -21,7 +23,7 @@
 namespace KeyValue
 {
 
-  std::string encode(double brightness);
+  std::string encode(const Outgoing::Message &message);
 
 }
 

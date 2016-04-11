@@ -34,7 +34,7 @@ void ActiveApplication::setLuminosityActor(Application::Actor value)
   application->setLuminosityActor(value);
 }
 
-void ActiveApplication::setListener(Application::Listener value)
+void ActiveApplication::setSender(Application::Sender value)
 {
-  application->setListener(value);
+  application->setSender(value);
 }

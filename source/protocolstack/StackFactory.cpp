@@ -12,9 +12,9 @@ namespace StackFactory
 
 static void connect(ProtocolStack &stack)
 {
-  stack.application->setListener([&stack](double brightness){
-    const auto message = stack.encoder(brightness);
-    stack.session->send(message);
+  stack.application->setSender([&stack](const Outgoing::Message &message){
+    const auto encoded = stack.encoder(message);
+    stack.session->send(encoded);
   });
 
   stack.session->setMessageCallback([&stack](const std::string &message){

@@ -64,7 +64,7 @@ TEST_F(CommandLineParser_Test, output_is_valid_when_provided_with_valid_argument
   ApplicationMock app;
   ON_CALL(applicationFactory, produce("application"))
       .WillByDefault(testing::Return(&app));
-  Presentation::Encoder encoder{[](double){return "test";}};
+  Presentation::Encoder encoder{[](const Outgoing::Message&){return "test";}};
   Presentation::Decoder decoder{[](const std::string&){return Incoming::Message{};}};
   ON_CALL(presentationFactory, produce("presentation"))
       .WillByDefault(testing::Return(Presentation::EncoderAndDecoder{encoder, decoder}));
@@ -138,14 +138,14 @@ TEST_F(CommandLineParser_Test, create_specified_application)
 
 TEST_F(CommandLineParser_Test, create_specified_presentation)
 {
-  Presentation::Encoder encoder{[](double){return "test";}};
+  Presentation::Encoder encoder{[](const Outgoing::Message&){return "test";}};
   Presentation::Decoder decoder{[](const std::string&){return Incoming::Message{};}};
   EXPECT_CALL(presentationFactory, produce("the presentation"))
       .WillOnce(testing::Return(Presentation::EncoderAndDecoder{encoder, decoder}));
 
   const auto result = testee.parse({"", "", "the presentation", ""});
 
-  ASSERT_EQ("test", result.presentation.first(0));
+  ASSERT_EQ("test", result.presentation.first({}));
 }
 
 TEST_F(CommandLineParser_Test, create_specified_session)
