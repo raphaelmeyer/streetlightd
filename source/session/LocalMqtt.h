@@ -8,7 +8,7 @@
 #ifndef MQTTTEST_H
 #define MQTTTEST_H
 
-#include <presentation/Session.h>
+#include <session/Session.h>
 
 #include <mosquittopp.h>
 

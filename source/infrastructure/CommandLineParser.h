@@ -10,8 +10,8 @@
 
 #include "Factory.h"
 #include <application/Application.h>
-#include <application/Presentation.h>
-#include <presentation/Session.h>
+#include <presentation/Presentation.h>
+#include <session/Session.h>
 
 #include <ostream>
 #include <vector>

@@ -8,11 +8,11 @@
 #include "../CommandLineParser.h"
 #include "Factory_Mock.h"
 #include "../../application/test/Application_Mock.h"
-#include "../../presentation/test/Session_Mock.h"
+#include "../../session/test/Session_Mock.h"
 
 #include <application/Application.h>
-#include <application/Presentation.h>
-#include <presentation/Session.h>
+#include <presentation/Presentation.h>
+#include <session/Session.h>
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>

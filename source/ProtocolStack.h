@@ -9,8 +9,8 @@
 #define PROTOCOLSTACK_H
 
 #include "application/ActiveApplication.h"
-#include "application/Presentation.h"
-#include "presentation/Session.h"
+#include "presentation/Presentation.h"
+#include "session/Session.h"
 
 #include <memory>
 

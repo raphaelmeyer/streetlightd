@@ -9,18 +9,19 @@
 #define APPLICATION_H
 
 #include "TimerListener.h"
-#include "PresentationListener.h"
+#include "IncomingMessage.h"
 
 #include <functional>
 
 class Application :
-    public TimerListener,
-    public PresentationListener
+    public TimerListener
 {
 public:
   typedef std::function<double()> Sensor;
   typedef std::function<void(double)> Actor;
   typedef std::function<void(double brightness)> Listener;
+
+  virtual void received(const Incoming::Message &message) = 0;
 
   virtual void setBrightnessSensor(Sensor value) = 0;
   virtual void setLuminosityActor(Actor value) = 0;

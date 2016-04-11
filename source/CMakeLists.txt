@@ -23,8 +23,10 @@ include_directories("/usr/include/dbus-c++-1")
 file(GLOB RAW_SOURCES
     *.h
     session/*.cpp
+    session/*.h
     dbus/*.cpp
     presentation/*.cpp
+    presentation/*.h
     application/*.cpp
     application/*.h
     infrastructure/*.cpp
