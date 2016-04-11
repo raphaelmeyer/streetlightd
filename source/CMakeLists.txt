@@ -25,8 +25,21 @@ file(GLOB RAW_SOURCES
     application/*.cpp
     )
 
+file(GLOB_RECURSE TEST_SOURCES
+    *_Test.cpp
+    *_Mock.h
+    infrastructure/CommandLineParser.cpp
+    application/Application.cpp
+    presentation/KeyValueEncoder.cpp
+    presentation/KeyValueDecoder.cpp
+    )
+
 add_executable(streetlightd main.cpp ${RAW_SOURCES})
 
 target_link_libraries(streetlightd mosquittopp dbus-c++-1 pthread)
+
+
+add_executable(unit-test ${TEST_SOURCES})
+target_link_libraries(unit-test gmock_main pthread)
 
 set(EXECUTABLE_OUTPUT_PATH "../")
