@@ -7,21 +7,29 @@
 
 #include "Forwarder.h"
 
-Forwarder::Forwarder(Sensor &_brightness, Actor &_luminosity, Presentation &_presentation) :
-  brightness_{_brightness},
-  luminosity_{_luminosity},
-  presentation{_presentation}
-{
-}
-
 void Forwarder::timeout()
 {
-  const auto brightnessValue = brightness_.get();
-  presentation.brightness(brightnessValue);
+  const auto brightnessValue = brightnessSensor();
+  listener(brightnessValue);
 }
 
 void Forwarder::luminosity(double value)
 {
-  luminosity_.set(value);
+  luminosityActor(value);
+}
+
+void Forwarder::setBrightnessSensor(Forwarder::Sensor value)
+{
+  brightnessSensor = value;
+}
+
+void Forwarder::setLuminosityActor(Forwarder::Actor value)
+{
+  luminosityActor = value;
+}
+
+void Forwarder::setListener(Forwarder::Listener value)
+{
+  listener = value;
 }
 

@@ -9,9 +9,8 @@
 #define FORWARDER_H
 
 #include "Application.h"
-#include "Sensor.h"
-#include "Actor.h"
-#include "Presentation.h"
+
+#include <functional>
 
 /**
  * Simple application logic that reads all values on a timeout and forwards it.
@@ -21,15 +20,21 @@ class Forwarder :
     public Application
 {
 public:
-  Forwarder(Sensor &brightness_, Actor &luminosity, Presentation &presentation);
+  typedef std::function<double()> Sensor;
+  typedef std::function<void(double)> Actor;
+  typedef std::function<void(double brightness)> Listener;
 
   void timeout() override;
   void luminosity(double) override;
 
+  void setBrightnessSensor(Sensor value);
+  void setLuminosityActor(Actor value);
+  void setListener(Listener value);
+
 private:
-  Sensor &brightness_;
-  Actor &luminosity_;
-  Presentation &presentation;
+  Sensor brightnessSensor{};
+  Actor luminosityActor{};
+  Listener listener{};
 
 };
 

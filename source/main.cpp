@@ -62,7 +62,16 @@ int main(int argc, char **argv)
   BrightnessSensor brightness{connection};
   LuminosityActor luminosity{connection};
 
-  Forwarder application{brightness, luminosity, presentationEncoder};
+  Forwarder application{};
+  application.setBrightnessSensor([&brightness]{
+    return brightness.get();
+  });
+  application.setLuminosityActor([&luminosity](double value){
+    luminosity.set(value);
+  });
+  application.setListener([&presentationEncoder](double brightness){
+    presentationEncoder.brightness(brightness);
+  });
   ActiveApplication activeApplication{application};
 
   KeyValueDecoder presentationDecoder{};
