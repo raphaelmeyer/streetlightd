@@ -63,11 +63,24 @@ int main(int argc, char **argv)
   parser.parse(arg);
 
   // Stack creation
-  std::unique_ptr<Session> session{parser.getSession()};
-  Presentation::Encoder encoder = parser.getPresentation().first;
-  Presentation::Decoder decoder = parser.getPresentation().second;
+  ProtocolStack stack;
+  stack.session = std::unique_ptr<Session>{parser.getSession()};
+  stack.encoder = parser.getPresentation().first;
+  stack.decoder = parser.getPresentation().second;
   std::unique_ptr<Application> application{parser.getApplication()};
-  ActiveApplication activeApplication{std::move(application)};
+  stack.application = std::unique_ptr<ActiveApplication>{new ActiveApplication(std::move(application))};
+
+  // connection
+  stack.application->setListener([&stack](double brightness){
+    const auto message = stack.encoder(brightness);
+    stack.session->send(message);
+  });
+
+  stack.session->setMessageCallback([&stack](const std::string &message){
+    const auto decoded = stack.decoder(message);
+    stack.application->received(decoded);
+  });
+
 
   // DBus creation
   DBus::Connection connection = DBus::Connection::SessionBus();
@@ -76,29 +89,19 @@ int main(int argc, char **argv)
   LuminosityActor luminosity{connection};
 
   // connection
-  activeApplication.setBrightnessSensor([&brightness]{
+  stack.application->setBrightnessSensor([&brightness]{
     return brightness.get();
   });
-  activeApplication.setLuminosityActor([&luminosity](double value){
+  stack.application->setLuminosityActor([&luminosity](double value){
     luminosity.set(value);
   });
-  activeApplication.setListener([encoder, &session](double brightness){
-    const auto message = encoder(brightness);
-    session->send(message);
-  });
-
-  session->setMessageCallback([decoder, &activeApplication](const std::string &message){
-    const auto decoded = decoder(message);
-    activeApplication.received(decoded);
-  });
-
 
   //TODO Timer is used for acceptance tests, use own timer when not under test
-  Timer timer{connection, activeApplication};
+  Timer timer{connection, *stack.application};
 
-  session->connect();
+  stack.session->connect();
   dispatcher.enter();
-  session->close();
+  stack.session->close();
 
   return 0;
 }
