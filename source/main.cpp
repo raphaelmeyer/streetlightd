@@ -10,6 +10,7 @@
 #include "presentation/KeyValueEncoder.h"
 #include "presentation/KeyValueDecoder.h"
 #include "session/LocalMqtt.h"
+#include "ProtocolStack.h"
 
 #include "dbus/Timer.h"
 #include "dbus/BrightnessSensor.h"
@@ -19,6 +20,7 @@
 #include "infrastructure/ActiveObject.h"
 #include "infrastructure/Factory.h"
 #include "infrastructure/CommandLineParser.h"
+#include "infrastructure/StackFactory.h"
 
 #include <dbus-c++/dbus.h>
 #include <dbus-c++/api.h>
@@ -26,15 +28,6 @@
 
 #include <csignal>
 #include <memory>
-
-class ProtocolStack
-{
-public:
-  std::unique_ptr<Application> application;
-  Presentation::Encoder encoder;
-  Presentation::Decoder decoder;
-  std::unique_ptr<Session> session;
-};
 
 
 static DBus::BusDispatcher dispatcher;
@@ -44,39 +37,18 @@ static void niam(int)
   dispatcher.leave();
 }
 
-ProtocolStack stackFactory(Configuration objects)
-{
-  ProtocolStack stack;
-  stack.session = std::unique_ptr<Session>{objects.session};
-  stack.encoder = objects.presentation.first;
-  stack.decoder = objects.presentation.second;
-  std::unique_ptr<Application> application{objects.application};
-  stack.application = std::unique_ptr<ActiveApplication>{new ActiveApplication(std::move(application))};
-
-  // connection
-  stack.application->setListener([&stack](double brightness){
-    const auto message = stack.encoder(brightness);
-    stack.session->send(message);
-  });
-
-  stack.session->setMessageCallback([&stack](const std::string &message){
-    const auto decoded = stack.decoder(message);
-    stack.application->received(decoded);
-  });
-
-  return stack;
-}
-
 Configuration parseCommandline( const std::vector<std::string> &arg)
 {
   Factory<Application*> applicationFactory;
   applicationFactory.add("forwarder", []{return new Forwarder();});
+
   Factory<Presentation::EncoderAndDecoder> encoderFactory;
   encoderFactory.add("key-value", []{ return Presentation::EncoderAndDecoder{KeyValue::encode, KeyValue::decode};});
+
   Factory<Session*> sessionFactory;
   sessionFactory.add("mqtt-local", []{return new LocalMqtt();});
-  CommandLineParser parser{std::cout, applicationFactory, encoderFactory, sessionFactory};
 
+  CommandLineParser parser{std::cout, applicationFactory, encoderFactory, sessionFactory};
   return parser.parse(arg);
 }
 
@@ -89,9 +61,8 @@ int main(int argc, char **argv)
 
   const std::vector<std::string> arg{argv, argv+argc};
 
-  Configuration objects = parseCommandline(arg);
-
-  ProtocolStack stack = stackFactory(objects);
+  Configuration configuration = parseCommandline(arg);
+  ProtocolStack stack = StackFactory::produce(configuration);
 
   // DBus creation
   DBus::Connection connection = DBus::Connection::SessionBus();
