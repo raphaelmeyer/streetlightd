@@ -31,6 +31,13 @@ public:
 
 };
 
+TEST_F(CommandLineParser_Test, output_is_not_valid_when_provided_invalid_arguments)
+{
+  const auto result = testee.parse({});
+
+  ASSERT_FALSE(result);
+}
+
 TEST_F(CommandLineParser_Test, show_help_by_default)
 {
   const std::string expected{
@@ -50,6 +57,24 @@ TEST_F(CommandLineParser_Test, does_not_print_help_for_correct_number_of_argumen
   testee.parse({"my name", "application", "presentation", "session"});
 
   ASSERT_EQ("", output.str());
+}
+
+TEST_F(CommandLineParser_Test, output_is_valid_when_provided_with_valid_arguments)
+{
+  ApplicationMock app;
+  ON_CALL(applicationFactory, produce("application"))
+      .WillByDefault(testing::Return(&app));
+  Presentation::Encoder encoder{[](double){return "test";}};
+  Presentation::Decoder decoder{[](const std::string&){return Incoming::Message{};}};
+  ON_CALL(presentationFactory, produce("presentation"))
+      .WillByDefault(testing::Return(Presentation::EncoderAndDecoder{encoder, decoder}));
+  SessionMock session;
+  ON_CALL(sessionFactory, produce("session"))
+      .WillByDefault(testing::Return(&session));
+
+  const auto result = testee.parse({"my name", "application", "presentation", "session"});
+
+  ASSERT_TRUE(result);
 }
 
 TEST_F(CommandLineParser_Test, show_available_applications_in_help)
@@ -106,9 +131,9 @@ TEST_F(CommandLineParser_Test, create_specified_application)
   EXPECT_CALL(applicationFactory, produce("the application"))
       .WillOnce(testing::Return(&app));
 
-  testee.parse({"", "the application", "", ""});
+  const auto result = testee.parse({"", "the application", "", ""});
 
-  ASSERT_EQ(&app, testee.getApplication());
+  ASSERT_EQ(&app, result.application);
 }
 
 TEST_F(CommandLineParser_Test, create_specified_presentation)
@@ -118,9 +143,9 @@ TEST_F(CommandLineParser_Test, create_specified_presentation)
   EXPECT_CALL(presentationFactory, produce("the presentation"))
       .WillOnce(testing::Return(Presentation::EncoderAndDecoder{encoder, decoder}));
 
-  testee.parse({"", "", "the presentation", ""});
+  const auto result = testee.parse({"", "", "the presentation", ""});
 
-  ASSERT_EQ("test", testee.getPresentation().first(0));
+  ASSERT_EQ("test", result.presentation.first(0));
 }
 
 TEST_F(CommandLineParser_Test, create_specified_session)
@@ -129,7 +154,7 @@ TEST_F(CommandLineParser_Test, create_specified_session)
   EXPECT_CALL(sessionFactory, produce("the session"))
       .WillOnce(testing::Return(&session));
 
-  testee.parse({"", "", "", "the session"});
+  const auto result = testee.parse({"", "", "", "the session"});
 
-  ASSERT_EQ(&session, testee.getSession());
+  ASSERT_EQ(&session, result.session);
 }

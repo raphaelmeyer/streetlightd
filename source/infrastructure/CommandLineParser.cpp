@@ -15,19 +15,24 @@ CommandLineParser::CommandLineParser(std::ostream &_output, Factory<Application 
 {
 }
 
-void CommandLineParser::parse(const std::vector<std::string> &arguments)
+Configuration CommandLineParser::parse(const std::vector<std::string> &arguments)
 {
   if (arguments.size() != 4) {
     output << "expecting the following arguments: <application> <presentation> <session>" << std::endl;
     printLayer("application", applicationFactory.workers());
     printLayer("presentation", presentationFactory.workers());
     printLayer("session", sessionFactory.workers());
-    return;
+    output << std::flush;
+
+    return {};
   }
 
-  application = applicationFactory.produce(arguments[1]);
-  presentation = presentationFactory.produce(arguments[2]);
-  session = sessionFactory.produce(arguments[3]);
+  Configuration result;
+  result.application = applicationFactory.produce(arguments[1]);
+  result.presentation = presentationFactory.produce(arguments[2]);
+  result.session = sessionFactory.produce(arguments[3]);
+
+  return result;
 }
 
 void CommandLineParser::printLayer(const std::string &name, const std::set<std::string> &list) const
@@ -44,18 +49,8 @@ void CommandLineParser::printList(const std::set<std::string> &list) const
   }
 }
 
-Application *CommandLineParser::getApplication() const
-{
-  return application;
-}
 
-Presentation::EncoderAndDecoder CommandLineParser::getPresentation() const
+Configuration::operator bool() const
 {
-  return presentation;
+  return bool(application) && bool(session);
 }
-
-Session *CommandLineParser::getSession() const
-{
-  return session;
-}
-
