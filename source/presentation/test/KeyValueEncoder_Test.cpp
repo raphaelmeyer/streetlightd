@@ -6,25 +6,35 @@
  */
 
 #include "../KeyValueEncoder.h"
-#include "Session_Mock.h"
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
+#include <string>
+#include <vector>
 
 class KeyValueEncoder_Test:
     public testing::Test
 {
 public:
-  testing::StrictMock<SessionMock> session{};
-  KeyValueEncoder testee{session};
+  typedef std::vector<std::string> vs;
+
+  void SetUp() override
+  {
+    testee.setListener([this](const std::string &message){
+      messages.push_back(message);
+    });
+  }
+
+  KeyValueEncoder testee{};
+  vs messages;
 
 };
 
 
 TEST_F(KeyValueEncoder_Test, encode_brightness)
 {
-  EXPECT_CALL(session, send("brightness 0.78\n"));
-
   testee.brightness(0.78);
+
+  ASSERT_EQ(vs{"brightness 0.78\n"}, messages);
 }

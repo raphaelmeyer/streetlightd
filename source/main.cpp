@@ -54,7 +54,8 @@ int main(int argc, char **argv)
   parser.parse(arg);
 
   Session *session = parser.getSession();
-  KeyValueEncoder presentationEncoder{*session};
+  KeyValueEncoder presentationEncoder{};
+  presentationEncoder.setListener([&session](const std::string &message){session->send(message);});
 
   DBus::Connection connection = DBus::Connection::SessionBus();
   connection.request_name("ch.bbv.streetlightd");

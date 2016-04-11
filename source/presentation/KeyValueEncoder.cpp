@@ -9,9 +9,9 @@
 
 #include <sstream>
 
-KeyValueEncoder::KeyValueEncoder(Session &_session) :
-  session{_session}
+void KeyValueEncoder::setListener(KeyValueEncoder::Listener value)
 {
+  message = value;
 }
 
 void KeyValueEncoder::brightness(double value)
@@ -19,6 +19,6 @@ void KeyValueEncoder::brightness(double value)
   std::stringstream stream;
   stream << "brightness " << value << std::endl;
 
-  session.send(stream.str());
+  message(stream.str());
 }
 

@@ -8,9 +8,10 @@
 #ifndef KEYVALUEENCODER_H
 #define KEYVALUEENCODER_H
 
-#include "Session.h"
-
 #include <application/Presentation.h>
+
+#include <string>
+#include <functional>
 
 /**
  * Own representation of key-value pairs that never should be used.
@@ -23,12 +24,14 @@ class KeyValueEncoder :
     public Presentation
 {
 public:
-  KeyValueEncoder(Session &session);
+  typedef std::function<void(const std::string&)> Listener;
+
+  void setListener(Listener value);
 
   void brightness(double value) override;
 
 private:
-  Session &session;
+  Listener message{};
 
 };
 
