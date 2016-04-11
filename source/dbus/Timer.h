@@ -8,7 +8,12 @@
 #ifndef TIMER_H
 #define TIMER_H
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wunused-but-set-variable"
 #include "TimerAdaptor.h"
+#pragma GCC diagnostic pop
+
 #include <application/TimerListener.h>
 
 #include <dbus-c++/dbus.h>

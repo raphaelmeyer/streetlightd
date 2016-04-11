@@ -7,6 +7,7 @@ set (Main_VERSION_MAJOR 0)
 set (Main_VERSION_MINOR 1)
 
 set (CMAKE_CXX_STANDARD 14)
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 add_definitions(-DNO_LOGGING)
 #include_directories ("${PROJECT_SOURCE_DIR}/amqp/")
 include_directories ("${PROJECT_SOURCE_DIR}/mqtt/")
@@ -16,6 +17,7 @@ include_directories ("${PROJECT_SOURCE_DIR}/session/")
 include_directories ("${PROJECT_SOURCE_DIR}/application/")
 
 include_directories("$(PROJECT_BINARY_DIR)")
+include_directories(".")
 include_directories("/usr/include/dbus-c++-1")
 
 file(GLOB RAW_SOURCES
