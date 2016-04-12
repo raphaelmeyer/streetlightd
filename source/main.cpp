@@ -61,6 +61,9 @@ int main(int argc, char **argv)
   const std::vector<std::string> arg{argv, argv+argc};
 
   Configuration configuration = parseCommandline(arg);
+  if (!configuration) {
+    return -1;
+  }
   ProtocolStack stack = StackFactory::produce(configuration);
 
   // DBus creation
