@@ -45,11 +45,9 @@ file(GLOB_RECURSE TEST_SOURCES
     )
 
 add_executable(streetlightd main.cpp ${RAW_SOURCES})
-
-target_link_libraries(streetlightd mosquittopp dbus-c++-1 pthread)
-
+target_link_libraries(streetlightd mosquittopp dbus-c++-1 pthread PocoUtil)
 
 add_executable(unit-test ${TEST_SOURCES})
-target_link_libraries(unit-test gmock_main pthread)
+target_link_libraries(unit-test gmock_main pthread PocoUtil)
 
 set(EXECUTABLE_OUTPUT_PATH "../")

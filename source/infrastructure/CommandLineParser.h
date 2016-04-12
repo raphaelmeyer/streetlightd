@@ -13,6 +13,7 @@
 #include <protocolstack/presentation/Presentation.h>
 #include <protocolstack/session/Session.h>
 
+#include <Poco/Util/OptionSet.h>
 #include <ostream>
 #include <vector>
 #include <set>
@@ -41,8 +42,9 @@ private:
   Factory<Presentation::EncoderAndDecoder> &presentationFactory;
   Factory<Session*> &sessionFactory;
 
-  void printLayer(const std::string &name, const std::set<std::string> &list) const;
-  void printList(const std::set<std::string> &list) const;
+  std::string join(const std::set<std::string> &list) const;
+
+  void printHelp(const Poco::Util::OptionSet &options);
 
 };
 
