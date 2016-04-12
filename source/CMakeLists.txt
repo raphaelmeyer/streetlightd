@@ -42,12 +42,14 @@ file(GLOB_RECURSE TEST_SOURCES
     protocolstack/application/Forwarder.cpp
     protocolstack/presentation/KeyValueEncoder.cpp
     protocolstack/presentation/KeyValueDecoder.cpp
+    protocolstack/presentation/JsonEncoder.cpp
+    protocolstack/presentation/JsonDecoder.cpp
     )
 
 add_executable(streetlightd main.cpp ${RAW_SOURCES})
-target_link_libraries(streetlightd mosquittopp dbus-c++-1 pthread PocoUtil)
+target_link_libraries(streetlightd mosquittopp dbus-c++-1 pthread PocoUtil jsoncpp)
 
 add_executable(unit-test ${TEST_SOURCES})
-target_link_libraries(unit-test gmock_main pthread PocoUtil)
+target_link_libraries(unit-test gmock_main pthread PocoUtil jsoncpp)
 
 set(EXECUTABLE_OUTPUT_PATH "../")

@@ -9,6 +9,8 @@
 #include "protocolstack/application/ActiveApplication.h"
 #include "protocolstack/presentation/KeyValueEncoder.h"
 #include "protocolstack/presentation/KeyValueDecoder.h"
+#include "protocolstack/presentation/JsonEncoder.h"
+#include "protocolstack/presentation/JsonDecoder.h"
 #include "protocolstack/session/LocalMqtt.h"
 #include "protocolstack/ProtocolStack.h"
 #include "protocolstack/StackFactory.h"
@@ -50,6 +52,7 @@ int main(int argc, char **argv)
 
   Factory<Presentation::EncoderAndDecoder> encoderFactory;
   encoderFactory.add("key-value", []{ return Presentation::EncoderAndDecoder{KeyValue::encode, KeyValue::decode};});
+  encoderFactory.add("json", []{ return Presentation::EncoderAndDecoder{Json::encode, Json::decode};});
 
   Factory<Session*> sessionFactory;
   sessionFactory.add("mqtt-local", []{return new LocalMqtt();});
