@@ -43,3 +43,5 @@ TEST(KeyValueDecoder_Test, uses_latest_specified_value)
   ASSERT_EQ(1, message.size());
   ASSERT_EQ(0.89, message[Incoming::Type::Luminosity]);
 }
+
+//TODO test for wrong format
