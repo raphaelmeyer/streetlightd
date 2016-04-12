@@ -36,21 +36,6 @@ static void niam(int)
   dispatcher.leave();
 }
 
-Configuration parseCommandline( const std::vector<std::string> &arg)
-{
-  Factory<Application*> applicationFactory;
-  applicationFactory.add("forwarder", []{return new Forwarder();});
-
-  Factory<Presentation::EncoderAndDecoder> encoderFactory;
-  encoderFactory.add("key-value", []{ return Presentation::EncoderAndDecoder{KeyValue::encode, KeyValue::decode};});
-
-  Factory<Session*> sessionFactory;
-  sessionFactory.add("mqtt-local", []{return new LocalMqtt();});
-
-  CommandLineParser parser{std::cout, applicationFactory, encoderFactory, sessionFactory};
-  return parser.parse(arg);
-}
-
 int main(int argc, char **argv)
 {
   DBus::default_dispatcher = &dispatcher;
@@ -60,11 +45,27 @@ int main(int argc, char **argv)
 
   const std::vector<std::string> arg{argv, argv+argc};
 
-  Configuration configuration = parseCommandline(arg);
+  Factory<Application*> applicationFactory;
+  applicationFactory.add("forwarder", []{return new Forwarder();});
+
+  Factory<Presentation::EncoderAndDecoder> encoderFactory;
+  encoderFactory.add("key-value", []{ return Presentation::EncoderAndDecoder{KeyValue::encode, KeyValue::decode};});
+
+  Factory<Session*> sessionFactory;
+  sessionFactory.add("mqtt-local", []{return new LocalMqtt();});
+
+  CommandLineParser parser{std::cout};
+  parser.addApplications(applicationFactory.workers());
+  parser.addPresentations(encoderFactory.workers());
+  parser.addSessions(sessionFactory.workers());
+  Configuration configuration = parser.parse(arg);
+
   if (!configuration) {
     return -1;
   }
-  ProtocolStack stack = StackFactory::produce(configuration);
+
+  StackFactory factory{applicationFactory, encoderFactory, sessionFactory};
+  ProtocolStack stack = factory.produce(configuration);
 
   // DBus creation
   DBus::Connection connection = DBus::Connection::SessionBus();

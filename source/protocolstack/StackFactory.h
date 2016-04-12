@@ -11,11 +11,23 @@
 #ifndef STACKFACTORY_H
 #define STACKFACTORY_H
 
-namespace StackFactory
+#include "../infrastructure/Factory.h"
+#include <protocolstack/application/Application.h>
+#include <protocolstack/presentation/Presentation.h>
+#include <protocolstack/session/Session.h>
+
+class StackFactory
 {
+public:
+  StackFactory(Factory<Application*> &applicationFactory, Factory<Presentation::EncoderAndDecoder> &presentationFactory, Factory<Session*> &sessionFactory);
 
-ProtocolStack produce(const Configuration &configuration);
+  ProtocolStack produce(const Configuration &configuration);
 
-}
+private:
+  Factory<Application*> &applicationFactory;
+  Factory<Presentation::EncoderAndDecoder> &presentationFactory;
+  Factory<Session*> &sessionFactory;
+
+};
 
 #endif

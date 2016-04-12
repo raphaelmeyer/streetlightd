@@ -8,11 +8,6 @@
 #ifndef COMMANDLINEPARSER_H
 #define COMMANDLINEPARSER_H
 
-#include "Factory.h"
-#include <protocolstack/application/Application.h>
-#include <protocolstack/presentation/Presentation.h>
-#include <protocolstack/session/Session.h>
-
 #include <Poco/Util/OptionSet.h>
 #include <ostream>
 #include <vector>
@@ -22,9 +17,9 @@
 class Configuration
 {
 public:
-  Application *application{nullptr};
-  Presentation::EncoderAndDecoder presentation{};
-  Session *session{nullptr};
+  std::string application{};
+  std::string presentation{};
+  std::string session{};
 
   operator bool() const;
 };
@@ -32,17 +27,19 @@ public:
 class CommandLineParser
 {
 public:
-  CommandLineParser(std::ostream &output, Factory<Application*> &applicationFactory, Factory<Presentation::EncoderAndDecoder> &presentationFactory, Factory<Session*> &sessionFactory);
+  CommandLineParser(std::ostream &output);
+
+  void addApplications(const std::set<std::string> &values);
+  void addPresentations(const std::set<std::string> &values);
+  void addSessions(const std::set<std::string> &values);
 
   Configuration parse(const std::vector<std::string> &arguments);
 
 private:
   std::ostream &output;
-  Factory<Application*> &applicationFactory;
-  Factory<Presentation::EncoderAndDecoder> &presentationFactory;
-  Factory<Session*> &sessionFactory;
-
-  std::string join(const std::set<std::string> &list) const;
+  std::set<std::string> application{};
+  std::set<std::string> presentation{};
+  std::set<std::string> session{};
 
   void printHelp(const Poco::Util::OptionSet &options);
 

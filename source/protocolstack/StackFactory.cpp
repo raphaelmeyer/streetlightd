@@ -7,8 +7,12 @@
 
 #include "StackFactory.h"
 
-namespace StackFactory
+StackFactory::StackFactory(Factory<Application *> &_application, Factory<Presentation::EncoderAndDecoder> &_presentation, Factory<Session *> &_session) :
+  applicationFactory{_application},
+  presentationFactory{_presentation},
+  sessionFactory{_session}
 {
+}
 
 static void connect(ProtocolStack &stack)
 {
@@ -23,23 +27,20 @@ static void connect(ProtocolStack &stack)
   });
 }
 
-static ProtocolStack initialize(const Configuration &configuration)
+ProtocolStack StackFactory::produce(const Configuration &configuration)
 {
+  //TODO cleanup
+  auto application = applicationFactory.produce(configuration.application);
+  auto presentation = presentationFactory.produce(configuration.presentation);
+  auto session = sessionFactory.produce(configuration.session);
+
   ProtocolStack stack;
-  stack.session = std::unique_ptr<Session>{configuration.session};
-  stack.encoder = configuration.presentation.first;
-  stack.decoder = configuration.presentation.second;
-  std::unique_ptr<Application> application{configuration.application};
-  stack.application = std::unique_ptr<ActiveApplication>{new ActiveApplication(std::move(application))};
+  stack.session = std::unique_ptr<Session>{session};
+  stack.encoder = presentation.first;
+  stack.decoder = presentation.second;
+  std::unique_ptr<Application> appptr{application};
+  stack.application = std::unique_ptr<ActiveApplication>{new ActiveApplication(std::move(appptr))};
 
-  return stack;
-}
-
-ProtocolStack produce(const Configuration &configuration)
-{
-  ProtocolStack stack = initialize(configuration);
   connect(stack);
   return stack;
-}
-
 }
