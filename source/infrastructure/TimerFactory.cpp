@@ -6,6 +6,7 @@
  */
 
 #include "TimerFactory.h"
+#include "InternalTimer.h"
 
 #include <dbus/DbusTimer.h>
 
@@ -19,6 +20,6 @@ Timer *TimerFactory::produce(const TimerConfiguration &configuration) const
   if (configuration.externalTimer) {
     return new DbusTimer(dbus);
   } else {
-    throw std::runtime_error("internal timer not yet implemented");
+    return new InternalTimer();
   }
 }
