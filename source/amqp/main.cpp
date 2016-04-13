@@ -1,4 +1,4 @@
-#include "AMQPSession.h"
+#include "AmqpSession.h"
 #include <protocolstack/session/SessionConfiguration.h>
 
 #include <cstdio>
@@ -21,7 +21,7 @@ int main(int argc, char** argv) {
   configuration.address = arg[1];
   configuration.credential = arg[2];
 
-  AMQPSession connection;
+  AmqpSession connection;
   connection.setConfiguration(configuration);
   connection.setUp();
   connection.connect();

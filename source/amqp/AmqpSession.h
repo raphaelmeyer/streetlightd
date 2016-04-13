@@ -13,9 +13,9 @@ extern "C" {
 
 #include <protocolstack/session/Session.h>
 
-class AMQPSession: public Session {
+class AmqpSession: public Session {
 public:
-  AMQPSession() = default;
+  AmqpSession() = default;
   virtual void setConfiguration(const SessionConfiguration &value) override;
   virtual void setUp() override;
   virtual void connect() override;

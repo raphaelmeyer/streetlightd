@@ -27,8 +27,8 @@ include_directories ("${PROJECT_SOURCE_DIR}/azure-iot-sdks/c/azure-uamqp-c/azure
 
 include_directories("$(PROJECT_BINARY_DIR)")
 
-add_executable(AMQPSession AMQPSession.cpp main.cpp)
+add_executable(AmqpSession AmqpSession.cpp main.cpp)
 #add_library(iothub_client STATIC IMPORTED)
-target_include_directories(AMQPSession PUBLIC "${PROJECT_SOURCE_DIR}/azure-iot-sdks/c/")
-target_link_libraries( AMQPSession aziotsharedutil iothub_client iothub_client_amqp_transport uamqp ssl crypto)
+target_include_directories(AmqpSession PUBLIC "${PROJECT_SOURCE_DIR}/azure-iot-sdks/c/")
+target_link_libraries( AmqpSession aziotsharedutil iothub_client iothub_client_amqp_transport uamqp ssl crypto)
 #target_link_libraries(AMQPConnection aziotsharedutil ssl crypto)

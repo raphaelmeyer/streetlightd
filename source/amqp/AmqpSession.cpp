@@ -1,4 +1,4 @@
-#include "AMQPSession.h"
+#include "AmqpSession.h"
 
 #include <exception>
 
@@ -7,7 +7,7 @@ static void SendConfirmationCallback(IOTHUB_CLIENT_CONFIRMATION_RESULT result, v
   //printf("Successfully sent your message");
 }
 
-void AMQPSession::setConfiguration(const SessionConfiguration &value)
+void AmqpSession::setConfiguration(const SessionConfiguration &value)
 {
   connectionString =
       "HostName=bbvgathering.azure-devices.net;"
@@ -15,7 +15,7 @@ void AMQPSession::setConfiguration(const SessionConfiguration &value)
       "SharedAccessKey=" + value.credential;
 }
 
-void AMQPSession::setUp()
+void AmqpSession::setUp()
 {
   srand((unsigned int)time(NULL));
   if (platform_init() != 0)
@@ -26,7 +26,7 @@ void AMQPSession::setUp()
   return;
 }
 
-void AMQPSession::connect()
+void AmqpSession::connect()
 {
   //Try to create a connection to our endpoint
   if ((iotHubClientHandle_ = IoTHubClient_CreateFromConnectionString(connectionString.c_str(), AMQP_Protocol)) == NULL)
@@ -35,14 +35,14 @@ void AMQPSession::connect()
   }
 
   /* Setting Message call back, so we can receive Commands. Give this pointer to callback*/
-  if (IoTHubClient_SetMessageCallback(iotHubClientHandle_, (&AMQPSession::internalMessageCallback), this) != IOTHUB_CLIENT_OK)
+  if (IoTHubClient_SetMessageCallback(iotHubClientHandle_, (&AmqpSession::internalMessageCallback), this) != IOTHUB_CLIENT_OK)
   {
     throw std::runtime_error("ERROR: IoTHubClient_SetMessageCallback..........FAILED!\r\n");
   }
   return;
 }
 
-void AMQPSession::send(const std::string& message)
+void AmqpSession::send(const std::string& message)
 {
   //IOTHUB_MESSAGE_HANDLE messageHandle = IoTHubMessage_CreateFromByteArray(reinterpret_cast<const unsigned char*>(message.c_str()), strlen(message.c_str()));
   IOTHUB_MESSAGE_HANDLE messageHandle = IoTHubMessage_CreateFromString(message.c_str());
@@ -57,25 +57,25 @@ void AMQPSession::send(const std::string& message)
   //printf("IoTHubClient_SendEventAsync accepted data for transmission to IoT Hub.\r\n");
 }
 
-void AMQPSession::setMessageCallback(std::function<void(const std::string&)> function) {
+void AmqpSession::setMessageCallback(std::function<void(const std::string&)> function) {
   if(function == nullptr)
     std::runtime_error("No valid Message Callback");
 
   receivedFunction_ = function;
 }
 
-void AMQPSession::close()
+void AmqpSession::close()
 {
   IoTHubClient_Destroy(iotHubClientHandle_);
   platform_deinit();
 }
 
-IOTHUBMESSAGE_DISPOSITION_RESULT AMQPSession::internalMessageCallback(IOTHUB_MESSAGE_HANDLE message, void* userContextCallback) {
+IOTHUBMESSAGE_DISPOSITION_RESULT AmqpSession::internalMessageCallback(IOTHUB_MESSAGE_HANDLE message, void* userContextCallback) {
   printf("Received a message");
   if(userContextCallback == nullptr)
     throw std::runtime_error("Error in internalMessageCallback, no \"this\" pointer");
 
-  AMQPSession* instance = reinterpret_cast<AMQPSession*>(userContextCallback);
+  AmqpSession* instance = reinterpret_cast<AmqpSession*>(userContextCallback);
 
   const unsigned char* buffer = NULL;
   size_t size = 0;
