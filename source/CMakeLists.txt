@@ -47,7 +47,7 @@ file(GLOB_RECURSE TEST_SOURCES
     )
 
 add_executable(streetlightd main.cpp ${RAW_SOURCES})
-target_link_libraries(streetlightd mosquittopp dbus-c++-1 pthread PocoUtil jsoncpp)
+target_link_libraries(streetlightd mosquittopp dbus-c++-1 pthread PocoUtil jsoncpp PocoNet PocoNetSSL PocoFoundation)
 
 add_executable(unit-test ${TEST_SOURCES})
 target_link_libraries(unit-test gmock_main pthread PocoUtil jsoncpp)
