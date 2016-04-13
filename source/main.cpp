@@ -58,7 +58,7 @@ int main(int argc, char **argv)
   parser.addApplications(applicationFactory.workers());
   parser.addPresentations(encoderFactory.workers());
   parser.addSessions(sessionFactory.workers());
-  Configuration configuration = parser.parse(arg);
+  StackConfiguration configuration = parser.parse(arg);
 
   if (!configuration) {
     return -1;

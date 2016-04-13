@@ -37,7 +37,7 @@ void CommandLineParser::addSessions(const std::set<std::string> &values)
   enums[Layer::Session].values.insert(values.begin(), values.end());
 }
 
-Configuration CommandLineParser::parse(const std::vector<std::string> &arguments) const
+StackConfiguration CommandLineParser::parse(const std::vector<std::string> &arguments) const
 {
   const Poco::Util::OptionSet options = createOptions();
 
@@ -104,9 +104,9 @@ std::map<CommandLineParser::Layer,std::string> CommandLineParser::fillEnumValues
   return enumValues;
 }
 
-Configuration CommandLineParser::createConfig(std::map<Layer, std::string> enumValues) const
+StackConfiguration CommandLineParser::createConfig(std::map<Layer, std::string> enumValues) const
 {
-  Configuration configuration;
+  StackConfiguration configuration;
   configuration.application = enumValues[Layer::Application];
   configuration.presentation = enumValues[Layer::Presentation];
   configuration.session = enumValues[Layer::Session];
@@ -173,10 +173,6 @@ std::string CommandLineParser::valueFor(CommandLineParser::Layer type, const std
   return value;
 }
 
-Configuration::operator bool() const
-{
-  return !application.empty() && !presentation.empty() && !session.empty();
-}
 
 static std::string join(const std::set<std::string> &list)
 {

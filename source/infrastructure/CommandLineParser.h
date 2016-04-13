@@ -8,22 +8,14 @@
 #ifndef COMMANDLINEPARSER_H
 #define COMMANDLINEPARSER_H
 
+#include <protocolstack/StackFactory.h>
+
 #include <Poco/Util/OptionSet.h>
 #include <ostream>
 #include <vector>
 #include <set>
 #include <string>
 #include <map>
-
-class Configuration
-{
-public:
-  std::string application{};
-  std::string presentation{};
-  std::string session{};
-
-  operator bool() const;
-};
 
 class CommandLineParser
 {
@@ -34,7 +26,7 @@ public:
   void addPresentations(const std::set<std::string> &values);
   void addSessions(const std::set<std::string> &values);
 
-  Configuration parse(const std::vector<std::string> &arguments) const;
+  StackConfiguration parse(const std::vector<std::string> &arguments) const;
 private:
   class EnumEntry {
   public:
@@ -60,7 +52,7 @@ private:
   std::string valueFor(Layer type, const std::map<std::string, std::string> &values) const;
   std::map<CommandLineParser::Layer, std::string> fillEnumValues(const std::map<std::string, std::string> &values) const;
   std::map<std::string, std::string> parseToMap(const std::vector<std::string> &arguments, const Poco::Util::OptionSet &options) const;
-  Configuration createConfig(std::map<Layer, std::string> enumValues) const;
+  StackConfiguration createConfig(std::map<Layer, std::string> enumValues) const;
 };
 
 #endif

@@ -6,7 +6,6 @@
  */
 
 #include "ProtocolStack.h"
-#include "infrastructure/CommandLineParser.h"
 
 #ifndef STACKFACTORY_H
 #define STACKFACTORY_H
@@ -16,12 +15,25 @@
 #include <protocolstack/presentation/Presentation.h>
 #include <protocolstack/session/Session.h>
 
+class StackConfiguration
+{
+public:
+  std::string application{};
+  std::string presentation{};
+  std::string session{};
+
+  operator bool() const
+  {
+    return !application.empty() && !presentation.empty() && !session.empty();
+  }
+};
+
 class StackFactory
 {
 public:
   StackFactory(Factory<Application*> &applicationFactory, Factory<Presentation::EncoderAndDecoder> &presentationFactory, Factory<Session*> &sessionFactory);
 
-  ProtocolStack produce(const Configuration &configuration);
+  ProtocolStack produce(const StackConfiguration &configuration);
 
 private:
   Factory<Application*> &applicationFactory;

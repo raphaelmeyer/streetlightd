@@ -27,7 +27,7 @@ static void connect(ProtocolStack &stack)
   });
 }
 
-ProtocolStack StackFactory::produce(const Configuration &configuration)
+ProtocolStack StackFactory::produce(const StackConfiguration &configuration)
 {
   //TODO cleanup
   auto application = applicationFactory.produce(configuration.application);
