@@ -29,6 +29,7 @@ public:
     "-s<session>, --session=<session>                 <session>:\n"
     "--address=<address>                              address to connect to\n"
     "--credential=<credential>                        credentials for connection\n"
+    "--external-timer                                 trigger updates via DBus\n"
   };
 
 };
@@ -170,4 +171,26 @@ TEST_F(CommandLineParser_Test, can_specify_credentials)
   const auto result = testee.parse({"--credential=mySecret", "-ax", "-px", "-sx"});
 
   ASSERT_EQ("mySecret", result.credential);
+}
+
+TEST_F(CommandLineParser_Test, do_not_use_external_timer_by_default)
+{
+  testee.addSessions({"x"});
+  testee.addPresentations({"x"});
+  testee.addApplications({"x"});
+
+  const auto result = testee.parse({"-ax", "-px", "-sx"});
+
+  ASSERT_FALSE(result.externalTimer);
+}
+
+TEST_F(CommandLineParser_Test, can_specify_to_use_external_timer)
+{
+  testee.addSessions({"x"});
+  testee.addPresentations({"x"});
+  testee.addApplications({"x"});
+
+  const auto result = testee.parse({"--external-timer", "-ax", "-px", "-sx"});
+
+  ASSERT_TRUE(result.externalTimer);
 }
