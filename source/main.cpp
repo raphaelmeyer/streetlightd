@@ -58,7 +58,7 @@ int main(int argc, char **argv)
   parser.addApplications(applicationFactory.workers());
   parser.addPresentations(encoderFactory.workers());
   parser.addSessions(sessionFactory.workers());
-  StackConfiguration configuration = parser.parse(arg);
+  Configuration configuration = parser.parse(arg);
 
   if (!configuration) {
     return -1;
@@ -66,6 +66,7 @@ int main(int argc, char **argv)
 
   StackFactory factory{applicationFactory, encoderFactory, sessionFactory};
   ProtocolStack stack = factory.produce(configuration);
+  stack.session->setConfiguration(configuration);
 
   // DBus creation
   DBus::Connection connection = DBus::Connection::SessionBus();

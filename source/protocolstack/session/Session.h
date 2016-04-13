@@ -8,6 +8,8 @@
 #ifndef SESSION
 #define SESSION
 
+#include "SessionConfiguration.h"
+
 #include <string>
 #include <functional>
 
@@ -18,8 +20,7 @@ public:
 
   virtual ~Session() = default;
   
-  //TODO Following are method stubs, they may be altered to fit our needs
-  
+  virtual void setConfiguration(const SessionConfiguration &value) = 0;
   virtual void setUp() = 0;
   virtual void connect() = 0;
 

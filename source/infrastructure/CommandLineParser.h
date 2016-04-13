@@ -9,6 +9,7 @@
 #define COMMANDLINEPARSER_H
 
 #include <protocolstack/StackFactory.h>
+#include <protocolstack/session/SessionConfiguration.h>
 
 #include <Poco/Util/OptionSet.h>
 #include <ostream>
@@ -16,6 +17,12 @@
 #include <set>
 #include <string>
 #include <map>
+
+class Configuration :
+    public StackConfiguration,
+    public SessionConfiguration
+{
+};
 
 class CommandLineParser
 {
@@ -26,7 +33,7 @@ public:
   void addPresentations(const std::set<std::string> &values);
   void addSessions(const std::set<std::string> &values);
 
-  StackConfiguration parse(const std::vector<std::string> &arguments) const;
+  Configuration parse(const std::vector<std::string> &arguments) const;
 private:
   class EnumEntry {
   public:
@@ -52,7 +59,8 @@ private:
   std::string valueFor(Layer type, const std::map<std::string, std::string> &values) const;
   std::map<CommandLineParser::Layer, std::string> fillEnumValues(const std::map<std::string, std::string> &values) const;
   std::map<std::string, std::string> parseToMap(const std::vector<std::string> &arguments, const Poco::Util::OptionSet &options) const;
-  StackConfiguration createConfig(std::map<Layer, std::string> enumValues) const;
+  void fillStackConfig(StackConfiguration &config, std::map<Layer, std::string> enumValues) const;
+  void fillSessionConfig(SessionConfiguration &config, std::map<std::string, std::string> values) const;
 };
 
 #endif

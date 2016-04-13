@@ -37,11 +37,11 @@ void CommandLineParser::addSessions(const std::set<std::string> &values)
   enums[Layer::Session].values.insert(values.begin(), values.end());
 }
 
-StackConfiguration CommandLineParser::parse(const std::vector<std::string> &arguments) const
+Configuration CommandLineParser::parse(const std::vector<std::string> &arguments) const
 {
   const Poco::Util::OptionSet options = createOptions();
 
-  const auto values = parseToMap(arguments, options);
+   auto values = parseToMap(arguments, options);  //TODO make const again
 
   if (values.empty()) {
     printHelp(options);
@@ -59,7 +59,10 @@ StackConfiguration CommandLineParser::parse(const std::vector<std::string> &argu
     return {};
   }
 
-  return createConfig(enumValues);
+  Configuration config{};
+  fillStackConfig(config, enumValues);
+  fillSessionConfig(config, values);
+  return config;
 }
 
 std::map<std::string, std::string> CommandLineParser::parseToMap(const std::vector<std::string> &arguments, const Poco::Util::OptionSet &options) const
@@ -104,13 +107,17 @@ std::map<CommandLineParser::Layer,std::string> CommandLineParser::fillEnumValues
   return enumValues;
 }
 
-StackConfiguration CommandLineParser::createConfig(std::map<Layer, std::string> enumValues) const
+void CommandLineParser::fillStackConfig(StackConfiguration &config, std::map<Layer, std::string> enumValues) const
 {
-  StackConfiguration configuration;
-  configuration.application = enumValues[Layer::Application];
-  configuration.presentation = enumValues[Layer::Presentation];
-  configuration.session = enumValues[Layer::Session];
-  return configuration;
+  config.application = enumValues[Layer::Application];
+  config.presentation = enumValues[Layer::Presentation];
+  config.session = enumValues[Layer::Session];
+}
+
+void CommandLineParser::fillSessionConfig(SessionConfiguration &config, std::map<std::string, std::string> values) const
+{
+  config.address = values["address"];
+  config.credential = values["credential"];
 }
 
 Poco::Util::OptionSet CommandLineParser::createOptions() const

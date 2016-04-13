@@ -27,6 +27,7 @@ public:
 
   void send(const std::string &message) override;
 
+  void setConfiguration(const SessionConfiguration &value) override;
   void setUp() override {}
   void connect() override;
   void close() override;
@@ -34,6 +35,7 @@ public:
   void setMessageCallback(Callback function) override;
 
 private:
+  SessionConfiguration configuration{};
   Callback listener{};
 
   void on_connect(int) override;

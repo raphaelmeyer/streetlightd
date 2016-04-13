@@ -18,6 +18,11 @@ void LocalMqtt::send(const std::string &message)
   throwIfError("publish", result);
 }
 
+void LocalMqtt::setConfiguration(const SessionConfiguration &value)
+{
+  configuration = value;
+}
+
 void LocalMqtt::on_message(const mosquitto_message *message)
 {
   const char *data = (const char *)message->payload;

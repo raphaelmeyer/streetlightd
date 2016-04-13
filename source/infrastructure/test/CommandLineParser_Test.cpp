@@ -149,3 +149,25 @@ TEST_F(CommandLineParser_Test, return_the_specified_session)
 
   ASSERT_EQ("theSession", result.session);
 }
+
+TEST_F(CommandLineParser_Test, can_specify_an_address)
+{
+  testee.addSessions({"x"});
+  testee.addPresentations({"x"});
+  testee.addApplications({"x"});
+
+  const auto result = testee.parse({"--address=someAddress", "-ax", "-px", "-sx"});
+
+  ASSERT_EQ("someAddress", result.address);
+}
+
+TEST_F(CommandLineParser_Test, can_specify_credentials)
+{
+  testee.addSessions({"x"});
+  testee.addPresentations({"x"});
+  testee.addApplications({"x"});
+
+  const auto result = testee.parse({"--credential=mySecret", "-ax", "-px", "-sx"});
+
+  ASSERT_EQ("mySecret", result.credential);
+}
