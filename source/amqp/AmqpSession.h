@@ -1,8 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string>
+#include <protocolstack/session/Session.h>
 
-extern "C" {
+extern "C"
+{
 #include "platform.h"
 #include "iothub_client.h"
 #include "iothub_message.h"
@@ -11,17 +10,20 @@ extern "C" {
 #include "iothubtransportamqp.h"
 }
 
-#include <protocolstack/session/Session.h>
+#include <string>
+#include <functional>
 
-class AmqpSession: public Session {
+class AmqpSession :
+    public Session
+{
 public:
-  AmqpSession() = default;
-  virtual void setConfiguration(const SessionConfiguration &value) override;
-  virtual void setUp() override;
-  virtual void connect() override;
-  virtual void send(const std::string& message) override;
-  virtual void close() override;
-  virtual void setMessageCallback(std::function<void(const std::string&)> function) override;
+  void setConfiguration(const SessionConfiguration &value) override;
+  void setUp() override;
+  void connect() override;
+  void send(const std::string& message) override;
+  void close() override;
+  void setMessageCallback(Callback function) override;
+
   /** Internal message callback which is executed when a message is received
          * @param message a handle to the message received
          * @param userContextCallback this will hold a pointer to a AMQPSession
@@ -31,5 +33,5 @@ public:
 
   std::string connectionString{};
   IOTHUB_CLIENT_HANDLE iotHubClientHandle_; ///!< Our internal connection handle
-  std::function<void(const std::string&)> receivedFunction_; ///!< Function to execute on receiving
+  Callback receivedFunction_; ///!< Function to execute on receiving
 };

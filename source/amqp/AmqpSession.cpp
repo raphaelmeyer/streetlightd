@@ -2,7 +2,7 @@
 
 #include <exception>
 
-static void SendConfirmationCallback(IOTHUB_CLIENT_CONFIRMATION_RESULT result, void* userContextCallback)
+static void SendConfirmationCallback(IOTHUB_CLIENT_CONFIRMATION_RESULT, void*)
 {
   //printf("Successfully sent your message");
 }
@@ -57,7 +57,7 @@ void AmqpSession::send(const std::string& message)
   //printf("IoTHubClient_SendEventAsync accepted data for transmission to IoT Hub.\r\n");
 }
 
-void AmqpSession::setMessageCallback(std::function<void(const std::string&)> function) {
+void AmqpSession::setMessageCallback(Callback function) {
   if(function == nullptr)
     std::runtime_error("No valid Message Callback");
 
@@ -112,31 +112,6 @@ IOTHUBMESSAGE_DISPOSITION_RESULT AmqpSession::internalMessageCallback(IOTHUB_MES
     //(void)printf("Failed getting the body of the message received (type %i).\r\n", contentType);
     throw std::runtime_error("Failed getting the STRING body of the message received.\r\n");
   }
-
-  //NOTE the original azure iot client used following code to get properties from message. We might delete it in the future, if we don't need it
-  /*// Retrieve properties from the message
-       MAP_HANDLE mapProperties = IoTHubMessage_Properties(message);
-       if (mapProperties != NULL)
-       {
-           const char*const* keys;
-           const char*const* values;
-           size_t propertyCount = 0;
-           if (Map_GetInternals(mapProperties, &keys, &values, &propertyCount) == MAP_OK)
-           {
-               if (propertyCount > 0)
-               {
-                   size_t index;
-
-                   printf("Message Properties:\r\n");
-                   for (index = 0; index < propertyCount; index++)
-                   {
-                       printf("\tKey: %s Value: %s\r\n", keys[index], values[index]);
-                   }
-                   printf("\r\n");
-               }
-           }
-       }
-       */
 
   return IOTHUBMESSAGE_ACCEPTED;
 }
