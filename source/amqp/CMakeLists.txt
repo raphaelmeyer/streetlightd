@@ -6,8 +6,12 @@ set (AMQPConnection_VERSION_MAJOR 0)
 set (AMQPConnection_VERSION_MINOR 1)
 
 set (CMAKE_CXX_STANDARD 14)
-add_definitions(-DNO_LOGGING)
-include_directories ("${PROJECT_SOURCE_DIR}/../presentation/")
+#add_definitions(-DNO_LOGGING)
+
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
+
+include_directories ("${PROJECT_SOURCE_DIR}/../")
 add_subdirectory ("${PROJECT_SOURCE_DIR}/azure-iot-sdks/c/" EXCLUDE_FROM_ALL)
 #add_subdirectory ("${PROJECT_SOURCE_DIR}/azure-iot-sdks/c/iothub_client")
 #add_subdirectory ("${PROJECT_SOURCE_DIR}/azure-iot-sdks/c/azure-uamqp-c/")

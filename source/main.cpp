@@ -16,6 +16,8 @@
 #include "protocolstack/ProtocolStack.h"
 #include "protocolstack/StackFactory.h"
 
+#include "amqp/AmqpSession.h"
+
 #include "dbus/DbusTimer.h"
 #include "dbus/BrightnessSensor.h"
 #include "dbus/LuminosityActor.h"
@@ -59,6 +61,7 @@ int main(int argc, char **argv)
   Factory<Session*> sessionFactory;
   sessionFactory.add("mqtt-local", []{return new LocalMqtt();});
   sessionFactory.add("azure-http", []{return new AzureHttp();});
+  sessionFactory.add("azure-amqp", []{return new AmqpSession();});
 
   CommandLineParser parser{std::cout};
   parser.addApplications(applicationFactory.workers());
