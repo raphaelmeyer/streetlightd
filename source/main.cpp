@@ -21,6 +21,7 @@
 #include "infrastructure/ActiveObject.h"
 #include "infrastructure/Factory.h"
 #include "infrastructure/CommandLineParser.h"
+#include "infrastructure/TimerFactory.h"
 
 #include <dbus-c++/dbus.h>
 #include <dbus-c++/api.h>
@@ -74,8 +75,9 @@ int main(int argc, char **argv)
   BrightnessSensor brightness{connection};
   LuminosityActor luminosity{connection};
 
-  //TODO Timer is used for acceptance tests, use own timer when not under test
-  std::unique_ptr<Timer> timer = std::unique_ptr<Timer>{new DbusTimer(connection)};
+  //  Timer creation
+  TimerFactory timerFactory{connection};
+  std::unique_ptr<Timer> timer = std::unique_ptr<Timer>{timerFactory.produce(configuration)};
 
   // connection
   stack.application->setBrightnessSensor([&brightness]{
