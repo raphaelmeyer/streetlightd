@@ -33,7 +33,7 @@ public:
 
 };
 
-TEST_F(CommandLineParser_Test, output_is_not_valid_when_provided_invalid_arguments)
+TEST_F(CommandLineParser_Test, output_is_not_valid_when_not_provided_all_arguments)
 {
   const auto result = testee.parse({});
 
@@ -73,6 +73,17 @@ TEST_F(CommandLineParser_Test, output_is_valid_when_provided_with_valid_argument
   ASSERT_TRUE(result);
 }
 
+TEST_F(CommandLineParser_Test, output_is_not_valid_when_provided_invalid_arguments)
+{
+  testee.addApplications({"A"});
+  testee.addPresentations({"P"});
+  testee.addSessions({"S"});
+
+  const auto result = testee.parse({"--application=X", "--presentation=P", "--session=S"});
+
+  ASSERT_FALSE(result);
+}
+
 TEST_F(CommandLineParser_Test, show_available_applications_in_help)
 {
   testee.addApplications({"app1", "app2", "app3"});
@@ -108,7 +119,9 @@ TEST_F(CommandLineParser_Test, show_available_sessions_in_help)
 
 TEST_F(CommandLineParser_Test, return_the_specified_application)
 {
-  testee.addSessions({"theApplication"});
+  testee.addApplications({"theApplication"});
+  testee.addPresentations({"x"});
+  testee.addSessions({"x"});
 
   const auto result = testee.parse({"--application=theApplication", "-px", "-sx"});
 
@@ -118,6 +131,8 @@ TEST_F(CommandLineParser_Test, return_the_specified_application)
 TEST_F(CommandLineParser_Test, return_the_specified_presentation)
 {
   testee.addPresentations({"thePresentation"});
+  testee.addApplications({"x"});
+  testee.addSessions({"x"});
 
   const auto result = testee.parse({"--presentation=thePresentation", "-ax", "-sx"});
 
@@ -127,10 +142,10 @@ TEST_F(CommandLineParser_Test, return_the_specified_presentation)
 TEST_F(CommandLineParser_Test, return_the_specified_session)
 {
   testee.addSessions({"theSession"});
+  testee.addPresentations({"x"});
+  testee.addApplications({"x"});
 
   const auto result = testee.parse({"--session=theSession", "-ax", "-px"});
 
   ASSERT_EQ("theSession", result.session);
 }
-
-//TODO print help when the specified value does not exist

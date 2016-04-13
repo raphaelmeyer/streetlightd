@@ -13,6 +13,7 @@
 #include <vector>
 #include <set>
 #include <string>
+#include <map>
 
 class Configuration
 {
@@ -33,16 +34,33 @@ public:
   void addPresentations(const std::set<std::string> &values);
   void addSessions(const std::set<std::string> &values);
 
-  Configuration parse(const std::vector<std::string> &arguments);
-
+  Configuration parse(const std::vector<std::string> &arguments) const;
 private:
+  class EnumEntry {
+  public:
+    std::string longName;
+    std::string shortName;
+    std::set<std::string> values;
+
+    Poco::Util::Option asOption() const;
+  };
+  enum class Layer {
+    Application,
+    Presentation,
+    Session
+  };
+
   std::ostream &output;
-  std::set<std::string> application{};
-  std::set<std::string> presentation{};
-  std::set<std::string> session{};
+  std::map<Layer, EnumEntry> enums;
 
-  void printHelp(const Poco::Util::OptionSet &options);
-
+  Poco::Util::OptionSet createOptions() const;
+  void printHelp(const Poco::Util::OptionSet &options) const;
+  std::string keyFor(Layer entry) const;
+  EnumEntry entryFor(Layer entry) const;
+  std::string valueFor(Layer type, const std::map<std::string, std::string> &values) const;
+  std::map<CommandLineParser::Layer, std::string> fillEnumValues(const std::map<std::string, std::string> &values) const;
+  std::map<std::string, std::string> parseToMap(const std::vector<std::string> &arguments, const Poco::Util::OptionSet &options) const;
+  Configuration createConfig(std::map<Layer, std::string> enumValues) const;
 };
 
 #endif
