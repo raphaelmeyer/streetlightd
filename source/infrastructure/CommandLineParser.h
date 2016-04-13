@@ -10,6 +10,7 @@
 
 #include <protocolstack/StackFactory.h>
 #include <protocolstack/session/SessionConfiguration.h>
+#include <infrastructure/TimerConfiguration.h>
 
 #include <Poco/Util/OptionSet.h>
 #include <ostream>
@@ -20,7 +21,8 @@
 
 class Configuration :
     public StackConfiguration,
-    public SessionConfiguration
+    public SessionConfiguration,
+    public TimerConfiguration
 {
 };
 
@@ -61,6 +63,7 @@ private:
   std::map<std::string, std::string> parseToMap(const std::vector<std::string> &arguments, const Poco::Util::OptionSet &options) const;
   void fillStackConfig(StackConfiguration &config, std::map<Layer, std::string> enumValues) const;
   void fillSessionConfig(SessionConfiguration &config, std::map<std::string, std::string> values) const;
+  void fillTimerConfig(TimerConfiguration &config, std::map<std::string, std::string> values) const;
 };
 
 #endif

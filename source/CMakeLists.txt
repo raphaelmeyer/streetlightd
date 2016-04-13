@@ -22,6 +22,7 @@ include_directories(".")
 include_directories("/usr/include/dbus-c++-1")
 
 file(GLOB RAW_SOURCES
+    *.h
     protocolstack/*.h
     protocolstack/*.cpp
     protocolstack/session/*.cpp
@@ -32,6 +33,7 @@ file(GLOB RAW_SOURCES
     protocolstack/application/*.cpp
     protocolstack/application/*.h
     infrastructure/*.cpp
+    infrastructure/*.h
     )
 
 file(GLOB_RECURSE TEST_SOURCES

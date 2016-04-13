@@ -62,6 +62,7 @@ Configuration CommandLineParser::parse(const std::vector<std::string> &arguments
   Configuration config{};
   fillStackConfig(config, enumValues);
   fillSessionConfig(config, values);
+  fillTimerConfig(config, values);
   return config;
 }
 
@@ -120,6 +121,11 @@ void CommandLineParser::fillSessionConfig(SessionConfiguration &config, std::map
   config.credential = values["credential"];
 }
 
+void CommandLineParser::fillTimerConfig(TimerConfiguration &config, std::map<std::string, std::string> values) const
+{
+  config.externalTimer = values.find("external-timer") != values.end();
+}
+
 Poco::Util::OptionSet CommandLineParser::createOptions() const
 {
   Poco::Util::OptionSet options{};
@@ -130,9 +136,9 @@ Poco::Util::OptionSet CommandLineParser::createOptions() const
     options.addOption(opt.second.asOption());
   }
 
-  options.addOption(Poco::Util::Option{"address",       "", "address to connect to", false}.argument("<address>"));
-  options.addOption(Poco::Util::Option{"credential",    "", "credentials for connection", false}.argument("<credential>"));
-
+  options.addOption(Poco::Util::Option{"address",        "", "address to connect to", false}.argument("<address>"));
+  options.addOption(Poco::Util::Option{"credential",     "", "credentials for connection", false}.argument("<credential>"));
+  options.addOption(Poco::Util::Option{"external-timer", "", "trigger updates via DBus", false});
   return options;
 }
 
