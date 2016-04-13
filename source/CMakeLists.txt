@@ -32,6 +32,7 @@ file(GLOB RAW_SOURCES
     protocolstack/application/*.cpp
     protocolstack/application/*.h
     infrastructure/*.cpp
+    infrastructure/*.h
     )
 
 file(GLOB_RECURSE TEST_SOURCES

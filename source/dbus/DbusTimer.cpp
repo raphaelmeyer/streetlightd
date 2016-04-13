@@ -5,19 +5,19 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "Timer.h"
+#include "DbusTimer.h"
 
-Timer::Timer(DBus::Connection &connection) :
+DbusTimer::DbusTimer(DBus::Connection &connection) :
   DBus::ObjectAdaptor{connection, "/ch/bbv/streetlightd"}
 {
 }
 
-void Timer::timeout()
+void DbusTimer::timeout()
 {
   callback();
 }
 
-void Timer::setCallback(Timer::Callback value)
+void DbusTimer::setCallback(DbusTimer::Callback value)
 {
   callback = value;
 }

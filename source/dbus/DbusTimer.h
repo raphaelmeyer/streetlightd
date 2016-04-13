@@ -5,8 +5,8 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef TIMER_H
-#define TIMER_H
+#ifndef DBUSTIMER_H
+#define DBUSTIMER_H
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -14,23 +14,23 @@
 #include "TimerAdaptor.h"
 #pragma GCC diagnostic pop
 
-#include <dbus-c++/dbus.h>
+#include <infrastructure/Timer.h>
 
+#include <dbus-c++/dbus.h>
 #include <functional>
 
-class Timer :
+class DbusTimer :
+    public Timer,
     public DBus::ObjectAdaptor,
     public DBus::IntrospectableAdaptor,
     public ch::bbv::timer_adaptor
 {
 public:
-  typedef std::function<void()> Callback;
-
-  Timer(DBus::Connection& connection);
+  DbusTimer(DBus::Connection& connection);
 
   void timeout() override;
 
-  void setCallback(Callback value);
+  void setCallback(Callback value) override;
 
 private:
   Callback callback;

@@ -13,7 +13,7 @@
 #include "protocolstack/ProtocolStack.h"
 #include "protocolstack/StackFactory.h"
 
-#include "dbus/Timer.h"
+#include "dbus/DbusTimer.h"
 #include "dbus/BrightnessSensor.h"
 #include "dbus/LuminosityActor.h"
 
@@ -73,8 +73,9 @@ int main(int argc, char **argv)
   connection.request_name("ch.bbv.streetlightd");
   BrightnessSensor brightness{connection};
   LuminosityActor luminosity{connection};
+
   //TODO Timer is used for acceptance tests, use own timer when not under test
-  Timer timer{connection};
+  std::unique_ptr<Timer> timer = std::unique_ptr<Timer>{new DbusTimer(connection)};
 
   // connection
   stack.application->setBrightnessSensor([&brightness]{
@@ -83,7 +84,7 @@ int main(int argc, char **argv)
   stack.application->setLuminosityActor([&luminosity](double value){
     luminosity.set(value);
   });
-  timer.setCallback([&stack]{
+  timer->setCallback([&stack]{
     stack.application->timeout();
   });
 
