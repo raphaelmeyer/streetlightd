@@ -70,6 +70,20 @@ static void SendConfirmationCallback(IOTHUB_CLIENT_CONFIRMATION_RESULT, void*)
   //printf("Successfully sent your message");
 }
 
+AmqpSession::AmqpSession()
+{
+  srand((unsigned int)time(NULL));
+  if (platform_init() != 0)
+  {
+    throw std::runtime_error("Failed to initialize the platform");
+  }
+}
+
+AmqpSession::~AmqpSession()
+{
+  platform_deinit();
+}
+
 void AmqpSession::setConfiguration(const SessionConfiguration &value)
 {
   connectionString =
@@ -80,13 +94,6 @@ void AmqpSession::setConfiguration(const SessionConfiguration &value)
 
 void AmqpSession::setUp()
 {
-  srand((unsigned int)time(NULL));
-  if (platform_init() != 0)
-  {
-    //printf("Failed to initialize the platform.\r\n");
-    throw std::runtime_error("Failed to initialize the platform");
-  }
-  return;
 }
 
 void AmqpSession::connect()
@@ -131,6 +138,5 @@ void AmqpSession::close()
 {
   IoTHubClient_Destroy((IOTHUB_CLIENT_HANDLE)iotHubClientHandle_);
   iotHubClientHandle_ = nullptr;
-  platform_deinit();
 }
 
