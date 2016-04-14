@@ -21,13 +21,12 @@ public:
   virtual ~Session() = default;
   
   virtual void setConfiguration(const SessionConfiguration &value) = 0;
-  virtual void setUp() = 0;
-  virtual void connect() = 0;
 
+  virtual void connect() = 0;
+  virtual void close() = 0;
 
   //TODO do not use a string (in the case somebody wants to send binary data)
   virtual void send(const std::string &message) = 0;
-  virtual void close() = 0;
   virtual void setMessageCallback(Callback function) = 0;
 
 };
