@@ -14,20 +14,17 @@
 #include "StreetlightProxy.h"
 #pragma GCC diagnostic pop
 
-#include <protocolstack/application/Sensor.h>
-
 #include <dbus-c++/dbus.h>
 
 class BrightnessSensor :
     public ch::bbv::brightness_proxy,
     public DBus::IntrospectableProxy,
-    public DBus::ObjectProxy,
-    public Sensor
+    public DBus::ObjectProxy
 {
 public:
   BrightnessSensor(DBus::Connection& connection);
 
-  double get() override;
+  double get();
 
 };
 

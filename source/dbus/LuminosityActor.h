@@ -14,20 +14,17 @@
 #include "StreetlightProxy.h"
 #pragma GCC diagnostic pop
 
-#include <protocolstack/application/Actor.h>
-
 #include <dbus-c++/dbus.h>
 
 class LuminosityActor :
     public ch::bbv::luminosity_proxy,
     public DBus::IntrospectableProxy,
-    public DBus::ObjectProxy,
-    public Actor
+    public DBus::ObjectProxy
 {
 public:
   LuminosityActor(DBus::Connection &connection);
 
-  void set(double) override;
+  void set(double);
 
 };
 
