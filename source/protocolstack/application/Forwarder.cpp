@@ -9,18 +9,20 @@
 
 void Forwarder::timeout()
 {
-  Outgoing::Message message;
+  message::Outgoing message;
 
-  message[Outgoing::Type::Brightness] = brightnessSensor();
+  message.brightness = brightnessSensor();
 
   sender(message);
 }
 
-void Forwarder::received(const Incoming::Message &message)
+void Forwarder::received(const message::Incoming &message)
 {
-  const auto luminosity = message.find(Incoming::Type::Luminosity);   //TODO use contains
-  if (luminosity != message.end()) {
-    luminosityActor(luminosity->second);
+  if (message.luminosity.isValid()) {
+    luminosityActor(message.luminosity());
+  }
+  if (message.warning.isValid()) {
+    warningActor(message.warning());
   }
 }
 
@@ -29,9 +31,14 @@ void Forwarder::setBrightnessSensor(Forwarder::Sensor value)
   brightnessSensor = value;
 }
 
-void Forwarder::setLuminosityActor(Forwarder::Actor value)
+void Forwarder::setLuminosityActor(Actor<double> value)
 {
   luminosityActor = value;
+}
+
+void Forwarder::setWarningActor(Actor<std::string> value)
+{
+  warningActor = value;
 }
 
 void Forwarder::setSender(Forwarder::Sender value)

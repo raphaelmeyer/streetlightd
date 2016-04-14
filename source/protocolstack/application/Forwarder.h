@@ -21,15 +21,17 @@ class Forwarder :
 {
 public:
   void timeout() override;
-  void received(const Incoming::Message &message) override;
+  void received(const message::Incoming &message) override;
 
   void setBrightnessSensor(Sensor value) override;
-  void setLuminosityActor(Actor value) override;
+  void setLuminosityActor(Actor<double> value) override;
+  void setWarningActor(Actor<std::string> value) override;
   void setSender(Sender value) override;
 
 private:
   Sensor brightnessSensor{};
-  Actor luminosityActor{};
+  Actor<double> luminosityActor{};
+  Actor<std::string> warningActor{};
   Sender sender{};
 
 };

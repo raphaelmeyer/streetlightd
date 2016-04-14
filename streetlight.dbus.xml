@@ -7,4 +7,7 @@
   <interface name="ch.bbv.luminosity">
     <property name="scaled" type="d" access="readwrite"/>
   </interface>
+  <interface name="ch.bbv.warning">
+    <property name="phrase" type="s" access="readwrite"/>
+  </interface>
 </node>

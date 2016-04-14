@@ -16,7 +16,7 @@ StackFactory::StackFactory(Factory<Application *> &_application, Factory<Present
 
 static void connect(ProtocolStack &stack)
 {
-  stack.application->setSender([&stack](const Outgoing::Message &message){
+  stack.application->setSender([&stack](const message::Outgoing &message){
     const auto encoded = stack.encoder(message);
     stack.session->send(encoded);
   });

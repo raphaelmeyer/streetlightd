@@ -6,7 +6,7 @@
  */
 
 #include "../Forwarder.h"
-#include "../IncomingMessage.h"
+#include "../message/Incoming.h"
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
@@ -17,7 +17,8 @@ class Forwarder_Test:
 {
 public:
   typedef std::vector<double> vd;
-  typedef std::vector<Outgoing::Message> vm;
+  typedef std::vector<std::string> vs;
+  typedef std::vector<message::Outgoing> vm;
 
   void SetUp() override
   {
@@ -27,7 +28,10 @@ public:
     testee.setLuminosityActor([this](double value){
       luminosity.push_back(value);
     });
-    testee.setSender([this](const Outgoing::Message &message){
+    testee.setWarningActor([this](std::string value){
+      warning.push_back(value);
+    });
+    testee.setSender([this](const message::Outgoing &message){
       sender.push_back(message);
     });
   }
@@ -36,6 +40,7 @@ public:
 
   double brightness{-1};
   vd luminosity{};
+  vs warning{};
   vm sender{};
 
 };
@@ -43,28 +48,39 @@ public:
 
 TEST_F(Forwarder_Test, the_brightness_is_read_when_a_timout_occurs)
 {
-  vm expected = vm{{{Outgoing::Type::Brightness, 0.12}}};
   brightness = 0.12;
 
   testee.timeout();
 
-  ASSERT_EQ(expected, sender);
+  ASSERT_EQ(0.12, sender[0].brightness());
 }
 
-TEST_F(Forwarder_Test, does_not_write_the_luminosity_when_not_set)
+TEST_F(Forwarder_Test, does_not_write_anything_when_not_set)
 {
-  const Incoming::Message message{};
+  const message::Incoming message{};
 
   testee.received(message);
 
   ASSERT_EQ(vd{}, luminosity);
+  ASSERT_EQ(vs{}, warning);
 }
 
 TEST_F(Forwarder_Test, writes_the_luminosity_when_received_a_new_value)
 {
-  const Incoming::Message message{{Incoming::Type::Luminosity, 0.45}};
+  message::Incoming message;
+  message.luminosity = 0.45;
 
   testee.received(message);
 
   ASSERT_EQ(vd{0.45}, luminosity);
+}
+
+TEST_F(Forwarder_Test, writes_the_warning_when_received_a_new_value)
+{
+  message::Incoming message;
+  message.warning = "hello world";
+
+  testee.received(message);
+
+  ASSERT_EQ(vs{"hello world"}, warning);
 }

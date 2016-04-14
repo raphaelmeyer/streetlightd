@@ -19,7 +19,7 @@ void ActiveApplication::timeout()
   active.put([this]{application->timeout();});
 }
 
-void ActiveApplication::received(const Incoming::Message &message)
+void ActiveApplication::received(const message::Incoming &message)
 {
   active.put([this, message]{application->received(message);});
 }
@@ -29,9 +29,14 @@ void ActiveApplication::setBrightnessSensor(Application::Sensor value)
   application->setBrightnessSensor(value);
 }
 
-void ActiveApplication::setLuminosityActor(Application::Actor value)
+void ActiveApplication::setLuminosityActor(Actor<double> value)
 {
   application->setLuminosityActor(value);
+}
+
+void ActiveApplication::setWarningActor(Actor<std::string> value)
+{
+  application->setWarningActor(value);
 }
 
 void ActiveApplication::setSender(Application::Sender value)
