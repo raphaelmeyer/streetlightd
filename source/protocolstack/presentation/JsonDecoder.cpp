@@ -12,7 +12,7 @@
 namespace Json
 {
 
-Incoming::Message decode(const std::string &message)
+message::Incoming decode(const std::string &message)
 {
   Json::Reader reader;
   Json::Value root;
@@ -21,11 +21,11 @@ Incoming::Message decode(const std::string &message)
     throw std::invalid_argument("not valid json: " + message);
   }
 
-  Incoming::Message result{};
+  message::Incoming result{};
 
   const auto &luminosity = root["luminosity"];
   if (!luminosity.isNull()) {
-    result[Incoming::Type::Luminosity] = luminosity.asDouble();
+    result.luminosity = luminosity.asDouble();
   }
 
   return result;
