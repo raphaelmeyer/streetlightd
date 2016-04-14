@@ -21,7 +21,7 @@ class Forwarder :
 {
 public:
   void timeout() override;
-  void received(const Incoming::Message &message) override;
+  void received(const message::Incoming &message) override;
 
   void setBrightnessSensor(Sensor value) override;
   void setLuminosityActor(Actor value) override;

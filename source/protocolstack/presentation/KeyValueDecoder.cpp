@@ -12,9 +12,9 @@
 namespace KeyValue
 {
 
-Incoming::Message decode(const std::string &message)
+message::Incoming decode(const std::string &message)
 {
-  Incoming::Message result{};
+  message::Incoming result{};
 
   std::stringstream stream{message};
 

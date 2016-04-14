@@ -16,7 +16,7 @@ void Forwarder::timeout()
   sender(message);
 }
 
-void Forwarder::received(const Incoming::Message &message)
+void Forwarder::received(const message::Incoming &message)
 {
   if (message.luminosity.isValid()) {
     luminosityActor(message.luminosity());

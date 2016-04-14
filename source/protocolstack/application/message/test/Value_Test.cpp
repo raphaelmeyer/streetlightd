@@ -5,7 +5,7 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "../MessageValue.h"
+#include "../Value.h"
 
 #include <gtest/gtest.h>
 

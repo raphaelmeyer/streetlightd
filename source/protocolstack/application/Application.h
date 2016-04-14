@@ -8,8 +8,8 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-#include "IncomingMessage.h"
-#include "OutgoingMessage.h"
+#include "message/Incoming.h"
+#include "message/OutgoingMessage.h"
 
 #include <functional>
 
@@ -23,7 +23,7 @@ public:
   virtual ~Application() = default;
 
   virtual void timeout() = 0;
-  virtual void received(const Incoming::Message &message) = 0;
+  virtual void received(const message::Incoming &message) = 0;
 
   virtual void setBrightnessSensor(Sensor value) = 0;
   virtual void setLuminosityActor(Actor value) = 0;

@@ -6,7 +6,7 @@
  */
 
 #include "../Forwarder.h"
-#include "../IncomingMessage.h"
+#include "../message/Incoming.h"
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
@@ -53,7 +53,7 @@ TEST_F(Forwarder_Test, the_brightness_is_read_when_a_timout_occurs)
 
 TEST_F(Forwarder_Test, does_not_write_the_luminosity_when_not_set)
 {
-  const Incoming::Message message{};
+  const message::Incoming message{};
 
   testee.received(message);
 
@@ -62,7 +62,7 @@ TEST_F(Forwarder_Test, does_not_write_the_luminosity_when_not_set)
 
 TEST_F(Forwarder_Test, writes_the_luminosity_when_received_a_new_value)
 {
-  Incoming::Message message;
+  message::Incoming message;
   message.luminosity = 0.45;
 
   testee.received(message);

@@ -8,14 +8,14 @@
 #ifndef KEYVALUEDECODER_H
 #define KEYVALUEDECODER_H
 
-#include <protocolstack/application/IncomingMessage.h>
+#include <protocolstack/application/message/Incoming.h>
 
 #include <string>
 
 namespace KeyValue
 {
 
-  Incoming::Message decode(const std::string &message);
+  message::Incoming decode(const std::string &message);
 
 }
 

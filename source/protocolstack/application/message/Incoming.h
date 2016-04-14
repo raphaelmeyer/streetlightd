@@ -8,15 +8,15 @@
 #ifndef INCOMINGMESSAGE_H
 #define INCOMINGMESSAGE_H
 
-#include "MessageValue.h"
+#include "Value.h"
 
-namespace Incoming
+namespace message
 {
 
-  class Message
+  class Incoming
   {
   public:
-    message::Value<double> luminosity{};
+    Value<double> luminosity{};
 
   };
 

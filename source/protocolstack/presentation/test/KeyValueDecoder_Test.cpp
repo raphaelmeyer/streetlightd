@@ -10,8 +10,6 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-typedef Incoming::Message M;
-
 TEST(KeyValueDecoder_Test, does_nothing_for_an_empty_message)
 {
   ASSERT_NO_THROW(KeyValue::decode(""));

@@ -19,7 +19,7 @@ void ActiveApplication::timeout()
   active.put([this]{application->timeout();});
 }
 
-void ActiveApplication::received(const Incoming::Message &message)
+void ActiveApplication::received(const message::Incoming &message)
 {
   active.put([this, message]{application->received(message);});
 }

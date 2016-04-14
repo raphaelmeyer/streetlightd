@@ -8,7 +8,7 @@
 #ifndef KEYVALUEENCODER_H
 #define KEYVALUEENCODER_H
 
-#include <protocolstack/application/OutgoingMessage.h>
+#include <protocolstack/application/message/OutgoingMessage.h>
 
 #include <string>
 
