@@ -17,6 +17,7 @@ namespace message
   {
   public:
     Value<double> luminosity{};
+    Value<std::string> warning{};
 
   };
 
