@@ -9,7 +9,7 @@
 #define APPLICATION_H
 
 #include "message/Incoming.h"
-#include "message/OutgoingMessage.h"
+#include "message/Outgoing.h"
 
 #include <functional>
 
@@ -18,7 +18,7 @@ class Application
 public:
   typedef std::function<double()> Sensor;
   typedef std::function<void(double)> Actor;
-  typedef std::function<void(const Outgoing::Message &message)> Sender;
+  typedef std::function<void(const message::Outgoing &message)> Sender;
 
   virtual ~Application() = default;
 

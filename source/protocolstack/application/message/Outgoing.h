@@ -8,16 +8,18 @@
 #ifndef OUTGOINGMESSAGE_H
 #define OUTGOINGMESSAGE_H
 
-#include <map>
+#include "Value.h"
 
-namespace Outgoing
+namespace message
 {
-  enum class Type
+
+  class Outgoing
   {
-    Brightness
+  public:
+    Value<double> brightness{};
+
   };
 
-  typedef std::map<Type, double> Message;
 }
 
 #endif

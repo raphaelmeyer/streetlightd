@@ -8,7 +8,7 @@
 #ifndef KEYVALUEENCODER_H
 #define KEYVALUEENCODER_H
 
-#include <protocolstack/application/message/OutgoingMessage.h>
+#include <protocolstack/application/message/Outgoing.h>
 
 #include <string>
 
@@ -23,7 +23,7 @@
 namespace KeyValue
 {
 
-  std::string encode(const Outgoing::Message &message);
+  std::string encode(const message::Outgoing &message);
 
 }
 

@@ -9,9 +9,9 @@
 
 void Forwarder::timeout()
 {
-  Outgoing::Message message;
+  message::Outgoing message;
 
-  message[Outgoing::Type::Brightness] = brightnessSensor();
+  message.brightness = brightnessSensor();
 
   sender(message);
 }

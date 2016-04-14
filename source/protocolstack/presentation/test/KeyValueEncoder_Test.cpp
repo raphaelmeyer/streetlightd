@@ -15,14 +15,15 @@
 
 TEST(KeyValueEncoder_Test, encode_empty_message)
 {
-  const Outgoing::Message message{};
+  const message::Outgoing message{};
 
   ASSERT_EQ("", KeyValue::encode(message));
 }
 
 TEST(KeyValueEncoder_Test, encode_brightness)
 {
-  const Outgoing::Message message{{Outgoing::Type::Brightness, 0.78}};
+  message::Outgoing message{};
+  message.brightness = 0.78;
 
   ASSERT_EQ("brightness 0.78\n", KeyValue::encode(message));
 }
