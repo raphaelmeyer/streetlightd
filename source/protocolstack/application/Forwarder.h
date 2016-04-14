@@ -25,11 +25,13 @@ public:
 
   void setBrightnessSensor(Sensor value) override;
   void setLuminosityActor(Actor<double> value) override;
+  void setWarningActor(Actor<std::string> value);
   void setSender(Sender value) override;
 
 private:
   Sensor brightnessSensor{};
   Actor<double> luminosityActor{};
+  Actor<std::string> warningActor{};
   Sender sender{};
 
 };

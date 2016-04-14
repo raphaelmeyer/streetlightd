@@ -21,6 +21,9 @@ void Forwarder::received(const message::Incoming &message)
   if (message.luminosity.isValid()) {
     luminosityActor(message.luminosity());
   }
+  if (message.warning.isValid()) {
+    warningActor(message.warning());
+  }
 }
 
 void Forwarder::setBrightnessSensor(Forwarder::Sensor value)
@@ -31,6 +34,11 @@ void Forwarder::setBrightnessSensor(Forwarder::Sensor value)
 void Forwarder::setLuminosityActor(Actor<double> value)
 {
   luminosityActor = value;
+}
+
+void Forwarder::setWarningActor(Actor<std::string> value)
+{
+  warningActor = value;
 }
 
 void Forwarder::setSender(Forwarder::Sender value)
