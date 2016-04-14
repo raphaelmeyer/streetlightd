@@ -5,8 +5,8 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef OUTGOINGMESSAGE_H
-#define OUTGOINGMESSAGE_H
+#ifndef MESSAGE_OUTGOING_H
+#define MESSAGE_OUTGOING_H
 
 #include "Value.h"
 

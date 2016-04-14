@@ -5,8 +5,8 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef MESSAGEVALUE_H
-#define MESSAGEVALUE_H
+#ifndef MESSAGE_VALUE_H
+#define MESSAGE_VALUE_H
 
 #include <stdexcept>
 

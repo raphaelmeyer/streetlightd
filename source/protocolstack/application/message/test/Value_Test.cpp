@@ -9,27 +9,27 @@
 
 #include <gtest/gtest.h>
 
-TEST(MessageValue_Test, is_not_valid_by_default)
+TEST(message_Value_Test, is_not_valid_by_default)
 {
   message::Value<int> testee{};
 
   ASSERT_FALSE(testee.isValid());
 }
 
-TEST(MessageValue_Test, is_valid_when_constructed_with_value)
+TEST(message_Value_Test, is_valid_when_constructed_with_value)
 {
   message::Value<int> testee{42};
 
   ASSERT_TRUE(testee());
 }
 
-TEST(MessageValue_Test, can_read_value)
+TEST(message_Value_Test, can_read_value)
 {
   ASSERT_EQ(42, message::Value<int>{42}());
   ASSERT_EQ("hello", message::Value<std::string>{"hello"}());
 }
 
-TEST(MessageValue_Test, is_valid_when_setting_value)
+TEST(message_Value_Test, is_valid_when_setting_value)
 {
   message::Value<int> testee{};
 
@@ -38,7 +38,7 @@ TEST(MessageValue_Test, is_valid_when_setting_value)
   ASSERT_TRUE(testee.isValid());
 }
 
-TEST(MessageValue_Test, can_store_value)
+TEST(message_Value_Test, can_store_value)
 {
   message::Value<int> testee{};
 
@@ -47,7 +47,7 @@ TEST(MessageValue_Test, can_store_value)
   ASSERT_EQ(42, testee());
 }
 
-TEST(MessageValue_Test, read_while_invalid_is_not_allowed)
+TEST(message_Value_Test, read_while_invalid_is_not_allowed)
 {
   message::Value<int> testee{};
 
