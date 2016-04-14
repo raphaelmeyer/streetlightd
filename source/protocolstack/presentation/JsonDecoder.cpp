@@ -12,7 +12,25 @@
 namespace Json
 {
 
-Incoming::Message decode(const std::string &message)
+static void write(message::Value<double> &value, const Json::Value &raw)
+{
+  value = raw.asDouble();
+}
+
+static void write(message::Value<std::string> &value, const Json::Value &raw)
+{
+  value = raw.asString();
+}
+
+template<typename T>
+static void writeIfValid(message::Value<T> &destination, const Json::Value &value)
+{
+  if (!value.isNull()) {
+    write(destination, value);
+  }
+}
+
+message::Incoming decode(const std::string &message)
 {
   Json::Reader reader;
   Json::Value root;
@@ -21,12 +39,10 @@ Incoming::Message decode(const std::string &message)
     throw std::invalid_argument("not valid json: " + message);
   }
 
-  Incoming::Message result{};
+  message::Incoming result{};
 
-  const auto &luminosity = root["luminosity"];
-  if (!luminosity.isNull()) {
-    result[Incoming::Type::Luminosity] = luminosity.asDouble();
-  }
+  writeIfValid(result.luminosity, root["luminosity"]);
+  writeIfValid(result.warning, root["warning"]);
 
   return result;
 }

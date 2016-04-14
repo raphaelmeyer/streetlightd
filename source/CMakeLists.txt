@@ -33,10 +33,13 @@ file(GLOB RAW_SOURCES
     protocolstack/session/*.cpp
     protocolstack/session/*.h
     dbus/*.cpp
+    dbus/*.h
     protocolstack/presentation/*.cpp
     protocolstack/presentation/*.h
     protocolstack/application/*.cpp
     protocolstack/application/*.h
+    protocolstack/application/message/*.h
+    protocolstack/application/message/*.cpp
     infrastructure/*.cpp
     infrastructure/*.h
     amqp/AmqpSession.cpp

@@ -119,4 +119,66 @@ private:
 };
 
 } } 
+namespace ch {
+namespace bbv {
+
+class warning_proxy
+: public ::DBus::InterfaceProxy
+{
+public:
+
+    warning_proxy()
+    : ::DBus::InterfaceProxy("ch.bbv.warning")
+    {
+    }
+
+public:
+
+    /* properties exported by this interface */
+        const std::string phrase() {
+            ::DBus::CallMessage call ;
+             call.member("Get"); call.interface("org.freedesktop.DBus.Properties");
+            ::DBus::MessageIter wi = call.writer(); 
+            const std::string interface_name = "ch.bbv.warning";
+            const std::string property_name  = "phrase";
+            wi << interface_name;
+            wi << property_name;
+            ::DBus::Message ret = this->invoke_method (call);
+            ::DBus::MessageIter ri = ret.reader ();
+            ::DBus::Variant argout; 
+            ri >> argout;
+            return argout;
+        };
+        void phrase( const std::string & input) {
+            ::DBus::CallMessage call ;
+             call.member("Set");  call.interface( "org.freedesktop.DBus.Properties");
+            ::DBus::MessageIter wi = call.writer(); 
+            ::DBus::Variant value;
+            ::DBus::MessageIter vi = value.writer ();
+            vi << input;
+            const std::string interface_name = "ch.bbv.warning";
+            const std::string property_name  = "phrase";
+            wi << interface_name;
+            wi << property_name;
+            wi << value;
+            ::DBus::Message ret = this->invoke_method (call);
+        };
+public:
+
+    /* methods exported by this interface,
+     * this functions will invoke the corresponding methods on the remote objects
+     */
+
+public:
+
+    /* signal handlers for this interface
+     */
+
+private:
+
+    /* unmarshalers (to unpack the DBus message before calling the actual signal handler)
+     */
+};
+
+} } 
 #endif //__dbusxx__StreetlightProxy_h__PROXY_MARSHAL_H

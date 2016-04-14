@@ -8,14 +8,14 @@
 #ifndef JSONDECODER_H
 #define JSONDECODER_H
 
-#include <protocolstack/application/IncomingMessage.h>
+#include <protocolstack/application/message/Incoming.h>
 
 #include <string>
 
 namespace Json
 {
 
-  Incoming::Message decode(const std::string &message);
+  message::Incoming decode(const std::string &message);
 
 }
 

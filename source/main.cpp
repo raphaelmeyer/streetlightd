@@ -19,8 +19,7 @@
 #include "amqp/AmqpSession.h"
 
 #include "dbus/DbusTimer.h"
-#include "dbus/BrightnessSensor.h"
-#include "dbus/LuminosityActor.h"
+#include "dbus/Streetlight.h"
 
 #include "infrastructure/Queue.h"
 #include "infrastructure/ActiveObject.h"
@@ -82,6 +81,7 @@ int main(int argc, char **argv)
   connection.request_name("ch.bbv.streetlightd");
   BrightnessSensor brightness{connection};
   LuminosityActor luminosity{connection};
+  WarningActor warning{connection};
 
   //  Timer creation
   TimerFactory timerFactory{connection};
@@ -89,10 +89,13 @@ int main(int argc, char **argv)
 
   // connection
   stack.application->setBrightnessSensor([&brightness]{
-    return brightness.get();
+    return brightness.scaled();
   });
   stack.application->setLuminosityActor([&luminosity](double value){
-    luminosity.set(value);
+    luminosity.scaled(value);
+  });
+  stack.application->setWarningActor([&warning](const std::string &value){
+    warning.phrase(value);
   });
   timer->setCallback([&stack]{
     stack.application->timeout();

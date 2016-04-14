@@ -16,6 +16,7 @@ class Streetlight(dbus.service.Object):
         self.session_bus = dbus.SessionBus()
 	self.brightness = -1
 	self.luminosity = -1
+	self.warning = ''
         name = dbus.service.BusName("ch.bbv.streetlight", bus=self.session_bus)
         dbus.service.Object.__init__(self, name, '/ch/bbv/streetlight')
 
@@ -31,6 +32,9 @@ class Streetlight(dbus.service.Object):
         if interface_name == 'ch.bbv.luminosity':
             if property_name == 'scaled':
                 self.luminosity = value
+        if interface_name == 'ch.bbv.warning':
+            if property_name == 'phrase':
+                self.warning = value
 
 
     @dbus.service.method(dbus.PROPERTIES_IFACE, in_signature='s', out_signature='a{sv}')
@@ -39,6 +43,8 @@ class Streetlight(dbus.service.Object):
 	        return { 'scaled': dbus.Double(self.brightness) }
 	elif interface_name == 'ch.bbv.luminosity':
 	        return { 'scaled': dbus.Double(self.luminosity) }
+	elif interface_name == 'ch.bbv.warning':
+	        return { 'phrase': dbus.String(self.warning) }
 	else:
 		raise dbus.exceptions.DBusException('Unknown interface: ' + interface_name)
 

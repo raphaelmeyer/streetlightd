@@ -12,7 +12,7 @@
 namespace Json
 {
 
-std::string encode(const Outgoing::Message &message)
+std::string encode(const message::Outgoing &message)
 {
   // A custom serilizer is written since the tested libraries do not
   // support custom float serializer.
@@ -21,9 +21,8 @@ std::string encode(const Outgoing::Message &message)
 
   stream << "{";
 
-  const auto &brightness = message.find(Outgoing::Type::Brightness);
-  if (brightness != message.end()) {
-    stream << "\"brightness\":" << brightness->second;
+  if (message.brightness.isValid()) {
+    stream << "\"brightness\":" << message.brightness();
   }
 
   stream << "}";
