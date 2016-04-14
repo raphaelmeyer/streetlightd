@@ -35,16 +35,30 @@ TEST(KeyValueDecoder_Test, last_newline_can_be_omitted)
 
 TEST(KeyValueDecoder_Test, withespace_between_key_and_value_are_removed)
 {
-  auto message = KeyValue::decode("luminosity      0.41");
+  auto message = KeyValue::decode("warning     test");
 
-  ASSERT_EQ(0.41, message.luminosity());
+  ASSERT_EQ("test", message.warning());
 }
 
 TEST(KeyValueDecoder_Test, withespace_after_value_are_removed)
 {
-  auto message = KeyValue::decode("luminosity 0.41   ");
+  auto message = KeyValue::decode("warning test    ");
 
-  ASSERT_EQ(0.41, message.luminosity());
+  ASSERT_EQ("test", message.warning());
+}
+
+TEST(KeyValueDecoder_Test, decode_warning_with_whitespaces)
+{
+  auto message = KeyValue::decode("warning a    b");
+
+  ASSERT_EQ("a    b", message.warning());
+}
+
+TEST(KeyValueDecoder_Test, decode_warning_string)
+{
+  auto message = KeyValue::decode("warning test\n");
+
+  ASSERT_EQ("test", message.warning());
 }
 
 TEST(KeyValueDecoder_Test, decode_luminosity)
