@@ -20,7 +20,7 @@ Scenario Outline: Receive a brightness value and set the lamp
 
     """
 
-  Then I expect the lamp to have the the luminosity <value>
+  Then I expect the lamp to have the luminosity <value>
 
   Examples:
     | value |

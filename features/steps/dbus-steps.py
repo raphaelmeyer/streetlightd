@@ -28,7 +28,7 @@ def step_impl(context):
 	streetlightd = bus.get_object('ch.bbv.streetlightd', '/ch/bbv/streetlightd')
 	streetlightd.timeout(dbus_interface='ch.bbv.timer')
 
-@then(u'I expect the lamp to have the the luminosity {value:g}')
+@then(u'I expect the lamp to have the luminosity {value:g}')
 def step_impl(context, value):
 	time.sleep(0.1)		#TODO is there a better way than sleep?
 	bus = dbus.SessionBus()

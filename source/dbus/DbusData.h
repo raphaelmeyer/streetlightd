@@ -8,6 +8,8 @@
 #ifndef DBUSDATA_H
 #define DBUSDATA_H
 
+#include <string>
+
 static const std::string DbusName{"/ch/bbv/streetlight"};
 static const std::string DbusService{"ch.bbv.streetlight"};
 

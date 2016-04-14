@@ -11,7 +11,7 @@
 #include "Timer.h"
 #include "TimerConfiguration.h"
 
-#include <dbus-c++/dbus.h>
+#include <dbus-c++/connection.h>
 
 class TimerFactory
 {
