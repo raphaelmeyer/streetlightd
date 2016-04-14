@@ -62,7 +62,8 @@ TEST_F(Forwarder_Test, does_not_write_the_luminosity_when_not_set)
 
 TEST_F(Forwarder_Test, writes_the_luminosity_when_received_a_new_value)
 {
-  const Incoming::Message message{{Incoming::Type::Luminosity, 0.45}};
+  Incoming::Message message;
+  message.luminosity = 0.45;
 
   testee.received(message);
 

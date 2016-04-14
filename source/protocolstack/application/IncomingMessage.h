@@ -8,16 +8,18 @@
 #ifndef INCOMINGMESSAGE_H
 #define INCOMINGMESSAGE_H
 
-#include <map>
+#include "MessageValue.h"
 
 namespace Incoming
 {
-  enum class Type
+
+  class Message
   {
-    Luminosity
+  public:
+    message::Value<double> luminosity{};
+
   };
 
-  typedef std::map<Type, double> Message;
 }
 
 #endif

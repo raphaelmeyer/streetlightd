@@ -17,14 +17,19 @@ Incoming::Message decode(const std::string &message)
   Incoming::Message result{};
 
   std::stringstream stream{message};
-  while (!stream.eof()) {
-    std::string key;
-    double value;
 
-    stream >> key >> value;
-
+  std::string line;
+  while (std::getline(stream, line, '\n')) {
+    auto spacePos = line.find(' ');
+    auto key = line.substr(0, spacePos);
+    auto value = line.substr(spacePos+1);
     if (key == "luminosity") {
-      result[Incoming::Type::Luminosity] = value;
+      try {
+        std::size_t count = 0;
+        double parsed  = std::stod(value, &count);
+        result.luminosity = parsed;
+      } catch (std::invalid_argument) {
+      }
     }
   }
 

@@ -18,9 +18,8 @@ void Forwarder::timeout()
 
 void Forwarder::received(const Incoming::Message &message)
 {
-  const auto luminosity = message.find(Incoming::Type::Luminosity);   //TODO use contains
-  if (luminosity != message.end()) {
-    luminosityActor(luminosity->second);
+  if (message.luminosity.isValid()) {
+    luminosityActor(message.luminosity());
   }
 }
 
