@@ -24,12 +24,12 @@ public:
   void received(const message::Incoming &message) override;
 
   void setBrightnessSensor(Sensor value) override;
-  void setLuminosityActor(Actor value) override;
+  void setLuminosityActor(Actor<double> value) override;
   void setSender(Sender value) override;
 
 private:
   Sensor brightnessSensor{};
-  Actor luminosityActor{};
+  Actor<double> luminosityActor{};
   Sender sender{};
 
 };

@@ -28,7 +28,7 @@ void Forwarder::setBrightnessSensor(Forwarder::Sensor value)
   brightnessSensor = value;
 }
 
-void Forwarder::setLuminosityActor(Forwarder::Actor value)
+void Forwarder::setLuminosityActor(Actor<double> value)
 {
   luminosityActor = value;
 }
