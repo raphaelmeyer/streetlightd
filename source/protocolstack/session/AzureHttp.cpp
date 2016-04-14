@@ -24,10 +24,6 @@ AzureHttp::AzureHttp()
 {
 }
 
-void AzureHttp::setUp()
-{
-}
-
 void AzureHttp::connect()
 {
   const auto ptrContext = new Poco::Net::Context(Poco::Net::Context::CLIENT_USE, "", "", "", Poco::Net::Context::VERIFY_STRICT, 9, true, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
