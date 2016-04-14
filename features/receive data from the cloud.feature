@@ -29,7 +29,6 @@ Scenario Outline: Receive a brightness value and set the lamp
     | 0.57  |
     | 1     |
 
-@wip
 Scenario Outline: Receive a warning and show it on the scoreboard
   Given I have a DBus streetlight
   And I connect to the local mqtt broker

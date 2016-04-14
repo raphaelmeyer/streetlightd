@@ -73,6 +73,7 @@ int main(int argc, char **argv)
   connection.request_name("ch.bbv.streetlightd");
   BrightnessSensor brightness{connection};
   LuminosityActor luminosity{connection};
+  WarningActor warning{connection};
 
   //  Timer creation
   TimerFactory timerFactory{connection};
@@ -84,6 +85,9 @@ int main(int argc, char **argv)
   });
   stack.application->setLuminosityActor([&luminosity](double value){
     luminosity.scaled(value);
+  });
+  stack.application->setWarningActor([&warning](const std::string &value){
+    warning.phrase(value);
   });
   timer->setCallback([&stack]{
     stack.application->timeout();

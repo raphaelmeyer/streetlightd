@@ -37,4 +37,15 @@ public:
 
 };
 
+
+class WarningActor :
+    public ch::bbv::warning_proxy,
+    public DBus::IntrospectableProxy,
+    public DBus::ObjectProxy
+{
+public:
+  WarningActor(DBus::Connection &connection);
+
+};
+
 #endif

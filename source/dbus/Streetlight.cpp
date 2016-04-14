@@ -22,3 +22,9 @@ LuminosityActor::LuminosityActor(DBus::Connection &connection) :
   DBus::ObjectProxy(connection, DbusName, DbusService.c_str())
 {
 }
+
+
+WarningActor::WarningActor(DBus::Connection &connection) :
+  DBus::ObjectProxy(connection, DbusName, DbusService.c_str())
+{
+}
