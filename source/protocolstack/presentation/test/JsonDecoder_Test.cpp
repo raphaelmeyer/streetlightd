@@ -45,4 +45,11 @@ TEST(JsonDecoder_Test, uses_latest_specified_value)
   ASSERT_EQ(0.89, message.luminosity());
 }
 
+TEST(JsonDecoder_Test, decode_warning_string)
+{
+  auto message = Json::decode("{\"warning\":\"hello world\"}");
+
+  ASSERT_EQ("hello world", message.warning());
+}
+
 //TODO test for multiple values
