@@ -34,6 +34,11 @@ void ActiveApplication::setLuminosityActor(Actor<double> value)
   application->setLuminosityActor(value);
 }
 
+void ActiveApplication::setWarningActor(Actor<std::string> value)
+{
+  application->setWarningActor(value);
+}
+
 void ActiveApplication::setSender(Application::Sender value)
 {
   application->setSender(value);
