@@ -92,10 +92,6 @@ void AmqpSession::setConfiguration(const SessionConfiguration &value)
       "SharedAccessKey=" + value.credential;
 }
 
-void AmqpSession::setUp()
-{
-}
-
 void AmqpSession::connect()
 {
   //Try to create a connection to our endpoint

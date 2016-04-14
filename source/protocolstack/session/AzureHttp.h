@@ -24,7 +24,6 @@ public:
   void send(const std::string &message) override;
 
   void setConfiguration(const SessionConfiguration &value) override;
-  void setUp() override;
   void connect() override;
   void close() override;
 

@@ -23,7 +23,6 @@ int main(int argc, char** argv) {
 
   AmqpSession connection;
   connection.setConfiguration(configuration);
-  connection.setUp();
   connection.connect();
   //std::function<void(const std::string&)> function = [](const std::string& s){ printf("Excecuting lambda with string=%s",s.c_str());};
   //connection.setMessageCallback(function);

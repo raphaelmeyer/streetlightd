@@ -11,7 +11,6 @@ public:
   ~AmqpSession() override;
 
   void setConfiguration(const SessionConfiguration &value) override;
-  void setUp() override;
   void connect() override;
   void send(const std::string& message) override;
   void close() override;
