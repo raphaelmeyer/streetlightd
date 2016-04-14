@@ -35,3 +35,16 @@ def step_impl(context, value):
 	streetlightd = bus.get_object('ch.bbv.streetlight', '/ch/bbv/streetlight')
 	luminosity = streetlightd.Get('ch.bbv.luminosity', 'scaled', dbus_interface=dbus.PROPERTIES_IFACE)
 	assert value == luminosity, 'expected luminosity: ' + str(value) + ', got: ' + str(luminosity)
+
+@then(u'I expect the lamp to show the warning \"{value}\"')
+def expect_warning(context, value):
+	time.sleep(0.1)		#TODO is there a better way than sleep?
+	bus = dbus.SessionBus()
+	streetlightd = bus.get_object('ch.bbv.streetlight', '/ch/bbv/streetlight')
+	luminosity = streetlightd.Get('ch.bbv.warning', 'phrase', dbus_interface=dbus.PROPERTIES_IFACE)
+	assert value == luminosity, 'expected warning: ' + str(value) + ', got: ' + str(luminosity)
+
+@then(u'I expect the lamp to show the warning ""')	# workaround for empty string
+def step_impl(context):
+	expect_warning(context, "")
+

@@ -5,8 +5,8 @@
 
 Feature: Receive data from the cloud
   As a city
-  I want to turn the light on the street on or off
-  In order to minimize energy consumption
+  I want to control the the street light
+  In order to increase security and minimize energy consumption
 
 
 Scenario Outline: Receive a brightness value and set the lamp
@@ -28,4 +28,25 @@ Scenario Outline: Receive a brightness value and set the lamp
     | 0.42  |
     | 0.57  |
     | 1     |
+
+@wip
+Scenario Outline: Receive a warning and show it on the scoreboard
+  Given I have a DBus streetlight
+  And I connect to the local mqtt broker
+  And I start streetlightd
+
+  When I send a mqtt message with the content:
+    """
+    warning <value>
+
+    """
+
+  Then I expect the lamp to show the warning "<value>"
+
+  Examples:
+    | value                                   |
+    |                                         |
+    | hello                                   |
+    | hello world                             |
+    | I can write very long text to the board |
 
