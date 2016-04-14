@@ -5,8 +5,8 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef BRIGHTNESSSENSOR_H
-#define BRIGHTNESSSENSOR_H
+#ifndef STREETLIGHT_H
+#define STREETLIGHT_H
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wignored-qualifiers"
@@ -24,7 +24,16 @@ class BrightnessSensor :
 public:
   BrightnessSensor(DBus::Connection& connection);
 
-  double get();
+};
+
+
+class LuminosityActor :
+    public ch::bbv::luminosity_proxy,
+    public DBus::IntrospectableProxy,
+    public DBus::ObjectProxy
+{
+public:
+  LuminosityActor(DBus::Connection &connection);
 
 };
 

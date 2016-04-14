@@ -14,8 +14,7 @@
 #include "protocolstack/StackFactory.h"
 
 #include "dbus/DbusTimer.h"
-#include "dbus/BrightnessSensor.h"
-#include "dbus/LuminosityActor.h"
+#include "dbus/Streetlight.h"
 
 #include "infrastructure/Queue.h"
 #include "infrastructure/ActiveObject.h"
@@ -81,10 +80,10 @@ int main(int argc, char **argv)
 
   // connection
   stack.application->setBrightnessSensor([&brightness]{
-    return brightness.get();
+    return brightness.scaled();
   });
   stack.application->setLuminosityActor([&luminosity](double value){
-    luminosity.set(value);
+    luminosity.scaled(value);
   });
   timer->setCallback([&stack]{
     stack.application->timeout();
