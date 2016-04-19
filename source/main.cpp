@@ -14,6 +14,7 @@
 #include "protocolstack/presentation/JsonDecoder.h"
 #include "protocolstack/session/LocalMqtt.h"
 #include "protocolstack/session/AzureHttp.h"
+#include "protocolstack/session/AzureMqtt.h"
 #include "protocolstack/ProtocolStack.h"
 #include "protocolstack/StackFactory.h"
 
@@ -63,6 +64,7 @@ int main(int argc, char **argv)
   sessionFactory.add("mqtt-local", []{return new LocalMqtt();});
   sessionFactory.add("azure-http", []{return new AzureHttp();});
   sessionFactory.add("azure-amqp", []{return new AmqpSession();});
+  sessionFactory.add("azure-mqtt", []{return new AzureMqtt();});
 
   CommandLineParser parser{std::cout};
   parser.addApplications(applicationFactory.workers());
