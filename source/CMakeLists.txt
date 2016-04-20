@@ -62,6 +62,7 @@ file(GLOB_RECURSE TEST_SOURCES
     protocolstack/presentation/KeyValueDecoder.cpp
     protocolstack/presentation/JsonEncoder.cpp
     protocolstack/presentation/JsonDecoder.cpp
+    protocolstack/presentation/Message.cpp
     )
 
 add_executable(streetlightd main.cpp ${RAW_SOURCES})

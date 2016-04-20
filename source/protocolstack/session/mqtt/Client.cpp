@@ -55,16 +55,15 @@ void Client::close()
   throwIfError("disconnect", disconnectResult);
 }
 
-void Client::send(const std::string &message)
+void Client::send(const presentation::Message &message)
 {
-  const auto result = publish(nullptr, configuration->sendTopic().c_str(), message.size(), message.c_str(), 2);
+  const auto result = publish(nullptr, configuration->sendTopic().c_str(), message.asBinary().size(), message.asBinary().data(), 2);
   throwIfError("publish", result);
 }
 
 void Client::on_message(const mosquitto_message *message)
 {
-  const char *data = (const char *)message->payload;
-  const std::string payload{data, data+message->payloadlen};
+  const presentation::Message payload{message->payload, static_cast<size_t>(message->payloadlen)};
   listener(payload);
 }
 

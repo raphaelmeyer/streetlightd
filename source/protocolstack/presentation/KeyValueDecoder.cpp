@@ -57,11 +57,11 @@ static void writeIfMatched(const std::string &name, message::Value<T> &destinati
   }
 }
 
-message::Incoming decode(const std::string &message)
+message::Incoming decode(const presentation::Message &message)
 {
   message::Incoming result{};
 
-  std::stringstream stream{message};
+  std::stringstream stream{message.asString()};
 
   std::string line;
   while (std::getline(stream, line, '\n')) {

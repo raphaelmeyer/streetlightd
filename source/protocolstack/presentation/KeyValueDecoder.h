@@ -9,13 +9,12 @@
 #define KEYVALUEDECODER_H
 
 #include <protocolstack/application/message/Incoming.h>
-
-#include <string>
+#include <protocolstack/presentation/Message.h>
 
 namespace KeyValue
 {
 
-  message::Incoming decode(const std::string &message);
+  message::Incoming decode(const presentation::Message &message);
 
 }
 

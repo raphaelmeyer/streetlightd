@@ -21,7 +21,7 @@ class AzureHttp :
 public:
   AzureHttp();
 
-  void send(const std::string &message) override;
+  void send(const presentation::Message &message) override;
 
   void setConfiguration(const SessionConfiguration &value) override;
   void connect() override;

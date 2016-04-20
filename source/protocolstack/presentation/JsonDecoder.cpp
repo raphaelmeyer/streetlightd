@@ -30,13 +30,13 @@ static void writeIfValid(message::Value<T> &destination, const Json::Value &valu
   }
 }
 
-message::Incoming decode(const std::string &message)
+message::Incoming decode(const presentation::Message &message)
 {
   Json::Reader reader;
   Json::Value root;
 
-  if (!reader.parse(message, root)) {
-    throw std::invalid_argument("not valid json: " + message);
+  if (!reader.parse(message.asString(), root)) {
+    throw std::invalid_argument("not valid json: " + message.asString());
   }
 
   message::Incoming result{};

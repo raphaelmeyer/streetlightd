@@ -32,13 +32,13 @@ void AzureHttp::connect()
   session->setKeepAlive(true);
 }
 
-void AzureHttp::send(const std::string &message)
+void AzureHttp::send(const presentation::Message &message)
 {
   http::Transfer transfer{*session};
 
   transfer.setUri(uri.getPathAndQuery());
   transfer.setCredentials(configuration.credential);
-  transfer.setRequest(message);
+  transfer.setRequest(message.asString());
 
   transfer.execute();
 

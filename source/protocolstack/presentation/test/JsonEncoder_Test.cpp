@@ -19,7 +19,7 @@ TEST(JsonEncoder_Test, encode_empty_message)
 {
   const message::Outgoing message{};
 
-  ASSERT_EQ("{}", Json::encode(message));
+  ASSERT_EQ("{}", Json::encode(message).asString());
 }
 
 TEST(JsonEncoder_Test, encode_brightness)
@@ -27,7 +27,7 @@ TEST(JsonEncoder_Test, encode_brightness)
   message::Outgoing message{};
   message.brightness = 0.78;
 
-  ASSERT_EQ("{\"brightness\":0.78}", Json::encode(message));
+  ASSERT_EQ("{\"brightness\":0.78}", Json::encode(message).asString());
 }
 
 TEST(JsonEncoder_Test, encode_info)
@@ -35,7 +35,7 @@ TEST(JsonEncoder_Test, encode_info)
   message::Outgoing message{};
   message.info = "hello world";
 
-  ASSERT_EQ("{\"info\":\"hello world\"}", Json::encode(message));
+  ASSERT_EQ("{\"info\":\"hello world\"}", Json::encode(message).asString());
 }
 
 TEST(JsonEncoder_Test, encode_2_values)
@@ -44,7 +44,7 @@ TEST(JsonEncoder_Test, encode_2_values)
   message.brightness = 0.78;
   message.info = "hello world";
 
-  ASSERT_EQ("{\"brightness\":0.78,\"info\":\"hello world\"}", Json::encode(message));
+  ASSERT_EQ("{\"brightness\":0.78,\"info\":\"hello world\"}", Json::encode(message).asString());
 }
 
 //TODO encode multiple values

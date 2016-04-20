@@ -9,6 +9,7 @@
 #define SESSION
 
 #include "SessionConfiguration.h"
+#include "../presentation/Message.h"
 
 #include <string>
 #include <functional>
@@ -16,7 +17,7 @@
 class Session
 {
 public:
-  typedef std::function<void(const std::string&)> Callback;
+  typedef std::function<void(const presentation::Message&)> Callback;
 
   virtual ~Session() = default;
   
@@ -25,8 +26,7 @@ public:
   virtual void connect() = 0;
   virtual void close() = 0;
 
-  //TODO do not use a string (in the case somebody wants to send binary data)
-  virtual void send(const std::string &message) = 0;
+  virtual void send(const presentation::Message &message) = 0;
   virtual void setMessageCallback(Callback function) = 0;
 
 };

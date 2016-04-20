@@ -12,7 +12,7 @@
 namespace Json
 {
 
-std::string encode(const message::Outgoing &message)
+presentation::Message encode(const message::Outgoing &message)
 {
   // A custom serilizer is written since the tested libraries do not
   // support custom float serializer.

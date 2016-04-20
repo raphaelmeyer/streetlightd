@@ -108,10 +108,10 @@ void AzureAmqp::connect()
   return;
 }
 
-void AzureAmqp::send(const std::string& message)
+void AzureAmqp::send(const presentation::Message &message)
 {
-  //IOTHUB_MESSAGE_HANDLE messageHandle = IoTHubMessage_CreateFromByteArray(reinterpret_cast<const unsigned char*>(message.c_str()), strlen(message.c_str()));
-  IOTHUB_MESSAGE_HANDLE messageHandle = IoTHubMessage_CreateFromString(message.c_str());
+  const auto content = message.asBinary();
+  IOTHUB_MESSAGE_HANDLE messageHandle = IoTHubMessage_CreateFromByteArray(content.data(), content.size());
   if(messageHandle == NULL) {
     throw std::runtime_error("Couldn't create MessageHandle");
   }

@@ -30,7 +30,7 @@ public:
   void connect() override;
   void close() override;
 
-  void send(const std::string &message) override;
+  void send(const presentation::Message &message) override;
   void setMessageCallback(Callback function) override;
 
 private:

@@ -21,7 +21,7 @@ static void connect(ProtocolStack &stack)
     stack.session->send(encoded);
   });
 
-  stack.session->setMessageCallback([&stack](const std::string &message){
+  stack.session->setMessageCallback([&stack](const presentation::Message &message){
     const auto decoded = stack.decoder(message);
     stack.application->received(decoded);
   });

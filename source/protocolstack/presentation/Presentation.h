@@ -10,6 +10,7 @@
 
 #include "../application/message/Incoming.h"
 #include "../application/message/Outgoing.h"
+#include "Message.h"
 
 #include <functional>
 #include <string>
@@ -17,8 +18,8 @@
 namespace presentation
 {
 
-  typedef std::function<std::string(const message::Outgoing &message)> Encoder;
-  typedef std::function<message::Incoming(const std::string &message)> Decoder;
+  typedef std::function<Message(const message::Outgoing &message)> Encoder;
+  typedef std::function<message::Incoming(const Message &message)> Decoder;
   typedef std::pair<Encoder,Decoder>  EncoderAndDecoder;
 
 }

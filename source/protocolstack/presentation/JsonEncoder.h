@@ -9,13 +9,12 @@
 #define JSONENCODER_H
 
 #include <protocolstack/application/message/Outgoing.h>
-
-#include <string>
+#include <protocolstack/presentation/Message.h>
 
 namespace Json
 {
 
-std::string encode(const message::Outgoing &message);
+presentation::Message encode(const message::Outgoing &message);
 
 }
 

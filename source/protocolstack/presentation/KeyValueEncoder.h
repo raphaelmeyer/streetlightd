@@ -10,8 +10,6 @@
 
 #include <protocolstack/application/message/Outgoing.h>
 
-#include <string>
-
 /**
  * Own representation of key-value pairs that never should be used.
  *
