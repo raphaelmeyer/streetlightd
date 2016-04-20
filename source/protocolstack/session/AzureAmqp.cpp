@@ -12,55 +12,59 @@ extern "C"
 
 #include <exception>
 
-
-
-/** Internal message callback which is executed when a message is received
-       * @param message a handle to the message received
-       * @param userContextCallback this will hold a pointer to a AMQPSession
-       * @return IOTHUBMESSAGE_ACCEPTED if everything went well
-       */
-static IOTHUBMESSAGE_DISPOSITION_RESULT internalMessageCallback(IOTHUB_MESSAGE_HANDLE message, void* userContextCallback) {
-  printf("Received a message");
-  if(userContextCallback == nullptr)
-    throw std::runtime_error("Error in internalMessageCallback, no callback function");
-
-  Session::Callback *callback = reinterpret_cast<Session::Callback*>(userContextCallback);
-
-  const unsigned char* buffer = NULL;
+static presentation::Message readAsBinary(IOTHUB_MESSAGE_HANDLE message)
+{
+  const unsigned char* buffer = nullptr;
   size_t size = 0;
 
-  IOTHUBMESSAGE_CONTENT_TYPE contentType = IoTHubMessage_GetContentType(message);
+  if (IoTHubMessage_GetByteArray(message, &buffer, &size) != IOTHUB_MESSAGE_OK)
+  {
+    throw std::runtime_error("Failed getting the BINARY body of the message received.\r\n");
+  }
 
-  if (contentType == IOTHUBMESSAGE_BYTEARRAY)
+  return presentation::Message{buffer, size};
+}
+
+static presentation::Message readAsString(IOTHUB_MESSAGE_HANDLE message)
+{
+  const char * const string = IoTHubMessage_GetString(message);
+  if (string == nullptr)
   {
-    if (IoTHubMessage_GetByteArray(message, &buffer, &size) == IOTHUB_MESSAGE_OK)
-    {
-      //(void)printf("Received Message  with BINARY Data: <<<%.*s>>> & Size=%d\r\n",  (int)size, buffer, (int)size);
-      (*callback)(std::string(reinterpret_cast<const char*>(buffer), size));
-    }
-    else
-    {
-      throw std::runtime_error("Failed getting the BINARY body of the message received.\r\n");
-    }
-  }
-  else if (contentType == IOTHUBMESSAGE_STRING)
-  {
-    //NOTE type unsafe reinterpretation casts!
-    if ((buffer = reinterpret_cast<const unsigned char*>(IoTHubMessage_GetString(message))) != NULL && (size = strlen(reinterpret_cast<const char*>(buffer))) > 0)
-    {
-      //(void)printf("Received Message with STRING Data: <<<%.*s>>> & Size=%d\r\n",(int)size, buffer, (int)size);
-      (*callback)(std::string(reinterpret_cast<const char*>(buffer), size));
-    }
-    else
-    {
-      throw std::runtime_error("Failed getting the STRING body of the message received.\r\n");
-    }
-  }
-  else
-  {
-    //(void)printf("Failed getting the body of the message received (type %i).\r\n", contentType);
     throw std::runtime_error("Failed getting the STRING body of the message received.\r\n");
   }
+
+  return presentation::Message{string};
+}
+
+static presentation::Message convertMessage(IOTHUB_MESSAGE_HANDLE message)
+{
+  const auto contentType = IoTHubMessage_GetContentType(message);
+
+  switch (contentType) {
+  case IOTHUBMESSAGE_BYTEARRAY:
+    return readAsBinary(message);
+  case IOTHUBMESSAGE_STRING:
+    return readAsString(message);
+  default:
+    throw std::runtime_error("Failed getting the STRING body of the message received.\r\n");
+  }
+}
+
+static Session::Callback toCallback(void *ptr)
+{
+  if (ptr == nullptr) {
+    throw std::runtime_error("Error in internalMessageCallback, no callback function");
+  }
+
+  return *reinterpret_cast<Session::Callback*>(ptr);
+}
+
+static IOTHUBMESSAGE_DISPOSITION_RESULT internalMessageCallback(IOTHUB_MESSAGE_HANDLE rawMessage, void* userContextCallback)
+{
+  Session::Callback callback = toCallback(userContextCallback);
+
+  const auto message = convertMessage(rawMessage);
+  callback(message);
 
   return IOTHUBMESSAGE_ACCEPTED;
 }
