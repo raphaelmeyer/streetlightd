@@ -7,67 +7,36 @@
 
 #include "LocalMqtt.h"
 
-LocalMqtt::LocalMqtt() :
-  mosqpp::mosquittopp{nullptr}
+
+std::string LocalMqtt::deviceId() const
+{
+  return "LocalMqttDevice";
+}
+
+std::string LocalMqtt::receiveTopic() const
+{
+  return "streetlight/actor";
+}
+
+std::string LocalMqtt::sendTopic() const
+{
+  return "streetlight/sensor";
+}
+
+std::string LocalMqtt::address() const
+{
+  return "localhost";
+}
+
+int LocalMqtt::port() const
+{
+  return 1883;
+}
+
+void LocalMqtt::configure(mosqpp::mosquittopp &) const
 {
 }
 
-void LocalMqtt::send(const std::string &message)
+void LocalMqtt::setConfiguration(const SessionConfiguration &)
 {
-  const auto result = publish(nullptr, "streetlight/sensor", message.size(), message.c_str(), 2, false);
-  throwIfError("publish", result);
 }
-
-void LocalMqtt::setConfiguration(const SessionConfiguration &value)
-{
-  configuration = value;
-}
-
-void LocalMqtt::on_message(const mosquitto_message *message)
-{
-  const char *data = (const char *)message->payload;
-  const std::string payload{data, data+message->payloadlen};
-  listener(payload);
-}
-
-void LocalMqtt::connect()
-{
-  const auto connectResult = mosqpp::mosquittopp::connect("localhost");
-  throwIfError("connect", connectResult);
-
-  const auto startResult = loop_start();
-  throwIfError("loop_start", startResult);
-}
-
-void LocalMqtt::close()
-{
-  const auto stopResult = loop_stop();
-  throwIfError("loop_stop", stopResult);
-
-  const auto disconnectResult = disconnect();
-  throwIfError("disconnect", disconnectResult);
-}
-
-void LocalMqtt::on_connect(int)
-{
-  const auto result = subscribe(nullptr, "streetlight/actor", 2);
-  throwIfError("subscribe", result);
-}
-
-void LocalMqtt::on_error()
-{
-  throw std::runtime_error("undefined error in LocalMqtt");
-}
-
-void LocalMqtt::throwIfError(const std::string &operation, int result)
-{
-  if (result != MOSQ_ERR_SUCCESS) {
-    throw std::runtime_error("LocalMqtt " + operation + ": " + mosqpp::strerror(result));
-  }
-}
-
-void LocalMqtt::setMessageCallback(Callback function)
-{
-  listener = function;
-}
-

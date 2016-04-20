@@ -32,6 +32,8 @@ file(GLOB RAW_SOURCES
     protocolstack/*.cpp
     protocolstack/session/*.cpp
     protocolstack/session/*.h
+    protocolstack/session/mqtt/*.h
+    protocolstack/session/mqtt/*.cpp
     dbus/*.cpp
     dbus/*.h
     protocolstack/presentation/*.cpp

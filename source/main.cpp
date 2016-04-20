@@ -12,9 +12,10 @@
 #include "protocolstack/presentation/KeyValueDecoder.h"
 #include "protocolstack/presentation/JsonEncoder.h"
 #include "protocolstack/presentation/JsonDecoder.h"
-#include "protocolstack/session/LocalMqtt.h"
 #include "protocolstack/session/AzureHttp.h"
+#include "protocolstack/session/mqtt/Client.h"
 #include "protocolstack/session/AzureMqtt.h"
+#include "protocolstack/session/LocalMqtt.h"
 #include "protocolstack/ProtocolStack.h"
 #include "protocolstack/StackFactory.h"
 
@@ -61,10 +62,10 @@ int main(int argc, char **argv)
   encoderFactory.add("json", []{ return Presentation::EncoderAndDecoder{Json::encode, Json::decode};});
 
   Factory<Session*> sessionFactory;
-  sessionFactory.add("mqtt-local", []{return new LocalMqtt();});
+  sessionFactory.add("mqtt-local", []{return new mqtt::Client(new LocalMqtt());});
   sessionFactory.add("azure-http", []{return new AzureHttp();});
   sessionFactory.add("azure-amqp", []{return new AmqpSession();});
-  sessionFactory.add("azure-mqtt", []{return new AzureMqtt();});
+  sessionFactory.add("azure-mqtt", []{return new mqtt::Client(new AzureMqtt());});
 
   CommandLineParser parser{std::cout};
   parser.addApplications(applicationFactory.workers());

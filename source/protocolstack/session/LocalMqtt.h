@@ -5,43 +5,24 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef MQTTTEST_H
-#define MQTTTEST_H
+#ifndef LOCALMQTTCONFIGURATION_H
+#define LOCALMQTTCONFIGURATION_H
 
-#include "Session.h"
+#include "mqtt/Configuration.h"
 
-#include <mosquittopp.h>
-
-#include <string>
-#include <functional>
-
-/**
- * Simple mqtt session implementation that connects to a local mqtt server.
- */
 class LocalMqtt :
-    public Session,
-    private mosqpp::mosquittopp
+    public mqtt::Configuration
 {
 public:
-  LocalMqtt();
+  std::string deviceId() const override;
+  std::string receiveTopic() const override;
+  std::string sendTopic() const override;
+  std::string address() const override;
+  int port() const override;
 
-  void send(const std::string &message) override;
+  void configure(mosqpp::mosquittopp &instance) const override;
 
   void setConfiguration(const SessionConfiguration &value) override;
-  void connect() override;
-  void close() override;
-
-  void setMessageCallback(Callback function) override;
-
-private:
-  SessionConfiguration configuration{};
-  Callback listener{};
-
-  void on_connect(int) override;
-  void on_message(const struct mosquitto_message *message) override;
-  void on_error() override;
-
-  void throwIfError(const std::string &operation, int result);
 
 };
 

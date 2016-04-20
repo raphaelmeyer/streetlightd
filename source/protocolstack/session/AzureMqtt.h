@@ -5,41 +5,27 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef AZUREMQTT_H
-#define AZUREMQTT_H
+#ifndef AZUREMQTTCONFIGURATION_H
+#define AZUREMQTTCONFIGURATION_H
 
-#include "Session.h"
-
-#include <mosquittopp.h>
+#include "mqtt/Configuration.h"
 
 class AzureMqtt :
-    public Session,
-    private mosqpp::mosquittopp
+    public mqtt::Configuration
 {
 public:
-  AzureMqtt();
-  ~AzureMqtt() override;
+  std::string deviceId() const override;
+  std::string receiveTopic() const override;
+  std::string sendTopic() const override;
+  std::string address() const override;
+  int port() const override;
+
+  void configure(mosqpp::mosquittopp &instance) const override;
 
   void setConfiguration(const SessionConfiguration &value) override;
 
-  void connect() override;
-  void close() override;
-
-  void send(const std::string &message) override;
-  void setMessageCallback(Callback function) override;
-
 private:
-  std::string username{"bbvgathering.azure-devices.net/Device2"};
-  std::string password{};
-  std::string receiveTopic{"devices/Device2/messages/devicebound/#"};
-  std::string sendTopic{"devices/Device2/messages/events/"};
-  Callback listener{};
-
-  void on_connect(int) override;
-  void on_message(const struct mosquitto_message *message) override;
-  void on_error() override;
-
-  void throwIfError(const std::string &operation, int result);
+  SessionConfiguration configuration;
 
 };
 
