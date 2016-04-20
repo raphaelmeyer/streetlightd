@@ -5,26 +5,29 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "HttpTransfer.h"
+#include "Transfer.h"
 
-HttpTransfer::HttpTransfer(Poco::Net::HTTPClientSession &_session) :
+namespace http
+{
+
+Transfer::Transfer(Poco::Net::HTTPClientSession &_session) :
   session{_session}
 {
   request.setMethod(Poco::Net::HTTPRequest::HTTP_POST);
   request.setVersion(Poco::Net::HTTPMessage::HTTP_1_1);
 }
 
-void HttpTransfer::setUri(const std::string &value)
+void Transfer::setUri(const std::string &value)
 {
   request.setURI(value);
 }
 
-void HttpTransfer::setCredentials(const std::string &value)
+void Transfer::setCredentials(const std::string &value)
 {
   request.add("Authorization", value);
 }
 
-void HttpTransfer::setRequest(const std::string &value)
+void Transfer::setRequest(const std::string &value)
 {
   requestData = value;
 
@@ -32,35 +35,37 @@ void HttpTransfer::setRequest(const std::string &value)
   request.setContentLength(requestData.length());
 }
 
-void HttpTransfer::execute()
+void Transfer::execute()
 {
   sendRequest();
   receiveResponse();
 }
 
-Poco::Net::HTTPResponse::HTTPStatus HttpTransfer::getStatus() const
+Poco::Net::HTTPResponse::HTTPStatus Transfer::getStatus() const
 {
   return response.getStatus();
 }
 
-const std::string &HttpTransfer::getReason() const
+const std::string &Transfer::getReason() const
 {
   return response.getReason();
 }
 
-const std::string &HttpTransfer::getResponse() const
+const std::string &Transfer::getResponse() const
 {
   return responseData;
 }
 
-void HttpTransfer::sendRequest()
+void Transfer::sendRequest()
 {
   auto &stream = session.sendRequest(request);
   stream << requestData;
 }
 
-void HttpTransfer::receiveResponse()
+void Transfer::receiveResponse()
 {
   std::istream &stream = session.receiveResponse(response);
   stream >> responseData;
+}
+
 }

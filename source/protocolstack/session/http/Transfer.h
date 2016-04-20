@@ -12,10 +12,13 @@
 #include <Poco/Net/HTTPRequest.h>
 #include <Poco/Net/HTTPResponse.h>
 
-class HttpTransfer
+namespace http
+{
+
+class Transfer
 {
 public:
-  HttpTransfer(Poco::Net::HTTPClientSession &session);
+  Transfer(Poco::Net::HTTPClientSession &session);
 
   void setUri(const std::string &value);
   void setCredentials(const std::string &credentials);
@@ -39,5 +42,7 @@ private:
   void handleResponseCode(const Poco::Net::HTTPResponse &response, const std::string &message);
 
 };
+
+}
 
 #endif

@@ -7,7 +7,7 @@
 
 #include "AzureHttp.h"
 
-#include "HttpTransfer.h"
+#include "http/Transfer.h"
 
 #include <Poco/Exception.h>
 #include <Poco/Net/Context.h>
@@ -34,7 +34,7 @@ void AzureHttp::connect()
 
 void AzureHttp::send(const std::string &message)
 {
-  HttpTransfer transfer{*session};
+  http::Transfer transfer{*session};
 
   transfer.setUri(uri.getPathAndQuery());
   transfer.setCredentials(configuration.credential);
@@ -51,7 +51,7 @@ void AzureHttp::setConfiguration(const SessionConfiguration &value)
   uri = configuration.address;
 }
 
-void AzureHttp::handleResponseCode(const HttpTransfer &transfer) const
+void AzureHttp::handleResponseCode(const http::Transfer &transfer) const
 {
   switch (transfer.getStatus()) {
   case Poco::Net::HTTPResponse::HTTPStatus::HTTP_OK:

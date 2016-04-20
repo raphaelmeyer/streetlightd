@@ -9,7 +9,7 @@
 #define AZUREHTTP_H
 
 #include "Session.h"
-#include "HttpTransfer.h"
+#include "http/Transfer.h"
 
 #include <Poco/Net/HTTPSClientSession.h>
 #include <Poco/URI.h>
@@ -36,7 +36,7 @@ private:
   Poco::URI uri{};
   std::unique_ptr<Poco::Net::HTTPSClientSession> session{};
 
-  void handleResponseCode(const HttpTransfer &transfer) const;
+  void handleResponseCode(const http::Transfer &transfer) const;
 
 };
 
