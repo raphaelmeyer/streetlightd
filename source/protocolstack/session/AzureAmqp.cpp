@@ -1,4 +1,4 @@
-#include "AmqpSession.h"
+#include "AzureAmqp.h"
 
 extern "C"
 {
@@ -70,7 +70,7 @@ static void SendConfirmationCallback(IOTHUB_CLIENT_CONFIRMATION_RESULT, void*)
   //printf("Successfully sent your message");
 }
 
-AmqpSession::AmqpSession()
+AzureAmqp::AzureAmqp()
 {
   srand((unsigned int)time(NULL));
   if (platform_init() != 0)
@@ -79,12 +79,12 @@ AmqpSession::AmqpSession()
   }
 }
 
-AmqpSession::~AmqpSession()
+AzureAmqp::~AzureAmqp()
 {
   platform_deinit();
 }
 
-void AmqpSession::setConfiguration(const SessionConfiguration &value)
+void AzureAmqp::setConfiguration(const SessionConfiguration &value)
 {
   connectionString =
       "HostName=bbvgathering.azure-devices.net;"
@@ -92,7 +92,7 @@ void AmqpSession::setConfiguration(const SessionConfiguration &value)
       "SharedAccessKey=" + value.credential;
 }
 
-void AmqpSession::connect()
+void AzureAmqp::connect()
 {
   //Try to create a connection to our endpoint
   if ((iotHubClientHandle_ = IoTHubClient_CreateFromConnectionString(connectionString.c_str(), AMQP_Protocol)) == NULL)
@@ -108,7 +108,7 @@ void AmqpSession::connect()
   return;
 }
 
-void AmqpSession::send(const std::string& message)
+void AzureAmqp::send(const std::string& message)
 {
   //IOTHUB_MESSAGE_HANDLE messageHandle = IoTHubMessage_CreateFromByteArray(reinterpret_cast<const unsigned char*>(message.c_str()), strlen(message.c_str()));
   IOTHUB_MESSAGE_HANDLE messageHandle = IoTHubMessage_CreateFromString(message.c_str());
@@ -123,14 +123,14 @@ void AmqpSession::send(const std::string& message)
   //printf("IoTHubClient_SendEventAsync accepted data for transmission to IoT Hub.\r\n");
 }
 
-void AmqpSession::setMessageCallback(Callback function) {
+void AzureAmqp::setMessageCallback(Callback function) {
   if(function == nullptr)
     std::runtime_error("No valid Message Callback");
 
   receivedFunction_ = function;
 }
 
-void AmqpSession::close()
+void AzureAmqp::close()
 {
   IoTHubClient_Destroy((IOTHUB_CLIENT_HANDLE)iotHubClientHandle_);
   iotHubClientHandle_ = nullptr;

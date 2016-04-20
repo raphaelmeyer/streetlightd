@@ -19,7 +19,7 @@
 #include "protocolstack/ProtocolStack.h"
 #include "protocolstack/StackFactory.h"
 
-#include "protocolstack/session/amqp/AmqpSession.h"
+#include "protocolstack/session/AzureAmqp.h"
 
 #include "dbus/DbusTimer.h"
 #include "dbus/Streetlight.h"
@@ -64,7 +64,7 @@ int main(int argc, char **argv)
   Factory<Session*> sessionFactory;
   sessionFactory.add("mqtt-local", []{return new mqtt::Client(new LocalMqtt());});
   sessionFactory.add("azure-http", []{return new AzureHttp();});
-  sessionFactory.add("azure-amqp", []{return new AmqpSession();});
+  sessionFactory.add("azure-amqp", []{return new AzureAmqp();});
   sessionFactory.add("azure-mqtt", []{return new mqtt::Client(new AzureMqtt());});
 
   CommandLineParser parser{std::cout};

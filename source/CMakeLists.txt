@@ -23,7 +23,7 @@ include_directories("/usr/include/dbus-c++-1")
 include_directories ("protocolstack/session/amqp/azure-iot-sdks/c/iothub_client/inc/")
 include_directories ("protocolstack/session/amqp/azure-iot-sdks/c/azure-uamqp-c/azure-c-shared-utility/c/inc/")
 
-add_subdirectory("${PROJECT_SOURCE_DIR}/protocolstack/session/amqp/")
+add_subdirectory ("protocolstack/session/amqp/azure-iot-sdks/c/" EXCLUDE_FROM_ALL)
 
 file(GLOB RAW_SOURCES
     *.h

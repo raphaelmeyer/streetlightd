@@ -3,12 +3,12 @@
 #include <string>
 #include <functional>
 
-class AmqpSession :
+class AzureAmqp :
     public Session
 {
 public:
-  AmqpSession();
-  ~AmqpSession() override;
+  AzureAmqp();
+  ~AzureAmqp() override;
 
   void setConfiguration(const SessionConfiguration &value) override;
   void connect() override;
