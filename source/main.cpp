@@ -66,7 +66,7 @@ int main(int argc, char **argv)
   sessionFactory.add("azure-amqp", []{return new AzureAmqp();});
   sessionFactory.add("azure-http", []{return new AzureHttp();});
   sessionFactory.add("azure-mqtt", []{return new mqtt::Client(new AzureMqtt());});
-  sessionFactory.add("mqtt-local", []{return new mqtt::Client(new LocalMqtt());});
+  sessionFactory.add("local-mqtt", []{return new mqtt::Client(new LocalMqtt());});
 
   CommandLineParser parser{std::cout};
   parser.addApplications(applicationFactory.workers());

@@ -9,7 +9,7 @@ import time
 
 @given(u'I start streetlightd')
 def step_impl(context):
-	context.application = subprocess.Popen(['streetlightd', '--application=forwarder', '--presentation=key-value', '--session=mqtt-local', '--external-timer'])
+	context.application = subprocess.Popen(['streetlightd', '--application=forwarder', '--presentation=key-value', '--session=local-mqtt', '--external-timer'])
 
 	bus = dbus.SessionBus()
 	while not (dbus.UTF8String('ch.bbv.streetlightd') in bus.list_names()):
