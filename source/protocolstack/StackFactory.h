@@ -31,13 +31,13 @@ public:
 class StackFactory
 {
 public:
-  StackFactory(Factory<Application*> &applicationFactory, Factory<Presentation::EncoderAndDecoder> &presentationFactory, Factory<Session*> &sessionFactory);
+  StackFactory(Factory<Application*> &applicationFactory, Factory<presentation::EncoderAndDecoder> &presentationFactory, Factory<Session*> &sessionFactory);
 
   ProtocolStack produce(const StackConfiguration &configuration);
 
 private:
   Factory<Application*> &applicationFactory;
-  Factory<Presentation::EncoderAndDecoder> &presentationFactory;
+  Factory<presentation::EncoderAndDecoder> &presentationFactory;
   Factory<Session*> &sessionFactory;
 
 };

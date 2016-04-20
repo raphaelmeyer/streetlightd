@@ -14,7 +14,7 @@
 #include <functional>
 #include <string>
 
-namespace Presentation
+namespace presentation
 {
 
   typedef std::function<std::string(const message::Outgoing &message)> Encoder;

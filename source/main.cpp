@@ -58,9 +58,9 @@ int main(int argc, char **argv)
   applicationFactory.add("forwarder", []{return new Forwarder();});
   applicationFactory.add("debug", []{return new Debug(std::cout);});
 
-  Factory<Presentation::EncoderAndDecoder> encoderFactory;
-  encoderFactory.add("key-value", []{ return Presentation::EncoderAndDecoder{KeyValue::encode, KeyValue::decode};});
-  encoderFactory.add("json", []{ return Presentation::EncoderAndDecoder{Json::encode, Json::decode};});
+  Factory<presentation::EncoderAndDecoder> encoderFactory;
+  encoderFactory.add("key-value", []{ return presentation::EncoderAndDecoder{KeyValue::encode, KeyValue::decode};});
+  encoderFactory.add("json", []{ return presentation::EncoderAndDecoder{Json::encode, Json::decode};});
 
   Factory<Session*> sessionFactory;
   sessionFactory.add("azure-amqp", []{return new AzureAmqp();});

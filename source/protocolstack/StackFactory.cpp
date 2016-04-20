@@ -7,7 +7,7 @@
 
 #include "StackFactory.h"
 
-StackFactory::StackFactory(Factory<Application *> &_application, Factory<Presentation::EncoderAndDecoder> &_presentation, Factory<Session *> &_session) :
+StackFactory::StackFactory(Factory<Application *> &_application, Factory<presentation::EncoderAndDecoder> &_presentation, Factory<Session *> &_session) :
   applicationFactory{_application},
   presentationFactory{_presentation},
   sessionFactory{_session}
