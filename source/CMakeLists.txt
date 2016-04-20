@@ -50,6 +50,9 @@ file(GLOB_RECURSE TEST_SOURCES
     *_Mock.h
     infrastructure/CommandLineParser.cpp
     infrastructure/Factory.h
+    protocolstack/application/message/Outgoing.cpp
+    protocolstack/application/message/Incoming.cpp
+    protocolstack/application/message/format.cpp
     protocolstack/application/Forwarder.cpp
     protocolstack/presentation/KeyValueEncoder.cpp
     protocolstack/presentation/KeyValueDecoder.cpp

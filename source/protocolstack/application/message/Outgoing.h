@@ -9,6 +9,7 @@
 #define MESSAGE_OUTGOING_H
 
 #include "Value.h"
+#include <ostream>
 
 namespace message
 {
@@ -22,5 +23,7 @@ namespace message
   };
 
 }
+
+std::ostream &operator<<(std::ostream &stream, const message::Outgoing &message);
 
 #endif
