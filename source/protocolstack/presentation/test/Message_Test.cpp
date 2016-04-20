@@ -10,6 +10,13 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
+TEST(Message_Test, has_default_constuctor)
+{
+  presentation::Message message{};
+
+  ASSERT_EQ("", message.asString());
+}
+
 TEST(Message_Test, can_create_from_string)
 {
   std::string string{"hello world"};

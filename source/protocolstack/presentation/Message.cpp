@@ -13,6 +13,11 @@
 namespace presentation
 {
 
+Message::Message() :
+  content{}
+{
+}
+
 Message::Message(const char *_content) :
   content{_content, _content + strlen(_content)}
 {

@@ -62,6 +62,8 @@ file(GLOB_RECURSE TEST_SOURCES
     protocolstack/presentation/KeyValueDecoder.cpp
     protocolstack/presentation/JsonEncoder.cpp
     protocolstack/presentation/JsonDecoder.cpp
+    protocolstack/presentation/BinaryEncoder.cpp
+    protocolstack/presentation/BinaryDecoder.cpp
     protocolstack/presentation/Message.cpp
     )
 

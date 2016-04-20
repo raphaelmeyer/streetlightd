@@ -17,6 +17,7 @@ namespace presentation
 class Message final
 {
 public:
+  Message();
   Message(const char *content);
   Message(const std::string &content);
   Message(const void *content, size_t length);

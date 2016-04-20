@@ -9,6 +9,8 @@
 #include "protocolstack/application/ActiveApplication.h"
 #include "protocolstack/application/Debug.h"
 #include "protocolstack/application/Forwarder.h"
+#include "protocolstack/presentation/BinaryDecoder.h"
+#include "protocolstack/presentation/BinaryEncoder.h"
 #include "protocolstack/presentation/JsonDecoder.h"
 #include "protocolstack/presentation/JsonEncoder.h"
 #include "protocolstack/presentation/KeyValueDecoder.h"
@@ -59,6 +61,7 @@ int main(int argc, char **argv)
   applicationFactory.add("debug", []{return new Debug(std::cout);});
 
   Factory<presentation::EncoderAndDecoder> encoderFactory;
+  encoderFactory.add("binary", []{ return presentation::EncoderAndDecoder{Binary::encode, Binary::decode};});
   encoderFactory.add("key-value", []{ return presentation::EncoderAndDecoder{KeyValue::encode, KeyValue::decode};});
   encoderFactory.add("json", []{ return presentation::EncoderAndDecoder{Json::encode, Json::decode};});
 
