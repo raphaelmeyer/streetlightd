@@ -54,6 +54,7 @@ file(GLOB_RECURSE TEST_SOURCES
     protocolstack/application/message/Incoming.cpp
     protocolstack/application/message/format.cpp
     protocolstack/application/Forwarder.cpp
+    protocolstack/application/Debug.cpp
     protocolstack/presentation/KeyValueEncoder.cpp
     protocolstack/presentation/KeyValueDecoder.cpp
     protocolstack/presentation/JsonEncoder.cpp

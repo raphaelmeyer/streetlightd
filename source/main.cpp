@@ -6,6 +6,7 @@
  */
 
 #include "protocolstack/application/Forwarder.h"
+#include "protocolstack/application/Debug.h"
 #include "protocolstack/application/ActiveApplication.h"
 #include "protocolstack/presentation/KeyValueEncoder.h"
 #include "protocolstack/presentation/KeyValueDecoder.h"
@@ -52,6 +53,7 @@ int main(int argc, char **argv)
 
   Factory<Application*> applicationFactory;
   applicationFactory.add("forwarder", []{return new Forwarder();});
+  applicationFactory.add("debug", []{return new Debug(std::cout);});
 
   Factory<Presentation::EncoderAndDecoder> encoderFactory;
   encoderFactory.add("key-value", []{ return Presentation::EncoderAndDecoder{KeyValue::encode, KeyValue::decode};});
