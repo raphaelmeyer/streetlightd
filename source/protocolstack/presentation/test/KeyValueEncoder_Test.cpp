@@ -27,3 +27,11 @@ TEST(KeyValueEncoder_Test, encode_brightness)
 
   ASSERT_EQ("brightness 0.78\n", KeyValue::encode(message));
 }
+
+TEST(KeyValueEncoder_Test, encode_info)
+{
+  message::Outgoing message{};
+  message.info = "hello world";
+
+  ASSERT_EQ("info hello world\n", KeyValue::encode(message));
+}

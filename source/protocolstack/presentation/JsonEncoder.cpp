@@ -24,6 +24,13 @@ std::string encode(const message::Outgoing &message)
   if (message.brightness.isValid()) {
     stream << "\"brightness\":" << message.brightness();
   }
+  //TODO use nicer solution
+  if (message.brightness.isValid() && message.info.isValid()) {
+    stream << ",";
+  }
+  if (message.info.isValid()) {
+    stream << "\"info\":\"" << message.info() << "\"";
+  }
 
   stream << "}";
 

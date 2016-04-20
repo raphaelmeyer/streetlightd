@@ -19,6 +19,9 @@ std::string encode(const message::Outgoing &message)
   if (message.brightness.isValid()) {
     stream << "brightness " << message.brightness() << std::endl;
   }
+  if (message.info.isValid()) {
+    stream << "info " << message.info() << std::endl;
+  }
 
   return stream.str();
 }

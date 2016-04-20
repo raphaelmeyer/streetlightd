@@ -17,6 +17,7 @@ namespace message
   {
   public:
     Value<double> brightness{};
+    Value<std::string> info{};
 
   };
 

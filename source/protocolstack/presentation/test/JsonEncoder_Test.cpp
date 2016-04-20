@@ -30,4 +30,21 @@ TEST(JsonEncoder_Test, encode_brightness)
   ASSERT_EQ("{\"brightness\":0.78}", Json::encode(message));
 }
 
+TEST(JsonEncoder_Test, encode_info)
+{
+  message::Outgoing message{};
+  message.info = "hello world";
+
+  ASSERT_EQ("{\"info\":\"hello world\"}", Json::encode(message));
+}
+
+TEST(JsonEncoder_Test, encode_2_values)
+{
+  message::Outgoing message{};
+  message.brightness = 0.78;
+  message.info = "hello world";
+
+  ASSERT_EQ("{\"brightness\":0.78,\"info\":\"hello world\"}", Json::encode(message));
+}
+
 //TODO encode multiple values
