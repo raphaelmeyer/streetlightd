@@ -10,7 +10,6 @@ set (CMAKE_CXX_STANDARD 14)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 add_definitions(-DNO_LOGGING)
-include_directories ("${PROJECT_SOURCE_DIR}/amqp/")
 include_directories ("${PROJECT_SOURCE_DIR}/mqtt/")
 include_directories ("${PROJECT_SOURCE_DIR}/dbus/")
 include_directories ("${PROJECT_SOURCE_DIR}/presentation/")
@@ -21,10 +20,10 @@ include_directories("$(PROJECT_BINARY_DIR)")
 include_directories(".")
 include_directories("/usr/include/dbus-c++-1")
 
-include_directories ("amqp/azure-iot-sdks/c/iothub_client/inc/")
-include_directories ("amqp/azure-iot-sdks/c/azure-uamqp-c/azure-c-shared-utility/c/inc/")
+include_directories ("protocolstack/session/amqp/azure-iot-sdks/c/iothub_client/inc/")
+include_directories ("protocolstack/session/amqp/azure-iot-sdks/c/azure-uamqp-c/azure-c-shared-utility/c/inc/")
 
-add_subdirectory("${PROJECT_SOURCE_DIR}/amqp/")
+add_subdirectory("${PROJECT_SOURCE_DIR}/protocolstack/session/amqp/")
 
 file(GLOB RAW_SOURCES
     *.h
@@ -46,7 +45,7 @@ file(GLOB RAW_SOURCES
     protocolstack/application/message/*.cpp
     infrastructure/*.cpp
     infrastructure/*.h
-    amqp/AmqpSession.cpp
+    protocolstack/session/amqp/AmqpSession.cpp
     )
 
 file(GLOB_RECURSE TEST_SOURCES

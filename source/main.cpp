@@ -19,7 +19,7 @@
 #include "protocolstack/ProtocolStack.h"
 #include "protocolstack/StackFactory.h"
 
-#include "amqp/AmqpSession.h"
+#include "protocolstack/session/amqp/AmqpSession.h"
 
 #include "dbus/DbusTimer.h"
 #include "dbus/Streetlight.h"
