@@ -5,21 +5,22 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "protocolstack/application/Forwarder.h"
-#include "protocolstack/application/Debug.h"
+
 #include "protocolstack/application/ActiveApplication.h"
-#include "protocolstack/presentation/KeyValueEncoder.h"
-#include "protocolstack/presentation/KeyValueDecoder.h"
-#include "protocolstack/presentation/JsonEncoder.h"
+#include "protocolstack/application/Debug.h"
+#include "protocolstack/application/Forwarder.h"
 #include "protocolstack/presentation/JsonDecoder.h"
+#include "protocolstack/presentation/JsonEncoder.h"
+#include "protocolstack/presentation/KeyValueDecoder.h"
+#include "protocolstack/presentation/KeyValueEncoder.h"
+#include "protocolstack/session/AzureAmqp.h"
 #include "protocolstack/session/AzureHttp.h"
-#include "protocolstack/session/mqtt/Client.h"
 #include "protocolstack/session/AzureMqtt.h"
 #include "protocolstack/session/LocalMqtt.h"
+#include "protocolstack/session/mqtt/Client.h"
+
 #include "protocolstack/ProtocolStack.h"
 #include "protocolstack/StackFactory.h"
-
-#include "protocolstack/session/AzureAmqp.h"
 
 #include "dbus/DbusTimer.h"
 #include "dbus/Streetlight.h"
@@ -62,10 +63,10 @@ int main(int argc, char **argv)
   encoderFactory.add("json", []{ return Presentation::EncoderAndDecoder{Json::encode, Json::decode};});
 
   Factory<Session*> sessionFactory;
-  sessionFactory.add("mqtt-local", []{return new mqtt::Client(new LocalMqtt());});
-  sessionFactory.add("azure-http", []{return new AzureHttp();});
   sessionFactory.add("azure-amqp", []{return new AzureAmqp();});
+  sessionFactory.add("azure-http", []{return new AzureHttp();});
   sessionFactory.add("azure-mqtt", []{return new mqtt::Client(new AzureMqtt());});
+  sessionFactory.add("mqtt-local", []{return new mqtt::Client(new LocalMqtt());});
 
   CommandLineParser parser{std::cout};
   parser.addApplications(applicationFactory.workers());

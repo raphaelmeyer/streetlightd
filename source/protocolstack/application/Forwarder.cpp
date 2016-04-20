@@ -26,7 +26,7 @@ void Forwarder::received(const message::Incoming &message)
   }
 }
 
-void Forwarder::setBrightnessSensor(Forwarder::Sensor value)
+void Forwarder::setBrightnessSensor(Sensor value)
 {
   brightnessSensor = value;
 }
@@ -41,7 +41,7 @@ void Forwarder::setWarningActor(Actor<std::string> value)
   warningActor = value;
 }
 
-void Forwarder::setSender(Forwarder::Sender value)
+void Forwarder::setSender(Sender value)
 {
   sender = value;
 }
