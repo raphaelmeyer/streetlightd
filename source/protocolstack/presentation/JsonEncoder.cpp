@@ -7,39 +7,81 @@
 
 #include "JsonEncoder.h"
 
+#include <protocolstack/application/message/propertyNames.h>
+
 #include <sstream>
+#include <functional>
 
 namespace Json
 {
 
-static void writeSeparator(std::ostream &stream, bool &first)
+class Printer :
+    public message::Visitor
 {
-  if (first) {
-    first = false;
-  } else {
-    stream << ",";
+public:
+  typedef std::function<std::string(message::Property)> PropertyNameGetter;
+
+  Printer(std::ostream &_output, PropertyNameGetter _propertyName) :
+    output{_output},
+    propertyName{_propertyName}
+  {
   }
-}
 
-static void add(std::ostream &stream, double value)
-{
-  stream << value;
-}
-
-static void add(std::ostream &stream, const std::string &value)
-{
-  stream << "\"" << value << "\"";
-}
-
-template<typename T>
-static void addIfValid(std::ostream &stream, const std::string &name, const message::Value<T> &value, bool &first)
-{
-  if (value.isValid()) {
-    writeSeparator(stream, first);
-    stream << "\"" + name + "\":";
-    add(stream, value());
+  void visit(message::Property property, const message::Value<double> &value) override
+  {
+    print(property, value);
   }
-}
+
+  void visit(message::Property property, const message::Value<std::string> &value) override
+  {
+    print(property, value);
+  }
+
+private:
+  bool first{true};
+  std::ostream &output;
+  PropertyNameGetter propertyName{};
+
+  void writeValue(double value)
+  {
+    output << value;
+  }
+
+  void writeValue(const std::string &value)
+  {
+    output << "\"" << value << "\"";
+  }
+
+  void writeKey(message::Property key)
+  {
+    output << "\"" + propertyName(key) + "\"";
+  }
+
+  void writeKeyValueSeparator()
+  {
+    output << ":";
+  }
+
+  void writeSeparator(bool first)
+  {
+    if (!first) {
+      output << ",";
+    }
+  }
+
+  template<typename T>
+  void print(message::Property property, const message::Value<T> &value)
+  {
+    if (value.isValid()) {
+      writeSeparator(first);
+      first = false;
+      writeKey(property);
+      writeKeyValueSeparator();
+      writeValue(value());
+    }
+  }
+
+};
 
 presentation::Message encode(const message::Outgoing &message)
 {
@@ -47,15 +89,10 @@ presentation::Message encode(const message::Outgoing &message)
   // support custom float serializer.
 
   std::stringstream stream;
+  Printer printer{stream, message::propertyName};
 
   stream << "{";
-
-  bool first = true;
-
-  addIfValid(stream, "brightness", message.brightness, first);
-  addIfValid(stream, "moisture", message.moisture, first);
-  addIfValid(stream, "info", message.info, first);
-
+  message.accept(printer);
   stream << "}";
 
   return stream.str();
