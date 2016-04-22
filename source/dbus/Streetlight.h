@@ -16,47 +16,22 @@
 
 #include <dbus-c++/dbus.h>
 
-class BrightnessSensor :
-    public ch::bbv::brightness_proxy,
+template<typename T>
+class DbusInterface :
+    public T,
     public DBus::IntrospectableProxy,
     public DBus::ObjectProxy
 {
 public:
-  BrightnessSensor(DBus::Connection& connection);
-
+  DbusInterface(DBus::Connection& connection) :
+    DBus::ObjectProxy(connection, "/ch/bbv/streetlight", "ch.bbv.streetlight")
+  {
+  }
 };
 
-
-class MoistureSensor :
-    public ch::bbv::moisture_proxy,
-    public DBus::IntrospectableProxy,
-    public DBus::ObjectProxy
-{
-public:
-  MoistureSensor(DBus::Connection& connection);
-
-};
-
-
-class LuminosityActor :
-    public ch::bbv::luminosity_proxy,
-    public DBus::IntrospectableProxy,
-    public DBus::ObjectProxy
-{
-public:
-  LuminosityActor(DBus::Connection &connection);
-
-};
-
-
-class WarningActor :
-    public ch::bbv::warning_proxy,
-    public DBus::IntrospectableProxy,
-    public DBus::ObjectProxy
-{
-public:
-  WarningActor(DBus::Connection &connection);
-
-};
+typedef DbusInterface<ch::bbv::brightness_proxy>  BrightnessSensor;
+typedef DbusInterface<ch::bbv::moisture_proxy>    MoistureSensor;
+typedef DbusInterface<ch::bbv::luminosity_proxy>  LuminosityActor;
+typedef DbusInterface<ch::bbv::warning_proxy>     WarningActor;
 
 #endif
