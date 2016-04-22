@@ -6,69 +6,86 @@
  */
 
 #include "../Printer.h"
+#include "PrintFormat_Mock.h"
 #include "../Value.h"
 #include "../Property.h"
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <sstream>
 #include <functional>
 
 class message_Printer_Test :
     public testing::Test
 {
 public:
-  std::stringstream output{};
-  message::Printer::PropertyNameGetter propertyGetter{[](message::Property){return "name";}};
-  message::Printer testee{output, propertyGetter};
+  testing::NiceMock<PrintFormatMock> format;
+  message::Printer testee{format};
 
 };
 
 TEST_F(message_Printer_Test, prints_valid_double_value)
 {
   const message::Value<double> value{0.42};
+  EXPECT_CALL(format, writeValue(0.42)).Times(1);
 
   testee.visit(message::Property::Info, value);
-
-  ASSERT_EQ("name=\"0.420000\"", output.str());
-}
-
-TEST_F(message_Printer_Test, does_not_print_invalid_double_value)
-{
-  const message::Value<double> value{};
-
-  testee.visit(message::Property::Info, value);
-
-  ASSERT_EQ("", output.str());
 }
 
 TEST_F(message_Printer_Test, prints_valid_string_value)
 {
   const message::Value<std::string> value{"test"};
+  EXPECT_CALL(format, writeValue("test")).Times(1);
 
   testee.visit(message::Property::Info, value);
-
-  ASSERT_EQ("name=\"test\"", output.str());
 }
 
-TEST_F(message_Printer_Test, adds_spaces_between_values)
+TEST_F(message_Printer_Test, does_not_print_invalid_value)
 {
-  const message::Value<std::string> value{"test"};
+  const message::Value<double> value{};
+  EXPECT_CALL(format, writeKey(testing::_)).Times(0);
 
   testee.visit(message::Property::Info, value);
-  testee.visit(message::Property::Info, value);
-  testee.visit(message::Property::Info, value);
-
-  ASSERT_EQ("name=\"test\" name=\"test\" name=\"test\"", output.str());
 }
 
-TEST_F(message_Printer_Test, does_not_add_spaces_for_invalid_values)
+TEST_F(message_Printer_Test, uses_the_provided_key_when_writeing_the_key)
 {
-  const message::Value<std::string> value{};
+  const message::Value<double> value{0.42};
+  EXPECT_CALL(format, writeKey(message::Property::Info)).Times(1);
+  EXPECT_CALL(format, writeKey(message::Property::Brightness)).Times(1);
+  EXPECT_CALL(format, writeKey(message::Property::Warning)).Times(0);
+
+  testee.visit(message::Property::Info, value);
+  testee.visit(message::Property::Brightness, value);
+}
+
+TEST_F(message_Printer_Test, calls_the_separator_the_first_time_with_true)
+{
+  const message::Value<double> value{0};
+  EXPECT_CALL(format, writeSeparator(true)).Times(1);
+  EXPECT_CALL(format, writeSeparator(false)).Times(0);
+
+  testee.visit(message::Property::Info, value);
+}
+
+TEST_F(message_Printer_Test, calls_the_separator_the_later_times_with_false)
+{
+  const message::Value<double> value{0};
+  EXPECT_CALL(format, writeSeparator(true)).Times(1);
+  EXPECT_CALL(format, writeSeparator(false)).Times(2);
 
   testee.visit(message::Property::Info, value);
   testee.visit(message::Property::Info, value);
   testee.visit(message::Property::Info, value);
+}
 
-  ASSERT_EQ("", output.str());
+TEST_F(message_Printer_Test, calls_all_functions_to_print_full_property)
+{
+  const message::Value<double> value{1};
+
+  EXPECT_CALL(format, writeSeparator(testing::_)).Times(1);
+  EXPECT_CALL(format, writeKey(testing::_)).Times(1);
+  EXPECT_CALL(format, writeKeyValueSeparator()).Times(1);
+  EXPECT_CALL(format, writeValue(1)).Times(1);
+
+  testee.visit(message::Property::Info, value);
 }

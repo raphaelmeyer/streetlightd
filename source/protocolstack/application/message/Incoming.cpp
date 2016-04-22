@@ -8,6 +8,7 @@
 #include "Incoming.h"
 
 #include "Printer.h"
+#include "DebugFormat.h"
 #include "propertyNames.h"
 
 namespace message
@@ -23,7 +24,8 @@ void Incoming::accept(Visitor &visitor) const
 
 std::ostream& operator<<(std::ostream &stream, const message::Incoming &message)
 {
-  message::Printer printer{stream, message::propertyName};
+  message::DebugFormat format{stream, message::propertyName};
+  message::Printer printer{format};
 
   stream << "message::Incoming(";
   message.accept(printer);

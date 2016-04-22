@@ -57,6 +57,7 @@ file(GLOB_RECURSE TEST_SOURCES
     protocolstack/application/message/Outgoing.cpp
     protocolstack/application/message/Incoming.cpp
     protocolstack/application/message/Printer.cpp
+    protocolstack/application/message/DebugFormat.cpp
     protocolstack/application/message/propertyNames.cpp
     protocolstack/application/Forwarder.cpp
     protocolstack/application/Debug.cpp

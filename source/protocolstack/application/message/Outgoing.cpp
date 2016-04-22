@@ -8,6 +8,7 @@
 #include "Outgoing.h"
 
 #include "Printer.h"
+#include "DebugFormat.h"
 #include "Property.h"
 #include "propertyNames.h"
 
@@ -25,7 +26,8 @@ void Outgoing::accept(Visitor &visitor) const
 
 std::ostream& operator<<(std::ostream &stream, const message::Outgoing &message)
 {
-  message::Printer printer{stream, message::propertyName};
+  message::DebugFormat format{stream, message::propertyName};
+  message::Printer printer{format};
 
   stream << "message::Outgoing(";
   message.accept(printer);

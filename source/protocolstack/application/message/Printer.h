@@ -10,6 +10,7 @@
 
 #include "Value.h"
 #include "Visitor.h"
+#include "PrintFormat.h"
 
 #include <ostream>
 #include <functional>
@@ -23,27 +24,24 @@ class Printer :
 public:
   typedef std::function<std::string(Property)> PropertyNameGetter;
 
-  Printer(std::ostream &output, PropertyNameGetter propertyName);
+  Printer(PrintFormat &format);
 
   void visit(Property property, const Value<double> &value) override;
   void visit(Property property, const Value<std::string> &value) override;
 
 private:
   bool first{true};
-  std::ostream &output;
-  PropertyNameGetter propertyName{};
-
-  std::string format(double value) const;
-  std::string format(const std::string &value) const;
-  std::string format(const std::string &key, const std::string &value) const;
-  std::string nextSeparator();
+  PrintFormat &format;
 
   template<typename T>
   void print(Property property, const Value<T> &value)
   {
     if (value.isValid()) {
-      output << nextSeparator();
-      output << format(propertyName(property), format(value()));
+      format.writeSeparator(first);
+      first = false;
+      format.writeKey(property);
+      format.writeKeyValueSeparator();
+      format.writeValue(value());
     }
   }
 
