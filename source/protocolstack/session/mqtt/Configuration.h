@@ -24,6 +24,7 @@ public:
   virtual std::string deviceId() const= 0;
   virtual std::string receiveTopic() const= 0;
   virtual std::string sendTopic() const= 0;
+  virtual int qos() const= 0;
   virtual std::string address() const= 0;
   virtual int port() const= 0;
 

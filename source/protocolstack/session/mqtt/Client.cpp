@@ -42,7 +42,7 @@ void Client::connect()
 
 void Client::on_connect(int)
 {
-  const auto result = subscribe(nullptr, configuration->receiveTopic().c_str(), 2);
+  const auto result = subscribe(nullptr, configuration->receiveTopic().c_str(), configuration->qos());
   throwIfError("subscribe", result);
 }
 
@@ -57,7 +57,7 @@ void Client::close()
 
 void Client::send(const presentation::Message &message)
 {
-  const auto result = publish(nullptr, configuration->sendTopic().c_str(), message.asBinary().size(), message.asBinary().data(), 2);
+  const auto result = publish(nullptr, configuration->sendTopic().c_str(), message.asBinary().size(), message.asBinary().data(), configuration->qos());
   throwIfError("publish", result);
 }
 

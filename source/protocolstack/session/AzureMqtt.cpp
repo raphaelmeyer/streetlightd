@@ -16,17 +16,22 @@ std::string AzureMqtt::deviceId() const
 
 std::string AzureMqtt::receiveTopic() const
 {
-  return "devices/" + configuration.address + "/messages/devicebound/#";
+  return topicPrefix() + "devicebound/#";
 }
 
 std::string AzureMqtt::sendTopic() const
 {
-  return "devices/" + configuration.address + "/messages/events/";
+  return topicPrefix() + "events/";
+}
+
+int AzureMqtt::qos() const
+{
+  return 1;
 }
 
 std::string AzureMqtt::address() const
 {
-  return "bbvgathering.azure-devices.net";
+  return "iothubbbvgathering.azure-devices.net";
 }
 
 int AzureMqtt::port() const
@@ -36,17 +41,35 @@ int AzureMqtt::port() const
 
 void AzureMqtt::configure(mosqpp::mosquittopp &instance) const
 {
-  const auto username = "bbvgathering.azure-devices.net/" + deviceId();
-  const auto password = configuration.credential;
-
   int value = MQTT_PROTOCOL_V311;
   mqtt::throwIfError("opts_set", instance.opts_set(MOSQ_OPT_PROTOCOL_VERSION, &value));
   mqtt::throwIfError("tls_set", instance.tls_set(nullptr, "/etc/ssl/certs/"));
-  mqtt::throwIfError("username_pw_set", instance.username_pw_set(username.c_str(), password.c_str()));
+  mqtt::throwIfError("username_pw_set", instance.username_pw_set(username().c_str(), password().c_str()));
   mqtt::throwIfError("tls_opts_set", instance.tls_opts_set(1, "tlsv1"));
 }
 
 void AzureMqtt::setConfiguration(const SessionConfiguration &value)
 {
   configuration = value;
+  tokenFactory = SasTokenFactory{value.credential, scope()};
+}
+
+std::string AzureMqtt::scope() const
+{
+  return address() + "/devices/" + deviceId();
+}
+
+std::string AzureMqtt::username() const
+{
+  return address() + "/" + deviceId() + "/";
+}
+
+std::string AzureMqtt::password() const
+{
+  return tokenFactory.produce();
+}
+
+std::string AzureMqtt::topicPrefix() const
+{
+  return "devices/" + deviceId() + "/messages/";
 }

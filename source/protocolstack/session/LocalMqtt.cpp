@@ -23,6 +23,11 @@ std::string LocalMqtt::sendTopic() const
   return "streetlight/sensor";
 }
 
+int LocalMqtt::qos() const
+{
+  return 2;
+}
+
 std::string LocalMqtt::address() const
 {
   return "localhost";
