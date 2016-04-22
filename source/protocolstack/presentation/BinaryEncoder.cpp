@@ -9,37 +9,64 @@
 
 #include "Binary.h"
 
+#include <protocolstack/application/message/Printer.h>
+#include <protocolstack/application/message/PrintFormat.h>
+
 #include <cmath>
 
 namespace Binary
 {
 
-static void write(double value, std::vector<uint8_t> &data)
+class Format :
+    public message::PrintFormat
 {
-  data.push_back(uint8_t(std::round(value * 255)));
-}
+public:
+  typedef std::function<int(message::Property)> PropertyNumberGetter;
 
-static void write(const std::string &value, std::vector<uint8_t> &data)
-{
-  data.push_back(value.size());
-  data.insert(data.end(), value.begin(), value.end());
-}
-
-template<typename T>
-static void writeIfValid(uint8_t key, const message::Value<T> &value, std::vector<uint8_t> &data)
-{
-  if (value.isValid()) {
-    data.push_back(key);
-    write(value(), data);
+  Format(std::vector<uint8_t> &_output, PropertyNumberGetter _propertyNumber) :
+    output{_output},
+    propertyNumber{_propertyNumber}
+  {
   }
-}
+
+  void writeValue(double value) override
+  {
+    output.push_back(uint8_t(std::round(value * 255)));
+  }
+
+  void writeValue(const std::string &value) override
+  {
+    output.push_back(value.size());
+    output.insert(output.end(), value.begin(), value.end());
+  }
+
+  void writeKey(message::Property key) override
+  {
+    output.push_back(propertyNumber(key));
+  }
+
+  void writeKeyValueSeparator() override
+  {
+  }
+
+  void writeSeparator(bool) override
+  {
+  }
+
+private:
+  std::vector<uint8_t> &output;
+  PropertyNumberGetter propertyNumber{};
+
+};
 
 presentation::Message encode(const message::Outgoing &message)
 {
   std::vector<uint8_t> data{};
-  writeIfValid(Brightness, message.brightness, data);
-  writeIfValid(Moisture, message.moisture, data);
-  writeIfValid(Info, message.info, data);
+  Format format{data, Binary::propertyNumber};
+  message::Printer printer{format};
+
+  message.accept(printer);
+
   return presentation::Message{data};
 }
 

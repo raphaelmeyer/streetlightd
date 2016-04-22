@@ -7,26 +7,65 @@
 
 #include "KeyValueEncoder.h"
 
+#include <protocolstack/application/message/propertyNames.h>
+#include <protocolstack/application/message/Printer.h>
+#include <protocolstack/application/message/PrintFormat.h>
+
 #include <sstream>
+#include <functional>
 
 namespace KeyValue
 {
 
-template<typename T>
-static void addIfValid(std::ostream &stream, const std::string &name, const message::Value<T> &value)
+class Format :
+    public message::PrintFormat
 {
-  if (value.isValid()) {
-    stream << name << " " << value() << std::endl;
+public:
+  typedef std::function<std::string(message::Property)> PropertyNameGetter;
+
+  Format(std::ostream &_output, PropertyNameGetter _propertyName) :
+    output{_output},
+    propertyName{_propertyName}
+  {
   }
-}
+
+  void writeValue(double value) override
+  {
+    output << value << "\n";
+  }
+
+  void writeValue(const std::string &value) override
+  {
+    output << value << "\n";
+  }
+
+  void writeKey(message::Property key) override
+  {
+    output << propertyName(key);
+  }
+
+  void writeKeyValueSeparator() override
+  {
+    output << " ";
+  }
+
+  void writeSeparator(bool) override
+  {
+  }
+
+private:
+  std::ostream &output;
+  PropertyNameGetter propertyName{};
+
+};
 
 std::string encode(const message::Outgoing &message)
 {
   std::stringstream stream;
+  Format format{stream, message::propertyName};
+  message::Printer printer{format};
 
-  addIfValid(stream, "brightness", message.brightness);
-  addIfValid(stream, "moisture", message.moisture);
-  addIfValid(stream, "info", message.info);
+  message.accept(printer);
 
   return stream.str();
 }
