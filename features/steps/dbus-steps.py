@@ -22,6 +22,12 @@ def step_impl(context, value):
 	streetlightd = bus.get_object('ch.bbv.streetlight', '/ch/bbv/streetlight')
 	streetlightd.Set('ch.bbv.brightness', 'scaled', dbus.Double(value), dbus_interface=dbus.PROPERTIES_IFACE)
 
+@given(u'the moisture is {value:g}')
+def step_impl(context, value):
+	bus = dbus.SessionBus()
+	streetlightd = bus.get_object('ch.bbv.streetlight', '/ch/bbv/streetlight')
+	streetlightd.Set('ch.bbv.moisture', 'scaled', dbus.Double(value), dbus_interface=dbus.PROPERTIES_IFACE)
+
 @when(u'I tell streetlightd to update')
 def step_impl(context):
 	bus = dbus.SessionBus()

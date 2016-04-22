@@ -89,6 +89,7 @@ int main(int argc, char **argv)
   DBus::Connection connection = DBus::Connection::SessionBus();
   connection.request_name("ch.bbv.streetlightd");
   BrightnessSensor brightness{connection};
+  MoistureSensor moisture{connection};
   LuminosityActor luminosity{connection};
   WarningActor warning{connection};
 
@@ -99,6 +100,9 @@ int main(int argc, char **argv)
   // connection
   stack.application->setBrightnessSensor([&brightness]{
     return brightness.scaled();
+  });
+  stack.application->setMoistureSensor([&moisture]{
+    return moisture.scaled();
   });
   stack.application->setLuminosityActor([&luminosity](double value){
     luminosity.scaled(value);

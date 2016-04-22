@@ -14,6 +14,7 @@ std::ostream& operator<<(std::ostream &stream, const message::Outgoing &message)
 {
   std::vector<std::string> values{};
   addIfValid(values, "brightness", message.brightness);
+  addIfValid(values, "moisture", message.moisture);
   addIfValid(values, "info", message.info);
 
   stream << "message::Outgoing(" << values << ")";

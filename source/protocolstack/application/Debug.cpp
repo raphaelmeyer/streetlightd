@@ -32,6 +32,10 @@ void Debug::setBrightnessSensor(Sensor)
 {
 }
 
+void Debug::setMoistureSensor(Application::Sensor)
+{
+}
+
 void Debug::setLuminosityActor(Actor<double>)
 {
 }

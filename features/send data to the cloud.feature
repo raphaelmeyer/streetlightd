@@ -8,10 +8,10 @@ Feature: Send data to the cloud
   I want to know the light situation on the streets
   In order to selectively turn street lamps on or off
 
-
-Scenario Outline: Forward a brightness value to the cloud
+Scenario Outline: Forward the sensor data to the cloud
   Given I have a DBus streetlight
-  And the brightness is <value>
+  And the brightness is <brightness>
+  And the moisture is <moisture>
   And I connect to the local mqtt broker
   And I start streetlightd
 
@@ -19,14 +19,15 @@ Scenario Outline: Forward a brightness value to the cloud
 
   Then I expect one mqtt message with the content:
     """
-    brightness <value>
+    brightness <brightness>
+    moisture <moisture>
 
     """
 
   Examples:
-    | value |
-    | 0     |
-    | 0.42  |
-    | 0.57  |
-    | 1     |
+    | brightness | moisture |
+    | 0          | 0.3      |
+    | 0.42       | 0        |
+    | 0.57       | 0.9      |
+    | 1          | 0.14     |
 

@@ -18,6 +18,12 @@ BrightnessSensor::BrightnessSensor(DBus::Connection &connection) :
 }
 
 
+MoistureSensor::MoistureSensor(DBus::Connection &connection) :
+  DBus::ObjectProxy(connection, DbusName, DbusService.c_str())
+{
+}
+
+
 LuminosityActor::LuminosityActor(DBus::Connection &connection) :
   DBus::ObjectProxy(connection, DbusName, DbusService.c_str())
 {

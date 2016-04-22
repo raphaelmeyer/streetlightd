@@ -35,6 +35,15 @@ TEST_F(message_Outgoing_Test, print_the_brightness)
   ASSERT_EQ("message::Outgoing(brightness=\"0.420000\")", output.str());
 }
 
+TEST_F(message_Outgoing_Test, print_the_moisture)
+{
+  message.moisture = 0.12345;
+
+  output << message;
+
+  ASSERT_EQ("message::Outgoing(moisture=\"0.123450\")", output.str());
+}
+
 TEST_F(message_Outgoing_Test, print_the_info)
 {
   message.info = "hello world";

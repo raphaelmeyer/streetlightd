@@ -12,6 +12,35 @@
 namespace Json
 {
 
+static void writeSeparator(std::ostream &stream, bool &first)
+{
+  if (first) {
+    first = false;
+  } else {
+    stream << ",";
+  }
+}
+
+static void add(std::ostream &stream, double value)
+{
+  stream << value;
+}
+
+static void add(std::ostream &stream, const std::string &value)
+{
+  stream << "\"" << value << "\"";
+}
+
+template<typename T>
+static void addIfValid(std::ostream &stream, const std::string &name, const message::Value<T> &value, bool &first)
+{
+  if (value.isValid()) {
+    writeSeparator(stream, first);
+    stream << "\"" + name + "\":";
+    add(stream, value());
+  }
+}
+
 presentation::Message encode(const message::Outgoing &message)
 {
   // A custom serilizer is written since the tested libraries do not
@@ -21,16 +50,11 @@ presentation::Message encode(const message::Outgoing &message)
 
   stream << "{";
 
-  if (message.brightness.isValid()) {
-    stream << "\"brightness\":" << message.brightness();
-  }
-  //TODO use nicer solution
-  if (message.brightness.isValid() && message.info.isValid()) {
-    stream << ",";
-  }
-  if (message.info.isValid()) {
-    stream << "\"info\":\"" << message.info() << "\"";
-  }
+  bool first = true;
+
+  addIfValid(stream, "brightness", message.brightness, first);
+  addIfValid(stream, "moisture", message.moisture, first);
+  addIfValid(stream, "info", message.info, first);
 
   stream << "}";
 

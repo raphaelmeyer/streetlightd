@@ -25,6 +25,9 @@ public:
     testee.setBrightnessSensor([this]{
       return brightness;
     });
+    testee.setMoistureSensor([this]{
+      return moisture;
+    });
     testee.setLuminosityActor([this](double value){
       luminosity.push_back(value);
     });
@@ -39,6 +42,7 @@ public:
   Forwarder testee{};
 
   double brightness{-1};
+  double moisture{-1};
   vd luminosity{};
   vs warning{};
   vm sender{};
@@ -53,6 +57,15 @@ TEST_F(Forwarder_Test, the_brightness_is_read_when_a_timout_occurs)
   testee.timeout();
 
   ASSERT_EQ(0.12, sender[0].brightness());
+}
+
+TEST_F(Forwarder_Test, the_moisture_is_read_when_a_timout_occurs)
+{
+  moisture = 0.12;
+
+  testee.timeout();
+
+  ASSERT_EQ(0.12, sender[0].moisture());
 }
 
 TEST_F(Forwarder_Test, does_not_write_anything_when_not_set)

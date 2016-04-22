@@ -30,6 +30,14 @@ TEST(JsonEncoder_Test, encode_brightness)
   ASSERT_EQ("{\"brightness\":0.78}", Json::encode(message).asString());
 }
 
+TEST(JsonEncoder_Test, encode_moisture)
+{
+  message::Outgoing message{};
+  message.moisture = 0.78;
+
+  ASSERT_EQ("{\"moisture\":0.78}", Json::encode(message).asString());
+}
+
 TEST(JsonEncoder_Test, encode_info)
 {
   message::Outgoing message{};
@@ -38,13 +46,12 @@ TEST(JsonEncoder_Test, encode_info)
   ASSERT_EQ("{\"info\":\"hello world\"}", Json::encode(message).asString());
 }
 
-TEST(JsonEncoder_Test, encode_2_values)
+TEST(JsonEncoder_Test, encode_multiple_values)
 {
   message::Outgoing message{};
   message.brightness = 0.78;
+  message.moisture = 0.12;
   message.info = "hello world";
 
-  ASSERT_EQ("{\"brightness\":0.78,\"info\":\"hello world\"}", Json::encode(message).asString());
+  ASSERT_EQ("{\"brightness\":0.78,\"moisture\":0.12,\"info\":\"hello world\"}", Json::encode(message).asString());
 }
-
-//TODO encode multiple values

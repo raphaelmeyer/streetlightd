@@ -30,6 +30,14 @@ TEST(BinaryEncoder_Test, encode_brightness)
   ASSERT_EQ(std::vector<uint8_t>({0, 64}), Binary::encode(message).asBinary());
 }
 
+TEST(BinaryEncoder_Test, encode_moisture)
+{
+  message::Outgoing message{};
+  message.moisture = 0.5;
+
+  ASSERT_EQ(std::vector<uint8_t>({4, 128}), Binary::encode(message).asBinary());
+}
+
 TEST(BinaryEncoder_Test, encode_info)
 {
   message::Outgoing message{};

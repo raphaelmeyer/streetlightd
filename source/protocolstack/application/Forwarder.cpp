@@ -12,6 +12,7 @@ void Forwarder::timeout()
   message::Outgoing message;
 
   message.brightness = brightnessSensor();
+  message.moisture = moistureSensor();
 
   sender(message);
 }
@@ -29,6 +30,11 @@ void Forwarder::received(const message::Incoming &message)
 void Forwarder::setBrightnessSensor(Sensor value)
 {
   brightnessSensor = value;
+}
+
+void Forwarder::setMoistureSensor(Application::Sensor value)
+{
+  moistureSensor = value;
 }
 
 void Forwarder::setLuminosityActor(Actor<double> value)

@@ -18,6 +18,7 @@ namespace message
   {
   public:
     Value<double> brightness{};
+    Value<double> moisture{};
     Value<std::string> info{};
 
   };

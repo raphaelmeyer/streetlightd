@@ -4,6 +4,9 @@
   <interface name="ch.bbv.brightness">
     <property name="scaled" type="d" access="read"/>
   </interface>
+  <interface name="ch.bbv.moisture">
+    <property name="scaled" type="d" access="read"/>
+  </interface>
   <interface name="ch.bbv.luminosity">
     <property name="scaled" type="d" access="readwrite"/>
   </interface>

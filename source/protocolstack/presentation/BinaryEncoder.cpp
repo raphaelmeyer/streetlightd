@@ -38,6 +38,7 @@ presentation::Message encode(const message::Outgoing &message)
 {
   std::vector<uint8_t> data{};
   writeIfValid(Brightness, message.brightness, data);
+  writeIfValid(Moisture, message.moisture, data);
   writeIfValid(Info, message.info, data);
   return presentation::Message{data};
 }

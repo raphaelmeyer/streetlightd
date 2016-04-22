@@ -27,6 +27,17 @@ public:
 };
 
 
+class MoistureSensor :
+    public ch::bbv::moisture_proxy,
+    public DBus::IntrospectableProxy,
+    public DBus::ObjectProxy
+{
+public:
+  MoistureSensor(DBus::Connection& connection);
+
+};
+
+
 class LuminosityActor :
     public ch::bbv::luminosity_proxy,
     public DBus::IntrospectableProxy,
