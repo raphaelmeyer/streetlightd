@@ -13,8 +13,9 @@
 class SessionConfiguration
 {
 public:
-  std::string address{};
-  std::string credential{};
+  std::string host{};
+  std::string user{};
+  std::string password{};
 };
 
 #endif

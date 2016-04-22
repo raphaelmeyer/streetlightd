@@ -27,8 +27,9 @@ public:
     "-a<application>, --application=<application>     <application>:\n"
     "-p<presentation>, --presentation=<presentation>  <presentation>:\n"
     "-s<session>, --session=<session>                 <session>:\n"
-    "--address=<address>                              address to connect to\n"
-    "--credential=<credential>                        credentials for connection\n"
+    "--host=<host>                                    host to connect to\n"
+    "--user=<user>                                    user of connection\n"
+    "--password=<password>                            password for connection\n"
     "--external-timer                                 trigger updates via DBus\n"
   };
 
@@ -58,6 +59,13 @@ TEST_F(CommandLineParser_Test, show_help_when_missing_required_arguments)
 TEST_F(CommandLineParser_Test, show_help_for_missing_option_argument)
 {
   testee.parse({"--application", "-px", "-sx"});
+
+  ASSERT_EQ(DefaultHelp, output.str());
+}
+
+TEST_F(CommandLineParser_Test, show_help_if_unknown_option_is_provided)
+{
+  testee.parse({"-ax", "-px", "-sx", "--unknown"});
 
   ASSERT_EQ(DefaultHelp, output.str());
 }
@@ -151,26 +159,37 @@ TEST_F(CommandLineParser_Test, return_the_specified_session)
   ASSERT_EQ("theSession", result.session);
 }
 
-TEST_F(CommandLineParser_Test, can_specify_an_address)
+TEST_F(CommandLineParser_Test, can_specify_the_host)
 {
   testee.addSessions({"x"});
   testee.addPresentations({"x"});
   testee.addApplications({"x"});
 
-  const auto result = testee.parse({"--address=someAddress", "-ax", "-px", "-sx"});
+  const auto result = testee.parse({"--host=someAddress", "-ax", "-px", "-sx"});
 
-  ASSERT_EQ("someAddress", result.address);
+  ASSERT_EQ("someAddress", result.host);
 }
 
-TEST_F(CommandLineParser_Test, can_specify_credentials)
+TEST_F(CommandLineParser_Test, can_specify_the_user)
 {
   testee.addSessions({"x"});
   testee.addPresentations({"x"});
   testee.addApplications({"x"});
 
-  const auto result = testee.parse({"--credential=mySecret", "-ax", "-px", "-sx"});
+  const auto result = testee.parse({"--user=someUser", "-ax", "-px", "-sx"});
 
-  ASSERT_EQ("mySecret", result.credential);
+  ASSERT_EQ("someUser", result.user);
+}
+
+TEST_F(CommandLineParser_Test, can_specify_password)
+{
+  testee.addSessions({"x"});
+  testee.addPresentations({"x"});
+  testee.addApplications({"x"});
+
+  const auto result = testee.parse({"--password=mySecret", "-ax", "-px", "-sx"});
+
+  ASSERT_EQ("mySecret", result.password);
 }
 
 TEST_F(CommandLineParser_Test, do_not_use_external_timer_by_default)

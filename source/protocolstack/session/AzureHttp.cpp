@@ -37,7 +37,7 @@ void AzureHttp::send(const presentation::Message &message)
   http::Transfer transfer{*session};
 
   transfer.setUri(uri.getPathAndQuery());
-  transfer.setCredentials(configuration.credential);
+  transfer.setCredentials(tokenFactory.produce());
   transfer.setRequest(message.asString());
 
   transfer.execute();
@@ -47,8 +47,8 @@ void AzureHttp::send(const presentation::Message &message)
 
 void AzureHttp::setConfiguration(const SessionConfiguration &value)
 {
-  configuration = value;
-  uri = configuration.address;
+  uri = "https://" + value.host + "/devices/" + value.user + "/messages/events?api-version=2016-02-03";
+  tokenFactory = SasTokenFactory{value.password, value.host + "/devices/" + value.user};
 }
 
 void AzureHttp::handleResponseCode(const http::Transfer &transfer) const

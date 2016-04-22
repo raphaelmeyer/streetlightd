@@ -91,9 +91,9 @@ AzureAmqp::~AzureAmqp()
 void AzureAmqp::setConfiguration(const SessionConfiguration &value)
 {
   connectionString =
-      "HostName=bbvgathering.azure-devices.net;"
-      "DeviceId=" + value.address + ";"
-      "SharedAccessKey=" + value.credential;
+      "HostName=" + value.host + ";"
+      "DeviceId=" + value.user + ";"
+      "SharedAccessKey=" + value.password;
 }
 
 void AzureAmqp::connect()

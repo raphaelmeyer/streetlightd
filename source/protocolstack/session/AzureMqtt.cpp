@@ -11,7 +11,7 @@
 
 std::string AzureMqtt::deviceId() const
 {
-  return configuration.address;
+  return configuration.user;
 }
 
 std::string AzureMqtt::receiveTopic() const
@@ -31,7 +31,7 @@ int AzureMqtt::qos() const
 
 std::string AzureMqtt::address() const
 {
-  return "iothubbbvgathering.azure-devices.net";
+  return configuration.host;
 }
 
 int AzureMqtt::port() const
@@ -51,7 +51,7 @@ void AzureMqtt::configure(mosqpp::mosquittopp &instance) const
 void AzureMqtt::setConfiguration(const SessionConfiguration &value)
 {
   configuration = value;
-  tokenFactory = SasTokenFactory{value.credential, scope()};
+  tokenFactory = SasTokenFactory{value.password, scope()};
 }
 
 std::string AzureMqtt::scope() const

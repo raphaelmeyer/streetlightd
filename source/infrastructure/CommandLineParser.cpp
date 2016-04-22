@@ -14,6 +14,11 @@
 #include <Poco/Util/HelpFormatter.h>
 #include <map>
 
+static const std::string HOST_ARGUMENT = "host";
+static const std::string USER_ARGUMENT = "user";
+static const std::string PASSWORD_ARGUMENT = "password";
+static const std::string TIMER_ARGUMENT = "external-timer";
+
 CommandLineParser::CommandLineParser(std::ostream &_output) :
   output{_output}
 {
@@ -80,14 +85,16 @@ std::map<std::string, std::string> CommandLineParser::parseToMap(const std::vect
       if (p1.process(arg, name, value)) {
         values[name] = value;
       }
-    } catch (Poco::Util::MissingArgumentException e) {
+    } catch (Poco::Util::MissingArgumentException) {
+      return {};
+    } catch (Poco::Util::UnknownOptionException) {
       return {};
     }
   }
 
   try {
     p1.checkRequired();
-  } catch (Poco::Util::MissingOptionException e) {
+  } catch (Poco::Util::MissingOptionException) {
     return {};
   }
 
@@ -117,13 +124,14 @@ void CommandLineParser::fillStackConfig(StackConfiguration &config, std::map<Lay
 
 void CommandLineParser::fillSessionConfig(SessionConfiguration &config, std::map<std::string, std::string> values) const
 {
-  config.address = values["address"];
-  config.credential = values["credential"];
+  config.host = values[HOST_ARGUMENT];
+  config.user = values[USER_ARGUMENT];
+  config.password = values[PASSWORD_ARGUMENT];
 }
 
 void CommandLineParser::fillTimerConfig(TimerConfiguration &config, std::map<std::string, std::string> values) const
 {
-  config.externalTimer = values.find("external-timer") != values.end();
+  config.externalTimer = values.find(TIMER_ARGUMENT) != values.end();
 }
 
 Poco::Util::OptionSet CommandLineParser::createOptions() const
@@ -136,9 +144,10 @@ Poco::Util::OptionSet CommandLineParser::createOptions() const
     options.addOption(opt.second.asOption());
   }
 
-  options.addOption(Poco::Util::Option{"address",        "", "address to connect to", false}.argument("<address>"));
-  options.addOption(Poco::Util::Option{"credential",     "", "credentials for connection", false}.argument("<credential>"));
-  options.addOption(Poco::Util::Option{"external-timer", "", "trigger updates via DBus", false});
+  options.addOption(Poco::Util::Option{HOST_ARGUMENT,     "", "host to connect to", false}.argument("<" + HOST_ARGUMENT + ">"));
+  options.addOption(Poco::Util::Option{USER_ARGUMENT,     "", "user of connection", false}.argument("<" + USER_ARGUMENT + ">"));
+  options.addOption(Poco::Util::Option{PASSWORD_ARGUMENT, "", "password for connection", false}.argument("<" + PASSWORD_ARGUMENT + ">"));
+  options.addOption(Poco::Util::Option{TIMER_ARGUMENT,    "", "trigger updates via DBus", false});
   return options;
 }
 
@@ -185,7 +194,6 @@ std::string CommandLineParser::valueFor(CommandLineParser::Layer type, const std
 
   return value;
 }
-
 
 static std::string join(const std::set<std::string> &list)
 {
