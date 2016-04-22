@@ -18,7 +18,7 @@
 #include "protocolstack/session/AzureAmqp.h"
 #include "protocolstack/session/AzureHttp.h"
 #include "protocolstack/session/AzureMqtt.h"
-#include "protocolstack/session/LocalMqtt.h"
+#include "protocolstack/session/SimpleMqtt.h"
 #include "protocolstack/session/mqtt/Client.h"
 
 #include "protocolstack/ProtocolStack.h"
@@ -69,7 +69,7 @@ int main(int argc, char **argv)
   sessionFactory.add("azure-amqp", []{return new AzureAmqp();});
   sessionFactory.add("azure-http", []{return new AzureHttp();});
   sessionFactory.add("azure-mqtt", []{return new mqtt::Client(new AzureMqtt());});
-  sessionFactory.add("local-mqtt", []{return new mqtt::Client(new LocalMqtt());});
+  sessionFactory.add("simple-mqtt", []{return new mqtt::Client(new SimpleMqtt());});
 
   CommandLineParser parser{std::cout};
   parser.addApplications(applicationFactory.workers());

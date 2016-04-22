@@ -27,7 +27,7 @@ class LocalMqtt:
 
 	def publish(self, message):
 		self.published = False
-		self.client.publish("streetlight/actor", payload=message, qos=2, retain=True)
+		self.client.publish("streetlight/lamp1/actor", payload=message, qos=2, retain=True)
 		while not self.published:
 			self.client.loop(1)
 
@@ -35,7 +35,7 @@ class LocalMqtt:
 		if rc <> 0:
 			raise NotImplementedError('could not connect: ' + str(rc))
 
-		self.client.subscribe("streetlight/sensor")
+		self.client.subscribe("streetlight/lamp1/sensor")
 		self.connected = True
 
 	def on_subscribe(self, client, userdata, mid, granted_qos):
