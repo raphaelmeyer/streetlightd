@@ -53,6 +53,7 @@ file(GLOB_RECURSE TEST_SOURCES
     *_Mock.h
     infrastructure/CommandLineParser.cpp
     infrastructure/Factory.h
+    infrastructure/SasToken.cpp
     protocolstack/application/message/Outgoing.cpp
     protocolstack/application/message/Incoming.cpp
     protocolstack/application/message/format.cpp
@@ -68,9 +69,9 @@ file(GLOB_RECURSE TEST_SOURCES
     )
 
 add_executable(streetlightd main.cpp ${RAW_SOURCES})
-target_link_libraries(streetlightd mosquittopp dbus-c++-1 pthread PocoUtil jsoncpp PocoNet PocoNetSSL PocoFoundation iothub_client iothub_client_amqp_transport uamqp ssl crypto)
+target_link_libraries(streetlightd mosquittopp dbus-c++-1 pthread PocoUtil jsoncpp PocoNet PocoNetSSL PocoFoundation iothub_client iothub_client_amqp_transport uamqp ssl crypto crypto++)
 
 add_executable(unit-test ${TEST_SOURCES})
-target_link_libraries(unit-test gmock_main pthread PocoUtil jsoncpp)
+target_link_libraries(unit-test gmock_main pthread PocoUtil jsoncpp crypto++ PocoFoundation)
 
 set(EXECUTABLE_OUTPUT_PATH "../")
