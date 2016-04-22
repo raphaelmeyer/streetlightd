@@ -7,15 +7,28 @@
 
 #include "Incoming.h"
 
-#include "format.h"
-#include <vector>
+#include "Printer.h"
+#include "propertyNames.h"
+
+namespace message
+{
+
+void Incoming::accept(Visitor &visitor) const
+{
+  visitor.visit(Property::Luminosity, luminosity);
+  visitor.visit(Property::Warning, warning);
+}
+
+}
 
 std::ostream& operator<<(std::ostream &stream, const message::Incoming &message)
 {
-  std::vector<std::string> values{};
-  addIfValid(values, "luminosity", message.luminosity);
-  addIfValid(values, "warning", message.warning);
+  message::Printer printer{stream, message::propertyName};
 
-  stream << "message::Incoming(" << values << ")";
+  stream << "message::Incoming(";
+  message.accept(printer);
+  stream << ")";
+
   return stream;
 }
+

@@ -9,6 +9,8 @@
 #define MESSAGE_INCOMING_H
 
 #include "Value.h"
+#include "Visitor.h"
+
 #include <ostream>
 
 namespace message
@@ -20,6 +22,7 @@ namespace message
     Value<double> luminosity{};
     Value<std::string> warning{};
 
+    void accept(Visitor &visitor) const;
   };
 
 }

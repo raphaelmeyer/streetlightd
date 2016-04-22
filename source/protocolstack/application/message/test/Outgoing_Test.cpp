@@ -5,60 +5,47 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
+#include "Visitor_Mock.h"
+
 #include "../Outgoing.h"
 
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 #include <sstream>
 
 class message_Outgoing_Test :
     public testing::Test
 {
 public:
-  std::stringstream output{};
-  message::Outgoing message{};
+  message::Outgoing testee{};
 
 };
 
-TEST_F(message_Outgoing_Test, print_empty_message)
+TEST_F(message_Outgoing_Test, can_print_message)
 {
-  output << message;
+  std::stringstream output{};
+  testee.brightness = 0.42;
+  testee.info = "hello world";
 
-  ASSERT_EQ("message::Outgoing()", output.str());
-}
-
-TEST_F(message_Outgoing_Test, print_the_brightness)
-{
-  message.brightness = 0.42;
-
-  output << message;
-
-  ASSERT_EQ("message::Outgoing(brightness=\"0.420000\")", output.str());
-}
-
-TEST_F(message_Outgoing_Test, print_the_moisture)
-{
-  message.moisture = 0.12345;
-
-  output << message;
-
-  ASSERT_EQ("message::Outgoing(moisture=\"0.123450\")", output.str());
-}
-
-TEST_F(message_Outgoing_Test, print_the_info)
-{
-  message.info = "hello world";
-
-  output << message;
-
-  ASSERT_EQ("message::Outgoing(info=\"hello world\")", output.str());
-}
-
-TEST_F(message_Outgoing_Test, print_2_values)
-{
-  message.brightness = 0.42;
-  message.info = "hello world";
-
-  output << message;
+  output << testee;
 
   ASSERT_EQ("message::Outgoing(brightness=\"0.420000\" info=\"hello world\")", output.str());
 }
+
+TEST_F(message_Outgoing_Test, visit_all_values)
+{
+  const VisitorMock::VisitDouble expectedDoubles = {
+    {message::Property::Brightness, &testee.brightness},
+    {message::Property::Moisture, &testee.moisture}
+  };
+  const VisitorMock::VisitString expectedStrings = {
+    {message::Property::Info, &testee.info}
+  };
+  testing::StrictMock<VisitorMock> visitor;
+
+  testee.accept(visitor);
+
+  ASSERT_EQ(expectedDoubles, visitor.visitDouble);
+  ASSERT_EQ(expectedStrings, visitor.visitString);
+}
+

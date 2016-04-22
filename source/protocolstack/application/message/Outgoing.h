@@ -9,6 +9,8 @@
 #define MESSAGE_OUTGOING_H
 
 #include "Value.h"
+#include "Visitor.h"
+
 #include <ostream>
 
 namespace message
@@ -17,10 +19,12 @@ namespace message
   class Outgoing
   {
   public:
+
     Value<double> brightness{};
     Value<double> moisture{};
     Value<std::string> info{};
 
+    void accept(Visitor &visitor) const;
   };
 
 }
