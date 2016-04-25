@@ -9,6 +9,7 @@
 #define MESSAGE_VALUE_H
 
 #include <stdexcept>
+#include <ostream>
 
 namespace message
 {
@@ -49,6 +50,17 @@ private:
   bool valid{false};
 };
 
+}
+
+template<typename T>
+std::ostream& operator<<(std::ostream &stream, const message::Value<T> &value)
+{
+  if (value.isValid()) {
+    stream << value();
+  } else {
+    stream << "invalid";
+  }
+  return stream;
 }
 
 #endif

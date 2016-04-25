@@ -53,3 +53,23 @@ TEST(message_Value_Test, read_while_invalid_is_not_allowed)
 
   ASSERT_THROW(testee(), std::runtime_error);
 }
+
+TEST(message_Value_Test, can_print_valid_value_to_stream)
+{
+  std::stringstream stream;
+  message::Value<int> testee{42};
+
+  stream << testee;
+
+  ASSERT_EQ("42", stream.str());
+}
+
+TEST(message_Value_Test, can_print_invalid_value_to_stream)
+{
+  std::stringstream stream;
+  message::Value<int> testee{};
+
+  stream << testee;
+
+  ASSERT_EQ("invalid", stream.str());
+}
