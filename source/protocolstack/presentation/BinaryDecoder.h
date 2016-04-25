@@ -14,7 +14,7 @@
 namespace Binary
 {
 
-  message::Incoming decode(const presentation::Message &message);
+message::Incoming decode(const presentation::Message &message);
 
 }
 

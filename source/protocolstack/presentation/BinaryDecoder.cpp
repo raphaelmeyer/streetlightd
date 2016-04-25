@@ -7,7 +7,7 @@
 
 #include "BinaryDecoder.h"
 
-#include "Binary.h"
+#include <protocolstack/application/message/propertyNumbers.h>
 
 #include <algorithm>
 
@@ -71,19 +71,12 @@ message::Incoming decode(const presentation::Message &message)
     const uint8_t key = *start;
     start++;
 
-    switch (key) {
-    case Luminosity: {
+    if (key == message::propertyNumber(message::Property::Luminosity)) {
       readTo(result.luminosity, start, end);
-      break;
-    }
-    case Warning: {
+    } else if (key == message::propertyNumber(message::Property::Warning)) {
       readTo(result.warning, start, end);
-      break;
-    }
-    default: {
+    } else {
       throw std::invalid_argument("invalid key: " + std::to_string(key));
-      break;
-    }
     }
   }
 

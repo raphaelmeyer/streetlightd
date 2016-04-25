@@ -7,8 +7,7 @@
 
 #include "BinaryEncoder.h"
 
-#include "Binary.h"
-
+#include <protocolstack/application/message/propertyNumbers.h>
 #include <protocolstack/application/message/Printer.h>
 #include <protocolstack/application/message/PrintFormat.h>
 
@@ -62,7 +61,7 @@ private:
 presentation::Message encode(const message::Outgoing &message)
 {
   std::vector<uint8_t> data{};
-  Format format{data, Binary::propertyNumber};
+  Format format{data, message::propertyNumber};
   message::Printer printer{format};
 
   message.accept(printer);

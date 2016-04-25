@@ -59,6 +59,7 @@ file(GLOB_RECURSE TEST_SOURCES
     protocolstack/application/message/Printer.cpp
     protocolstack/application/message/DebugFormat.cpp
     protocolstack/application/message/propertyNames.cpp
+    protocolstack/application/message/propertyNumbers.cpp
     protocolstack/application/Forwarder.cpp
     protocolstack/application/Debug.cpp
     protocolstack/presentation/KeyValueEncoder.cpp
