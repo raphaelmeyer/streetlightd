@@ -8,4 +8,6 @@ def after_scenario(context, scenario):
 		context.application.kill()
 	if hasattr(context, 'dbus'):
 		context.dbus.kill()
+	if hasattr(context, 'mqtt'):
+		context.mqtt.cleanup()
 

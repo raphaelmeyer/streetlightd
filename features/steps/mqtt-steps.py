@@ -20,6 +20,10 @@ class LocalMqtt:
 		while not self.subscribed:
 			self.client.loop(1)
 
+	def cleanup(self):
+		self.publish(None)
+
+
 	def waitForMessage(self):
 		while not self.messages:
 			self.client.loop(1)
