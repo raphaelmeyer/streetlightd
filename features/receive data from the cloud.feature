@@ -49,3 +49,14 @@ Scenario Outline: Receive a warning and show it on the scoreboard
     | hello world                             |
     | I can write very long text to the board |
 
+@wip
+Scenario: Receive binary data from the cloud
+  Given I have a DBus streetlight
+  And I connect to the local mqtt broker
+  And I start streetlightd with the binary encoding
+
+  When I send a mqtt message with the binary content "03 05 68 65 6c 6c 6f 02 2a"
+
+  Then I expect the lamp to show the warning "hello"
+  And I expect the lamp to have the luminosity 0.42
+

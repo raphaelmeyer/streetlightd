@@ -7,11 +7,18 @@ import subprocess
 import dbus
 import time
 
-@given(u'I start streetlightd')
-def step_impl(context):
-	context.application = subprocess.Popen(['streetlightd', '--application=forwarder', '--presentation=key-value', '--session=simple-mqtt', '--host=localhost', '--user=lamp1', '--external-timer'])
+def start(context, layers):
+	context.application = subprocess.Popen(['streetlightd', '--host=localhost', '--user=lamp1', '--external-timer'] + layers)
 
 	bus = dbus.SessionBus()
 	while not (dbus.UTF8String('ch.bbv.streetlightd') in bus.list_names()):
 		time.sleep(0.01)
+
+@given(u'I start streetlightd')
+def step_impl(context):
+	start(context, ['--application=forwarder', '--presentation=key-value', '--session=simple-mqtt'])
+
+@given(u'I start streetlightd with the binary encoding')
+def step_impl(context):
+	start(context, ['--application=forwarder', '--presentation=binary', '--session=simple-mqtt'])
 

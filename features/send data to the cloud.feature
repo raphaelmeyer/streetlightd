@@ -33,3 +33,16 @@ Scenario Outline: Forward the sensor data to the cloud
     | 0.57       | 0.9      |  0.9         |
     | 1          | 0.14     | -0.3         |
 
+
+Scenario: Forward the sensor data to the cloud in binary
+  Given I have a DBus streetlight
+  And the brightness is 0.32
+  And the moisture is 1
+  And the proximity sensor returns -0.72
+  And I connect to the local mqtt broker
+  And I start streetlightd with the binary encoding
+
+  When I tell streetlightd to update
+
+  Then I expect one mqtt message with the binary content "00 20 04 64 05 b8"
+

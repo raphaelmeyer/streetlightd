@@ -8,6 +8,7 @@
 #include "../BinaryEncoder.h"
 
 #include <protocolstack/application/message/Outgoing.h>
+#include <protocolstack/application/message/propertyNumbers.h>
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
@@ -22,12 +23,34 @@ TEST(BinaryEncoder_Test, encode_empty_message)
   ASSERT_EQ(std::vector<uint8_t>{}, Binary::encode(message).asBinary());
 }
 
-TEST(BinaryEncoder_Test, encode_scaled_positive_value)
+TEST(BinaryEncoder_Test, encode_positive_double_values)
 {
+  const auto key = message::propertyNumber(message::Property::Brightness);
   message::Outgoing message{};
-  message.brightness = 0.25;
 
-  ASSERT_EQ(std::vector<uint8_t>({0, 64}), Binary::encode(message).asBinary());
+  message.brightness = 0;
+  ASSERT_EQ(std::vector<uint8_t>({key, 0}), Binary::encode(message).asBinary());
+
+  message.brightness = 1;
+  ASSERT_EQ(std::vector<uint8_t>({key, 100}), Binary::encode(message).asBinary());
+
+  message.brightness = 0.33;
+  ASSERT_EQ(std::vector<uint8_t>({key, 33}), Binary::encode(message).asBinary());
+}
+
+TEST(BinaryEncoder_Test, encode_negative_double_values)
+{
+  const auto key = message::propertyNumber(message::Property::Proximity);
+  message::Outgoing message{};
+
+  message.proximity = -0;
+  ASSERT_EQ(std::vector<uint8_t>({key, 0}), Binary::encode(message).asBinary());
+
+  message.proximity = -1;
+  ASSERT_EQ(std::vector<uint8_t>({key, 0x9c}), Binary::encode(message).asBinary());
+
+  message.proximity = -0.33;
+  ASSERT_EQ(std::vector<uint8_t>({key, 0xdf}), Binary::encode(message).asBinary());
 }
 
 TEST(BinaryEncoder_Test, encode_string)
@@ -44,5 +67,5 @@ TEST(BinaryEncoder_Test, encode_2_values)
   message.brightness = 0.78;
   message.info = "";
 
-  ASSERT_EQ(std::vector<uint8_t>({0, 199, 1, 0}), Binary::encode(message).asBinary());
+  ASSERT_EQ(std::vector<uint8_t>({0, 78, 1, 0}), Binary::encode(message).asBinary());
 }

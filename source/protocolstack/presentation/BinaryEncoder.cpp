@@ -30,7 +30,7 @@ public:
 
   void writeValue(double value) override
   {
-    output.push_back(uint8_t(std::round(value * 255)));
+    output.push_back(uint8_t(std::round(value * 100)));
   }
 
   void writeValue(const std::string &value) override

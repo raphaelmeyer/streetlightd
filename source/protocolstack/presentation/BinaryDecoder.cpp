@@ -24,10 +24,10 @@ double read<double>(std::vector<uint8_t>::const_iterator &start, std::vector<uin
     throw std::invalid_argument("expected 1 byte, got nothing");
   }
 
-  const uint8_t raw = *start;
+  const int8_t raw = static_cast<int8_t>(*start);
   start++;
 
-  return double(raw) / 255.0;
+  return double(raw) / 100;
 }
 
 template<>
