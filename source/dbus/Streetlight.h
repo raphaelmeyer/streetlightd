@@ -31,6 +31,7 @@ public:
 
 typedef DbusInterface<ch::bbv::brightness_proxy>  BrightnessSensor;
 typedef DbusInterface<ch::bbv::moisture_proxy>    MoistureSensor;
+typedef DbusInterface<ch::bbv::proximity_proxy>   ProximitySensor;
 typedef DbusInterface<ch::bbv::luminosity_proxy>  LuminosityActor;
 typedef DbusInterface<ch::bbv::warning_proxy>     WarningActor;
 

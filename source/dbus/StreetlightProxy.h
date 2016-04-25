@@ -108,6 +108,54 @@ private:
 namespace ch {
 namespace bbv {
 
+class proximity_proxy
+: public ::DBus::InterfaceProxy
+{
+public:
+
+    proximity_proxy()
+    : ::DBus::InterfaceProxy("ch.bbv.proximity")
+    {
+    }
+
+public:
+
+    /* properties exported by this interface */
+        const double scaled() {
+            ::DBus::CallMessage call ;
+             call.member("Get"); call.interface("org.freedesktop.DBus.Properties");
+            ::DBus::MessageIter wi = call.writer(); 
+            const std::string interface_name = "ch.bbv.proximity";
+            const std::string property_name  = "scaled";
+            wi << interface_name;
+            wi << property_name;
+            ::DBus::Message ret = this->invoke_method (call);
+            ::DBus::MessageIter ri = ret.reader ();
+            ::DBus::Variant argout; 
+            ri >> argout;
+            return argout;
+        };
+public:
+
+    /* methods exported by this interface,
+     * this functions will invoke the corresponding methods on the remote objects
+     */
+
+public:
+
+    /* signal handlers for this interface
+     */
+
+private:
+
+    /* unmarshalers (to unpack the DBus message before calling the actual signal handler)
+     */
+};
+
+} } 
+namespace ch {
+namespace bbv {
+
 class luminosity_proxy
 : public ::DBus::InterfaceProxy
 {

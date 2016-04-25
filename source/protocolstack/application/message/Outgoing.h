@@ -22,6 +22,7 @@ namespace message
 
     Value<double> brightness{};
     Value<double> moisture{};
+    Value<double> proximity{};
     Value<std::string> info{};
 
     void accept(Visitor &visitor) const;

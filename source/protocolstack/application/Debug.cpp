@@ -36,6 +36,10 @@ void Debug::setMoistureSensor(Application::Sensor)
 {
 }
 
+void Debug::setProximitySensor(Application::Sensor)
+{
+}
+
 void Debug::setLuminosityActor(Actor<double>)
 {
 }

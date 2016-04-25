@@ -34,6 +34,11 @@ void ActiveApplication::setMoistureSensor(Application::Sensor value)
   application->setMoistureSensor(value);
 }
 
+void ActiveApplication::setProximitySensor(Application::Sensor value)
+{
+  application->setProximitySensor(value);
+}
+
 void ActiveApplication::setLuminosityActor(Actor<double> value)
 {
   application->setLuminosityActor(value);

@@ -12,6 +12,7 @@ Scenario Outline: Forward the sensor data to the cloud
   Given I have a DBus streetlight
   And the brightness is <brightness>
   And the moisture is <moisture>
+  And the proximity sensor returns <displacement>
   And I connect to the local mqtt broker
   And I start streetlightd
 
@@ -21,13 +22,14 @@ Scenario Outline: Forward the sensor data to the cloud
     """
     brightness <brightness>
     moisture <moisture>
+    proximity <displacement>
 
     """
 
   Examples:
-    | brightness | moisture |
-    | 0          | 0.3      |
-    | 0.42       | 0        |
-    | 0.57       | 0.9      |
-    | 1          | 0.14     |
+    | brightness | moisture | displacement |
+    | 0          | 0.3      |  0.4         |
+    | 0.42       | 0        | -0.5         |
+    | 0.57       | 0.9      |  0.9         |
+    | 1          | 0.14     | -0.3         |
 

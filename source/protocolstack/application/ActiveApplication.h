@@ -24,6 +24,7 @@ public:
 
   void setBrightnessSensor(Sensor value) override;
   void setMoistureSensor(Sensor value) override;
+  void setProximitySensor(Sensor value) override;
   void setLuminosityActor(Actor<double> value) override;
   void setWarningActor(Actor<std::string> value) override;
   void setSender(Sender value) override;

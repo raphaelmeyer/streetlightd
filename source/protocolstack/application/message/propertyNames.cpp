@@ -19,6 +19,8 @@ std::string propertyName(Property property)
     return "brightness";
   case Property::Moisture:
     return "moisture";
+  case Property::Proximity:
+    return "proximity";
   case Property::Info:
     return "info";
   case Property::Luminosity:

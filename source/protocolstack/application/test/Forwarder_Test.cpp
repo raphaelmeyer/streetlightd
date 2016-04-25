@@ -28,6 +28,9 @@ public:
     testee.setMoistureSensor([this]{
       return moisture;
     });
+    testee.setProximitySensor([this]{
+      return proximity;
+    });
     testee.setLuminosityActor([this](double value){
       luminosity.push_back(value);
     });
@@ -43,6 +46,7 @@ public:
 
   double brightness{-1};
   double moisture{-1};
+  double proximity{-1};
   vd luminosity{};
   vs warning{};
   vm sender{};
@@ -50,7 +54,7 @@ public:
 };
 
 
-TEST_F(Forwarder_Test, the_brightness_is_read_when_a_timout_occurs)
+TEST_F(Forwarder_Test, the_brightness_is_read_and_sent_when_a_timout_occurs)
 {
   brightness = 0.12;
 
@@ -59,13 +63,22 @@ TEST_F(Forwarder_Test, the_brightness_is_read_when_a_timout_occurs)
   ASSERT_EQ(0.12, sender[0].brightness());
 }
 
-TEST_F(Forwarder_Test, the_moisture_is_read_when_a_timout_occurs)
+TEST_F(Forwarder_Test, the_moisture_is_read_and_sent_when_a_timout_occurs)
 {
   moisture = 0.12;
 
   testee.timeout();
 
   ASSERT_EQ(0.12, sender[0].moisture());
+}
+
+TEST_F(Forwarder_Test, the_proximity_is_read_and_sent_when_a_timout_occurs)
+{
+  proximity = 0.12;
+
+  testee.timeout();
+
+  ASSERT_EQ(0.12, sender[0].proximity());
 }
 
 TEST_F(Forwarder_Test, does_not_write_anything_when_not_set)

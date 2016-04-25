@@ -24,6 +24,11 @@ TEST(message_propertyNumbers_Test, has_a_name_for_moisture)
   ASSERT_EQ(4, message::propertyNumber(message::Property::Moisture));
 }
 
+TEST(message_propertyNumbers_Test, has_a_name_for_proximity)
+{
+  ASSERT_EQ(5, message::propertyNumber(message::Property::Proximity));
+}
+
 TEST(message_propertyNumbers_Test, has_a_name_for_info)
 {
   ASSERT_EQ(1, message::propertyNumber(message::Property::Info));

@@ -36,7 +36,8 @@ TEST_F(message_Outgoing_Test, visit_all_values)
 {
   const VisitorMock::VisitDouble expectedDoubles = {
     {message::Property::Brightness, &testee.brightness},
-    {message::Property::Moisture, &testee.moisture}
+    {message::Property::Moisture, &testee.moisture},
+    {message::Property::Proximity, &testee.proximity}
   };
   const VisitorMock::VisitString expectedStrings = {
     {message::Property::Info, &testee.info}

@@ -15,6 +15,7 @@ enum class Property
 {
   Brightness,
   Moisture,
+  Proximity,
   Info,
 
   Luminosity,

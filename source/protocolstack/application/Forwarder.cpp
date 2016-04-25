@@ -13,6 +13,7 @@ void Forwarder::timeout()
 
   message.brightness = brightnessSensor();
   message.moisture = moistureSensor();
+  message.proximity = proximitySensor();
 
   sender(message);
 }
@@ -35,6 +36,11 @@ void Forwarder::setBrightnessSensor(Sensor value)
 void Forwarder::setMoistureSensor(Application::Sensor value)
 {
   moistureSensor = value;
+}
+
+void Forwarder::setProximitySensor(Application::Sensor value)
+{
+  proximitySensor = value;
 }
 
 void Forwarder::setLuminosityActor(Actor<double> value)

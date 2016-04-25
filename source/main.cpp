@@ -90,6 +90,7 @@ int main(int argc, char **argv)
   connection.request_name("ch.bbv.streetlightd");
   BrightnessSensor brightness{connection};
   MoistureSensor moisture{connection};
+  ProximitySensor proximity{connection};
   LuminosityActor luminosity{connection};
   WarningActor warning{connection};
 
@@ -103,6 +104,9 @@ int main(int argc, char **argv)
   });
   stack.application->setMoistureSensor([&moisture]{
     return moisture.scaled();
+  });
+  stack.application->setProximitySensor([&proximity]{
+    return proximity.scaled();
   });
   stack.application->setLuminosityActor([&luminosity](double value){
     luminosity.scaled(value);

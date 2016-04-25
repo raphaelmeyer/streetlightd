@@ -28,6 +28,7 @@ public:
 
   virtual void setBrightnessSensor(Sensor value) = 0;
   virtual void setMoistureSensor(Sensor value) = 0;
+  virtual void setProximitySensor(Sensor value) = 0;
   virtual void setLuminosityActor(Actor<double> value) = 0;
   virtual void setWarningActor(Actor<std::string> value) = 0;
   virtual void setSender(Sender value) = 0;

@@ -19,6 +19,7 @@ void Outgoing::accept(Visitor &visitor) const
 {
   visitor.visit(Property::Brightness, brightness);
   visitor.visit(Property::Moisture, moisture);
+  visitor.visit(Property::Proximity, proximity);
   visitor.visit(Property::Info, info);
 }
 

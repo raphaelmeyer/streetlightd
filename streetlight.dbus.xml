@@ -7,6 +7,9 @@
   <interface name="ch.bbv.moisture">
     <property name="scaled" type="d" access="read"/>
   </interface>
+  <interface name="ch.bbv.proximity">
+    <property name="scaled" type="d" access="read"/>
+  </interface>
   <interface name="ch.bbv.luminosity">
     <property name="scaled" type="d" access="readwrite"/>
   </interface>
