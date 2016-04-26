@@ -10,6 +10,7 @@
 
 #include "Session.h"
 #include "http/Transfer.h"
+#include "http/Session.h"
 #include <infrastructure/SasToken.h>
 
 #include <Poco/Net/HTTPSClientSession.h>
@@ -32,12 +33,13 @@ public:
 
 private:
   Callback listener{};
+  std::string uriGet{};
+  std::string uriPost{};
 
   SasTokenFactory tokenFactory{"", ""};
-  Poco::URI uri{};
-  std::unique_ptr<Poco::Net::HTTPSClientSession> session{};
 
-  void handleResponseCode(const http::Transfer &transfer) const;
+  std::unique_ptr<http::Session> receiver{};
+  std::unique_ptr<http::Session> sender{};
 
 };
 

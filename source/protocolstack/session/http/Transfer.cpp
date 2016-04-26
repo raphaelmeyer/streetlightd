@@ -13,8 +13,12 @@ namespace http
 Transfer::Transfer(Poco::Net::HTTPClientSession &_session) :
   session{_session}
 {
-  request.setMethod(Poco::Net::HTTPRequest::HTTP_POST);
   request.setVersion(Poco::Net::HTTPMessage::HTTP_1_1);
+}
+
+void Transfer::setMethod(const std::string &value)
+{
+  request.setMethod(value);
 }
 
 void Transfer::setUri(const std::string &value)

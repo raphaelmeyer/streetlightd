@@ -16,8 +16,6 @@
 #include <Poco/Path.h>
 #include <Poco/URI.h>
 
-#include <iostream>
-
 //TODO poll server
 
 AzureHttp::AzureHttp()
@@ -26,57 +24,35 @@ AzureHttp::AzureHttp()
 
 void AzureHttp::connect()
 {
-  const auto ptrContext = new Poco::Net::Context(Poco::Net::Context::CLIENT_USE, "", "", "", Poco::Net::Context::VERIFY_STRICT, 9, true, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
-  const auto sp = new Poco::Net::HTTPSClientSession(uri.getHost(), uri.getPort(), ptrContext);
-  session = std::unique_ptr<Poco::Net::HTTPSClientSession>{sp};
-  session->setKeepAlive(true);
+  sender = std::unique_ptr<http::Session>(new http::Session(Poco::URI{uriPost}, tokenFactory));
+  receiver = std::unique_ptr<http::Session>(new http::Session(Poco::URI{uriGet}, tokenFactory));
 }
 
 void AzureHttp::send(const presentation::Message &message)
 {
-  http::Transfer transfer{*session};
+  sender->post(message.asString());
 
-  transfer.setUri(uri.getPathAndQuery());
-  transfer.setCredentials(tokenFactory.produce());
-  transfer.setRequest(message.asString());
-
-  transfer.execute();
-
-  handleResponseCode(transfer);
+  const auto response = receiver->get();
+  if (response != std::string{}) {
+    listener(response);
+  }
 }
 
 void AzureHttp::setConfiguration(const SessionConfiguration &value)
 {
-  uri = "https://" + value.host + "/devices/" + value.user + "/messages/events?api-version=2016-02-03";
+  uriPost = "https://" + value.host + "/devices/" + value.user + "/messages/events?api-version=2016-02-03";
+  uriGet = "https://" + value.host + "/devices/" + value.user + "/messages/devicebound?api-version=2016-02-03";
   tokenFactory = SasTokenFactory{value.password, value.host + "/devices/" + value.user};
-}
-
-void AzureHttp::handleResponseCode(const http::Transfer &transfer) const
-{
-  switch (transfer.getStatus()) {
-  case Poco::Net::HTTPResponse::HTTPStatus::HTTP_OK:
-  {
-    listener(transfer.getResponse());
-    break;
-  }
-  case Poco::Net::HTTPResponse::HTTPStatus::HTTP_NO_CONTENT:
-  {
-    break;
-  }
-  default:
-  {
-    std::cout << "unhandled response: " << transfer.getStatus() << " " << transfer.getReason() << std::endl;
-    break;
-  }
-  }
 }
 
 void AzureHttp::close()
 {
-  session.release();
+  receiver.release();
+  sender.release();
 }
 
 void AzureHttp::setMessageCallback(Session::Callback function)
 {
   listener = function;
 }
+

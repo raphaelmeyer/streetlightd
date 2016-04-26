@@ -20,6 +20,7 @@ class Transfer
 public:
   Transfer(Poco::Net::HTTPClientSession &session);
 
+  void setMethod(const std::string &value);
   void setUri(const std::string &value);
   void setCredentials(const std::string &credentials);
   void setRequest(const std::string &value);
