@@ -10,7 +10,7 @@
 static void runner(Timer::Callback *callback, bool *running)
 {
   while (*running) {
-    std::this_thread::sleep_for (std::chrono::seconds(1));
+    std::this_thread::sleep_for(std::chrono::seconds(1));
     (*callback)();
   }
 }
