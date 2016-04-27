@@ -5,17 +5,22 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef SESSIONCONFIGURATION_H
-#define SESSIONCONFIGURATION_H
+#ifndef SESSION_CONFIGURATION_H
+#define SESSION_CONFIGURATION_H
 
 #include <string>
 
-class SessionConfiguration
+namespace session
+{
+
+class Configuration
 {
 public:
   std::string host{};
   std::string user{};
   std::string password{};
 };
+
+}
 
 #endif

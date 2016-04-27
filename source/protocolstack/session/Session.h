@@ -8,7 +8,7 @@
 #ifndef SESSION
 #define SESSION
 
-#include "SessionConfiguration.h"
+#include "Configuration.h"
 #include "../presentation/Message.h"
 
 #include <string>
@@ -21,7 +21,7 @@ public:
 
   virtual ~Session() = default;
   
-  virtual void setConfiguration(const SessionConfiguration &value) = 0;
+  virtual void setConfiguration(const session::Configuration &value) = 0;
 
   virtual void connect() = 0;
   virtual void close() = 0;

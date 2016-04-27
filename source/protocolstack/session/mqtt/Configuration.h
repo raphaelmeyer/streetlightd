@@ -8,7 +8,7 @@
 #ifndef MQTTCONFIGURATION_H
 #define MQTTCONFIGURATION_H
 
-#include "../SessionConfiguration.h"
+#include "../Configuration.h"
 
 #include <mosquittopp.h>
 #include <string>
@@ -30,7 +30,7 @@ public:
 
   virtual void configure(mosqpp::mosquittopp &instance) const= 0;
 
-  virtual void setConfiguration(const SessionConfiguration &value) = 0;
+  virtual void setConfiguration(const session::Configuration &value) = 0;
 
 };
 

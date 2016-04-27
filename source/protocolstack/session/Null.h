@@ -5,23 +5,28 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef NULLSESSION_H
-#define NULLSESSION_H
+#ifndef SESSION_NULL_H
+#define SESSION_NULL_H
 
 #include "Session.h"
 
-class NullSession :
+namespace session
+{
+
+class Null :
     public Session
 {
 public:
   void send(const presentation::Message &) override;
 
-  void setConfiguration(const SessionConfiguration &) override;
+  void setConfiguration(const session::Configuration &) override;
   void connect() override;
   void close() override;
 
   void setMessageCallback(Callback) override;
 
 };
+
+}
 
 #endif

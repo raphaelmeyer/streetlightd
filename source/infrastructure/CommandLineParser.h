@@ -9,7 +9,7 @@
 #define COMMANDLINEPARSER_H
 
 #include <protocolstack/StackFactory.h>
-#include <protocolstack/session/SessionConfiguration.h>
+#include <protocolstack/session/Configuration.h>
 #include <infrastructure/TimerConfiguration.h>
 
 #include <Poco/Util/OptionSet.h>
@@ -21,7 +21,7 @@
 
 class Configuration :
     public StackConfiguration,
-    public SessionConfiguration,
+    public session::Configuration,
     public TimerConfiguration
 {
 };
@@ -62,7 +62,7 @@ private:
   std::map<CommandLineParser::Layer, std::string> fillEnumValues(const std::map<std::string, std::string> &values) const;
   std::map<std::string, std::string> parseToMap(const std::vector<std::string> &arguments, const Poco::Util::OptionSet &options) const;
   void fillStackConfig(StackConfiguration &config, std::map<Layer, std::string> enumValues) const;
-  void fillSessionConfig(SessionConfiguration &config, std::map<std::string, std::string> values) const;
+  void fillSessionConfig(session::Configuration &config, std::map<std::string, std::string> values) const;
   void fillTimerConfig(TimerConfiguration &config, std::map<std::string, std::string> values) const;
 };
 

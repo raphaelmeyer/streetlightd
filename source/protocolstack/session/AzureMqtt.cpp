@@ -48,7 +48,7 @@ void AzureMqtt::configure(mosqpp::mosquittopp &instance) const
   mqtt::throwIfError("tls_opts_set", instance.tls_opts_set(1, "tlsv1"));
 }
 
-void AzureMqtt::setConfiguration(const SessionConfiguration &value)
+void AzureMqtt::setConfiguration(const session::Configuration &value)
 {
   configuration = value;
   tokenFactory = SasTokenFactory{value.password, scope()};

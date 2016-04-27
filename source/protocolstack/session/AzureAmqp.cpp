@@ -88,7 +88,7 @@ AzureAmqp::~AzureAmqp()
   platform_deinit();
 }
 
-void AzureAmqp::setConfiguration(const SessionConfiguration &value)
+void AzureAmqp::setConfiguration(const session::Configuration &value)
 {
   connectionString =
       "HostName=" + value.host + ";"

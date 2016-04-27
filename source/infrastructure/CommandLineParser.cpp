@@ -122,7 +122,7 @@ void CommandLineParser::fillStackConfig(StackConfiguration &config, std::map<Lay
   config.session = enumValues[Layer::Session];
 }
 
-void CommandLineParser::fillSessionConfig(SessionConfiguration &config, std::map<std::string, std::string> values) const
+void CommandLineParser::fillSessionConfig(session::Configuration &config, std::map<std::string, std::string> values) const
 {
   config.host = values[HOST_ARGUMENT];
   config.user = values[USER_ARGUMENT];

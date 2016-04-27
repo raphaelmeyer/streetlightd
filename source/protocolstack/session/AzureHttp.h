@@ -26,7 +26,7 @@ public:
 
   void send(const presentation::Message &message) override;
 
-  void setConfiguration(const SessionConfiguration &value) override;
+  void setConfiguration(const session::Configuration &value) override;
   void connect() override;
   void close() override;
 

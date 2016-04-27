@@ -23,10 +23,10 @@ public:
 
   void configure(mosqpp::mosquittopp &instance) const override;
 
-  void setConfiguration(const SessionConfiguration &value) override;
+  void setConfiguration(const session::Configuration &value) override;
 
 private:
-  SessionConfiguration configuration;
+  session::Configuration configuration;
 
 };
 

@@ -42,7 +42,7 @@ void SimpleMqtt::configure(mosqpp::mosquittopp &) const
 {
 }
 
-void SimpleMqtt::setConfiguration(const SessionConfiguration &value)
+void SimpleMqtt::setConfiguration(const session::Configuration &value)
 {
   configuration = value;
 }

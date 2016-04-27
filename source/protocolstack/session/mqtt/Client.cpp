@@ -24,7 +24,7 @@ Client::~Client()
   throwIfError("lib_cleanup", mosqpp::lib_cleanup());
 }
 
-void Client::setConfiguration(const SessionConfiguration &value)
+void Client::setConfiguration(const session::Configuration &value)
 {
   configuration->setConfiguration(value);
 

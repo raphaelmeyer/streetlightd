@@ -50,7 +50,7 @@ void AzureHttp::send(const presentation::Message &message)
   sender->post(message.asString());
 }
 
-void AzureHttp::setConfiguration(const SessionConfiguration &value)
+void AzureHttp::setConfiguration(const session::Configuration &value)
 {
   uriPost = "https://" + value.host + "/devices/" + value.user + "/messages/events?api-version=2016-02-03";
   uriGet = "https://" + value.host + "/devices/" + value.user + "/messages/devicebound?api-version=2016-02-03";
