@@ -69,6 +69,7 @@ file(GLOB_RECURSE TEST_SOURCES
     protocolstack/presentation/BinaryEncoder.cpp
     protocolstack/presentation/BinaryDecoder.cpp
     protocolstack/presentation/Message.cpp
+    protocolstack/presentation/Null.cpp
     )
 
 add_executable(streetlightd main.cpp ${RAW_SOURCES})

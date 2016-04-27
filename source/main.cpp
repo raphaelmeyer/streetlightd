@@ -15,6 +15,7 @@
 #include "protocolstack/presentation/JsonEncoder.h"
 #include "protocolstack/presentation/KeyValueDecoder.h"
 #include "protocolstack/presentation/KeyValueEncoder.h"
+#include "protocolstack/presentation/Null.h"
 #include "protocolstack/session/AzureAmqp.h"
 #include "protocolstack/session/AzureHttp.h"
 #include "protocolstack/session/AzureMqtt.h"
@@ -61,6 +62,7 @@ int main(int argc, char **argv)
   applicationFactory.add("debug", []{return new Debug(std::cout);});
 
   Factory<presentation::EncoderAndDecoder> encoderFactory;
+  encoderFactory.add("none", []{ return presentation::EncoderAndDecoder{presentation::null::encode, presentation::null::decode};});
   encoderFactory.add("binary", []{ return presentation::EncoderAndDecoder{Binary::encode, Binary::decode};});
   encoderFactory.add("key-value", []{ return presentation::EncoderAndDecoder{KeyValue::encode, KeyValue::decode};});
   encoderFactory.add("json", []{ return presentation::EncoderAndDecoder{Json::encode, Json::decode};});
