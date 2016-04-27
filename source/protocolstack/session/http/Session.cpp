@@ -19,8 +19,9 @@
 namespace http
 {
 
-Session::Session(const Poco::URI &_uri, const SasTokenFactory &_tokenFactory) :
+Session::Session(const Poco::URI &_uri, const SasTokenFactory &_tokenFactory, Callback _receiver) :
   uri{_uri},
+  receiver{_receiver},
   tokenFactory{_tokenFactory}
 {
   const auto ptrContext = new Poco::Net::Context(Poco::Net::Context::CLIENT_USE, "", "", "", Poco::Net::Context::VERIFY_STRICT, 9, true, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
@@ -35,9 +36,9 @@ Session::~Session()
   handle.release();
 }
 
-std::string Session::get()
+void Session::get()
 {
-  return transfer(Poco::Net::HTTPRequest::HTTP_GET, "");
+  transfer(Poco::Net::HTTPRequest::HTTP_GET, "");
 }
 
 void Session::post(const std::string &content)
@@ -45,7 +46,7 @@ void Session::post(const std::string &content)
   transfer(Poco::Net::HTTPRequest::HTTP_POST, content);
 }
 
-std::string Session::transfer(const std::string &method, const std::string &content)
+void Session::transfer(const std::string &method, const std::string &content)
 {
   Transfer transfer{*handle};
 
@@ -59,16 +60,17 @@ std::string Session::transfer(const std::string &method, const std::string &cont
   return handleResponseCode(transfer);
 }
 
-std::string Session::handleResponseCode(const Transfer &transfer) const
+void Session::handleResponseCode(const Transfer &transfer) const
 {
   switch (transfer.getStatus()) {
   case Poco::Net::HTTPResponse::HTTPStatus::HTTP_OK:
   {
-    return transfer.getResponse();
+    receiver(transfer.getResponse());
+    break;
   }
   case Poco::Net::HTTPResponse::HTTPStatus::HTTP_NO_CONTENT:
   {
-    return {};
+    break;
   }
   default:
   {
