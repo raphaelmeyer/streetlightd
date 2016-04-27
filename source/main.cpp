@@ -9,6 +9,7 @@
 #include "protocolstack/application/ActiveApplication.h"
 #include "protocolstack/application/Debug.h"
 #include "protocolstack/application/Forwarder.h"
+#include "protocolstack/application/Offline.h"
 #include "protocolstack/presentation/BinaryDecoder.h"
 #include "protocolstack/presentation/BinaryEncoder.h"
 #include "protocolstack/presentation/JsonDecoder.h"
@@ -61,6 +62,7 @@ int main(int argc, char **argv)
   Factory<Application*> applicationFactory;
   applicationFactory.add("forwarder", []{return new Forwarder();});
   applicationFactory.add("debug", []{return new Debug(std::cout);});
+  applicationFactory.add("offline", []{return new Offline();});
 
   Factory<presentation::EncoderAndDecoder> encoderFactory;
   encoderFactory.add("none", []{ return presentation::EncoderAndDecoder{presentation::null::encode, presentation::null::decode};});

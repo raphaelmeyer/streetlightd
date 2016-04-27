@@ -22,3 +22,7 @@ def step_impl(context):
 def step_impl(context):
 	start(context, ['--application=forwarder', '--presentation=binary', '--session=simple-mqtt'])
 
+@given(u'I start streetlightd in the offline mode')
+def step_impl(context):
+	start(context, ['--application=offline', '--presentation=none', '--session=none'])
+
