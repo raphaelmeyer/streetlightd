@@ -21,6 +21,7 @@
 #include "protocolstack/session/AzureMqtt.h"
 #include "protocolstack/session/SimpleMqtt.h"
 #include "protocolstack/session/mqtt/Client.h"
+#include "protocolstack/session/NullSession.h"
 
 #include "protocolstack/ProtocolStack.h"
 #include "protocolstack/StackFactory.h"
@@ -68,6 +69,7 @@ int main(int argc, char **argv)
   encoderFactory.add("json", []{ return presentation::EncoderAndDecoder{Json::encode, Json::decode};});
 
   Factory<Session*> sessionFactory;
+  sessionFactory.add("none", []{return new NullSession();});
   sessionFactory.add("azure-amqp", []{return new AzureAmqp();});
   sessionFactory.add("azure-http", []{return new AzureHttp();});
   sessionFactory.add("azure-mqtt", []{return new mqtt::Client(new AzureMqtt());});
