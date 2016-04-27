@@ -16,6 +16,7 @@
 #include <Poco/Net/HTTPSClientSession.h>
 #include <Poco/URI.h>
 #include <memory>
+#include <thread>
 
 class AzureHttp :
     public Session
@@ -35,11 +36,12 @@ private:
   Callback listener{};
   std::string uriGet{};
   std::string uriPost{};
-
   SasTokenFactory tokenFactory{"", ""};
 
-  std::unique_ptr<http::Session> receiver{};
   std::unique_ptr<http::Session> sender{};
+
+  bool receiverRunning;
+  std::thread reader;
 
 };
 

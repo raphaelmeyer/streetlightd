@@ -16,7 +16,22 @@
 #include <Poco/Path.h>
 #include <Poco/URI.h>
 
-//TODO poll server
+static void receiverThread(std::unique_ptr<http::Session> session, Session::Callback *callback, bool *running)
+{
+  //TODO improve exit with condition variable or something else
+
+  while (*running) {
+    const auto response = session->get();
+    if (response != std::string{}) {
+      (*callback)(response);
+    }
+
+    for (int i = 0; (i < 10) && *running; i++) {
+      std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+  }
+}
+
 
 AzureHttp::AzureHttp()
 {
@@ -25,17 +40,15 @@ AzureHttp::AzureHttp()
 void AzureHttp::connect()
 {
   sender = std::unique_ptr<http::Session>(new http::Session(Poco::URI{uriPost}, tokenFactory));
-  receiver = std::unique_ptr<http::Session>(new http::Session(Poco::URI{uriGet}, tokenFactory));
+  std::unique_ptr<http::Session> receiver = std::unique_ptr<http::Session>(new http::Session(Poco::URI{uriGet}, tokenFactory));
+
+  receiverRunning = true;
+  reader = std::thread{receiverThread, std::move(receiver), &listener, &receiverRunning};
 }
 
 void AzureHttp::send(const presentation::Message &message)
 {
   sender->post(message.asString());
-
-  const auto response = receiver->get();
-  if (response != std::string{}) {
-    listener(response);
-  }
 }
 
 void AzureHttp::setConfiguration(const SessionConfiguration &value)
@@ -47,7 +60,9 @@ void AzureHttp::setConfiguration(const SessionConfiguration &value)
 
 void AzureHttp::close()
 {
-  receiver.release();
+  receiverRunning = false;
+  reader.join();
+
   sender.release();
 }
 
