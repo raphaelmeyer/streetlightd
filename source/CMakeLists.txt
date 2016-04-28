@@ -77,6 +77,13 @@ add_executable(streetlightd main.cpp ${RAW_SOURCES})
 target_link_libraries(streetlightd mosquittopp dbus-c++-1 pthread PocoUtil jsoncpp PocoNet PocoNetSSL PocoFoundation iothub_client iothub_client_amqp_transport uamqp ssl crypto crypto++)
 
 add_executable(unit-test ${TEST_SOURCES})
-target_link_libraries(unit-test gmock_main pthread PocoUtil jsoncpp crypto++ PocoFoundation)
+target_link_libraries(unit-test pthread PocoUtil jsoncpp crypto++ PocoFoundation)
+
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../cmake-findgmock)
+find_package(GMock REQUIRED)
+include_directories(${GMOCK_INCLUDE_DIRS})
+target_link_libraries(unit-test ${GTEST_BOTH_LIBRARIES} ${GMOCK_BOTH_LIBRARIES})
 
 set(EXECUTABLE_OUTPUT_PATH "../")
