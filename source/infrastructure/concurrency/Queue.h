@@ -5,13 +5,16 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef QUEUE_H
-#define QUEUE_H
+#ifndef CONCURRENCY_QUEUE_H
+#define CONCURRENCY_QUEUE_H
 
 #include <mutex>
 #include <condition_variable>
 #include <queue>
 #include <functional>
+
+namespace concurrency
+{
 
 class Queue
 {
@@ -32,5 +35,7 @@ private:
   std::condition_variable notEmpty{};
 
 };
+
+}
 
 #endif

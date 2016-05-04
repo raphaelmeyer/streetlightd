@@ -7,6 +7,9 @@
 
 #include "Queue.h"
 
+namespace concurrency
+{
+
 void Queue::enqueue(Queue::T call)
 {
   {
@@ -40,4 +43,6 @@ void Queue::close()
     finished = true;
   }
   notEmpty.notify_one();
+}
+
 }

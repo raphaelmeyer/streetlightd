@@ -30,8 +30,6 @@
 #include "dbus/DbusTimer.h"
 #include "dbus/Streetlight.h"
 
-#include "infrastructure/Queue.h"
-#include "infrastructure/ActiveObject.h"
 #include "infrastructure/Factory.h"
 #include "infrastructure/CommandLineParser.h"
 #include "infrastructure/TimerFactory.h"

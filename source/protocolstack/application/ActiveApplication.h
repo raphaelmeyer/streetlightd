@@ -9,7 +9,7 @@
 #define ACTIVEAPPLICATION_H
 
 #include "Application.h"
-#include "../infrastructure/ActiveObject.h"
+#include "../infrastructure/concurrency/ActiveObject.h"
 
 #include <memory>
 
@@ -30,7 +30,7 @@ public:
   void setSender(Sender value) override;
 
 private:
-  ActiveObject active;
+  concurrency::ActiveObject active;
   std::unique_ptr<Application> application;
 
 };

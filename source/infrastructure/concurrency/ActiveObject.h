@@ -5,11 +5,14 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef ACTIVEOBJECT_H
-#define ACTIVEOBJECT_H
+#ifndef CONCURRENCY_ACTIVEOBJECT_H
+#define CONCURRENCY_ACTIVEOBJECT_H
 
 #include "Queue.h"
 #include <thread>
+
+namespace concurrency
+{
 
 class ActiveObject
 {
@@ -24,5 +27,7 @@ private:
   std::thread appThread;
 
 };
+
+}
 
 #endif

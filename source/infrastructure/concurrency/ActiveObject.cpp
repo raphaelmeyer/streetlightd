@@ -7,6 +7,9 @@
 
 #include "ActiveObject.h"
 
+namespace concurrency
+{
+
 static void appRunner(Queue &queue)
 {
   Queue::T call;
@@ -30,4 +33,6 @@ ActiveObject::~ActiveObject()
 void ActiveObject::put(std::function<void ()> call)
 {
   queue.enqueue(call);
+}
+
 }
