@@ -11,6 +11,7 @@
 #include "Timer.h"
 
 #include <thread>
+#include <mutex>
 
 class InternalTimer :
     public Timer
@@ -23,8 +24,9 @@ public:
 
 private:
   Callback callback{};
-  bool running;
+  bool running{true};
   std::thread thread;
+  std::mutex mutex;
 
 };
 

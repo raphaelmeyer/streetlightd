@@ -7,27 +7,42 @@
 
 #include "InternalTimer.h"
 
-static void runner(Timer::Callback *callback, bool *running)
+static void runner(Timer::Callback &callback, bool &running, std::mutex &mutex)
 {
-  while (*running) {
+  while (true) {
     std::this_thread::sleep_for(std::chrono::seconds(1));
-    (*callback)();
+
+    Timer::Callback cb;
+    {
+      std::lock_guard<std::mutex> lock{mutex};
+      if (!running) {
+        return;
+      }
+      cb = callback;
+    }
+    cb();
   }
 }
 
 InternalTimer::InternalTimer() :
   running{true},
-  thread{runner, &callback, &running}
+  thread{runner, std::ref(callback), std::ref(running), std::ref(mutex)}
 {
 }
 
 InternalTimer::~InternalTimer()
 {
-  running = false;
+  {
+    std::lock_guard<std::mutex> lock{mutex};
+    running = false;
+  }
   thread.join();
 }
 
 void InternalTimer::setCallback(Timer::Callback value)
 {
-  callback = value;
+  {
+    std::lock_guard<std::mutex> lock{mutex};
+    callback = value;
+  }
 }
