@@ -50,6 +50,7 @@ static void niam(int)
 
 int main(int argc, char **argv)
 {
+  DBus::_init_threading();
   DBus::default_dispatcher = &dispatcher;
 
   signal(SIGTERM, niam);
@@ -126,8 +127,6 @@ int main(int argc, char **argv)
   stack.session->connect();
   dispatcher.enter();
   stack.session->close();
-
-  stack.application.release();
 
   return 0;
 }
