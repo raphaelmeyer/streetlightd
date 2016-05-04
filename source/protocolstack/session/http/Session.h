@@ -26,7 +26,6 @@ public:
   typedef std::function<void(const std::string &content)> Callback;
 
   Session(const Poco::URI &uri, const SasTokenFactory &tokenFactory, Callback receiver = [](const std::string &){});
-  ~Session();
 
   void get();
   void post(const std::string &content);

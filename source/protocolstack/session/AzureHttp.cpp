@@ -48,8 +48,8 @@ void AzureHttp::setConfiguration(const session::Configuration &value)
 
 void AzureHttp::close()
 {
-  receiver.release();
-  sender.release();
+  sender = nullptr;
+  receiver = nullptr;
 }
 
 void AzureHttp::setMessageCallback(Session::Callback function)

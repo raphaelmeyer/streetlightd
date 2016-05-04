@@ -31,11 +31,6 @@ Session::Session(const Poco::URI &_uri, const SasTokenFactory &_tokenFactory, Ca
   handle->setKeepAlive(true);
 }
 
-Session::~Session()
-{
-  handle.release();
-}
-
 void Session::get()
 {
   transfer(Poco::Net::HTTPRequest::HTTP_GET, "");
