@@ -45,6 +45,8 @@ file(GLOB RAW_SOURCES
     protocolstack/application/message/*.cpp
     infrastructure/*.cpp
     infrastructure/*.h
+    infrastructure/concurrency/*.cpp
+    infrastructure/concurrency/*.h
     protocolstack/session/amqp/AmqpSession.cpp
     )
 

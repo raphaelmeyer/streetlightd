@@ -9,24 +9,18 @@
 #define INTERNALTIMER_H
 
 #include "Timer.h"
+#include "concurrency/Timer.h"
 
-#include <thread>
-#include <mutex>
+#include <memory>
 
 class InternalTimer :
     public Timer
 {
 public:
-  InternalTimer();
-  ~InternalTimer();
-
   void setCallback(Callback value) override;
 
 private:
-  Callback callback{};
-  bool running{true};
-  std::thread thread;
-  std::mutex mutex;
+  std::unique_ptr<concurrency::Timer> timer{nullptr};
 
 };
 
