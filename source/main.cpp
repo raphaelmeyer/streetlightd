@@ -104,6 +104,7 @@ int main(int argc, char **argv)
 
   // connection
   stack.application->setBrightnessSensor([&brightness]{
+    //TODO check if dbus-c++ is thread safe; if not, protect it against those calls
     return brightness.scaled();
   });
   stack.application->setMoistureSensor([&moisture]{

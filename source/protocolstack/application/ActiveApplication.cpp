@@ -26,30 +26,30 @@ void ActiveApplication::received(const message::Incoming &message)
 
 void ActiveApplication::setBrightnessSensor(Application::Sensor value)
 {
-  application->setBrightnessSensor(value);
+  active.put([this, value]{application->setBrightnessSensor(value);});
 }
 
 void ActiveApplication::setMoistureSensor(Application::Sensor value)
 {
-  application->setMoistureSensor(value);
+  active.put([this, value]{application->setMoistureSensor(value);});
 }
 
 void ActiveApplication::setProximitySensor(Application::Sensor value)
 {
-  application->setProximitySensor(value);
+  active.put([this, value]{application->setProximitySensor(value);});
 }
 
 void ActiveApplication::setLuminosityActor(Actor<double> value)
 {
-  application->setLuminosityActor(value);
+  active.put([this, value]{application->setLuminosityActor(value);});
 }
 
 void ActiveApplication::setWarningActor(Actor<std::string> value)
 {
-  application->setWarningActor(value);
+  active.put([this, value]{application->setWarningActor(value);});
 }
 
 void ActiveApplication::setSender(Application::Sender value)
 {
-  application->setSender(value);
+  active.put([this, value]{application->setSender(value);});
 }
