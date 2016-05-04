@@ -21,7 +21,6 @@ public:
 
 private:
   Queue queue;
-  bool running;
   std::thread appThread;
 
 };

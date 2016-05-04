@@ -7,24 +7,23 @@
 
 #include "ActiveObject.h"
 
-static void appRunner(Queue *queue, bool *running)
+static void appRunner(Queue &queue)
 {
-  while (*running) {
-    const auto call = queue->dequeue();
+  Queue::T call;
+  while (queue.dequeue(call)) {
     call();
   }
 }
 
 ActiveObject::ActiveObject() :
   queue{},
-  running{true},
-  appThread{appRunner, &queue, &running}
+  appThread{appRunner, std::ref(queue)}
 {
 }
 
 ActiveObject::~ActiveObject()
 {
-  running = false;
+  queue.close();
   appThread.join();
 }
 

@@ -9,23 +9,35 @@
 
 void Queue::enqueue(Queue::T call)
 {
-  std::lock_guard<std::mutex> lock{mutex};
-  queue.push(call);
-
-  condition.notify_one();
+  {
+    std::lock_guard<std::mutex> lock{mutex};
+    queue.push(call);
+  }
+  notEmpty.notify_one();
 }
 
-Queue::T Queue::dequeue()
+bool Queue::dequeue(T &call)
 {
-  while (true) {
-    std::unique_lock<std::mutex> lock{mutex};
+  std::unique_lock<std::mutex> lock{mutex};
 
-    if (!queue.empty()) {
-      const auto value = queue.front();
-      queue.pop();
-      return value;
-    }
+  notEmpty.wait(lock, [&]{
+    return !queue.empty() || finished;
+  });
 
-    condition.wait(lock);
+  if (!queue.empty()) {
+    call = queue.front();
+    queue.pop();
+    return true;
   }
+
+  return false;
+}
+
+void Queue::close()
+{
+  {
+    std::lock_guard<std::mutex> lock{mutex};
+    finished = true;
+  }
+  notEmpty.notify_one();
 }

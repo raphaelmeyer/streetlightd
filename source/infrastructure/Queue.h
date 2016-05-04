@@ -20,12 +20,16 @@ public:
 
   void enqueue(T call);
 
-  T dequeue();
+  bool dequeue(T &call);
+
+  void close();
 
 private:
+  bool finished{false};
   std::queue<T> queue{};
+
   std::mutex mutex{};
-  std::condition_variable condition{};
+  std::condition_variable notEmpty{};
 
 };
 
