@@ -12,11 +12,10 @@
 #include "http/Transfer.h"
 #include "http/Session.h"
 #include <infrastructure/SasToken.h>
+#include <infrastructure/concurrency/Timer.h>
 
 #include <Poco/Net/HTTPSClientSession.h>
 #include <Poco/URI.h>
-#include <memory>
-#include <thread>
 
 class AzureHttp :
     public Session
@@ -39,9 +38,7 @@ private:
   SasTokenFactory tokenFactory{"", ""};
 
   std::unique_ptr<http::Session> sender{};
-
-  bool receiverRunning;
-  std::thread reader;
+  std::unique_ptr<concurrency::Timer> receiver{};
 
 };
 

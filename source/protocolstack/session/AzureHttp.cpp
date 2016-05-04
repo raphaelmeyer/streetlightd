@@ -16,20 +16,6 @@
 #include <Poco/Path.h>
 #include <Poco/URI.h>
 
-static void receiverThread(bool *running, std::unique_ptr<http::Session> session)
-{
-  //TODO improve exit with condition variable or something else
-
-  while (*running) {
-    session->get();
-
-    for (int i = 0; (i < 10) && *running; i++) {
-      std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    }
-  }
-}
-
-
 AzureHttp::AzureHttp()
 {
 }
@@ -37,12 +23,15 @@ AzureHttp::AzureHttp()
 void AzureHttp::connect()
 {
   sender = std::unique_ptr<http::Session>(new http::Session(Poco::URI{uriPost}, tokenFactory));
-  std::unique_ptr<http::Session> receiver = std::unique_ptr<http::Session>(new http::Session(Poco::URI{uriGet}, tokenFactory, [this](const auto &value){
-    listener(value);
-  }));
 
-  receiverRunning = true;
-  reader = std::thread{receiverThread, &receiverRunning, std::move(receiver)};
+  Callback callback = listener;
+  std::shared_ptr<http::Session> receiverSession = std::shared_ptr<http::Session>(new http::Session(Poco::URI{uriGet}, tokenFactory, [callback](const auto &value){
+    callback(value);
+  }));
+  auto tickHandler = [receiverSession] {
+    receiverSession->get();
+  };
+  receiver = std::unique_ptr<concurrency::Timer>(new concurrency::Timer(tickHandler));
 }
 
 void AzureHttp::send(const presentation::Message &message)
@@ -59,9 +48,7 @@ void AzureHttp::setConfiguration(const session::Configuration &value)
 
 void AzureHttp::close()
 {
-  receiverRunning = false;
-  reader.join();
-
+  receiver.release();
   sender.release();
 }
 
