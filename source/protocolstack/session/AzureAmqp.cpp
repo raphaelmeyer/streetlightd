@@ -69,9 +69,10 @@ static IOTHUBMESSAGE_DISPOSITION_RESULT internalMessageCallback(IOTHUB_MESSAGE_H
   return IOTHUBMESSAGE_ACCEPTED;
 }
 
-static void SendConfirmationCallback(IOTHUB_CLIENT_CONFIRMATION_RESULT, void*)
+static void SendConfirmationCallback(IOTHUB_CLIENT_CONFIRMATION_RESULT, void* userContextCallback)
 {
-  //printf("Successfully sent your message");
+  IOTHUB_MESSAGE_HANDLE messageHandle = userContextCallback;
+  IoTHubMessage_Destroy(messageHandle);
 }
 
 AzureAmqp::AzureAmqp()
@@ -120,7 +121,7 @@ void AzureAmqp::send(const presentation::Message &message)
     throw std::runtime_error("Couldn't create MessageHandle");
   }
 
-  if (IoTHubClient_SendEventAsync((IOTHUB_CLIENT_HANDLE)iotHubClientHandle_, messageHandle, SendConfirmationCallback, this) != IOTHUB_CLIENT_OK)
+  if (IoTHubClient_SendEventAsync((IOTHUB_CLIENT_HANDLE)iotHubClientHandle_, messageHandle, SendConfirmationCallback, messageHandle) != IOTHUB_CLIENT_OK)
   {
     throw std::runtime_error("ERROR: IoTHubClient_SendEventAsync..........FAILED!\r\n");
   }
