@@ -48,11 +48,11 @@ void Client::on_connect(int)
 
 void Client::close()
 {
-  const auto stopResult = loop_stop();
-  throwIfError("loop_stop", stopResult);
-
   const auto disconnectResult = disconnect();
   throwIfError("disconnect", disconnectResult);
+
+  const auto stopResult = loop_stop();
+  throwIfError("loop_stop", stopResult);
 }
 
 void Client::send(const presentation::Message &message)
