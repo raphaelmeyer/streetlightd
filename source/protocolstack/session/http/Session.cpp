@@ -24,11 +24,17 @@ Session::Session(const Poco::URI &_uri, const SasTokenFactory &_tokenFactory, Ca
   receiver{_receiver},
   tokenFactory{_tokenFactory}
 {
-  const auto ptrContext = new Poco::Net::Context(Poco::Net::Context::CLIENT_USE, "", "", "", Poco::Net::Context::VERIFY_STRICT, 9, true, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
+  const Poco::Net::Context::Ptr ptrContext = new Poco::Net::Context(Poco::Net::Context::CLIENT_USE, "", "", "", Poco::Net::Context::VERIFY_STRICT, 9, true, "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH");
 
-  const auto handlePointer = new Poco::Net::HTTPSClientSession(uri.getHost(), uri.getPort(), ptrContext);
-  handle = std::unique_ptr<Poco::Net::HTTPSClientSession>{handlePointer};
+  handle = new Poco::Net::HTTPSClientSession(uri.getHost(), uri.getPort(), ptrContext);
   handle->setKeepAlive(true);
+}
+
+Session::~Session()
+{
+  // Workaround for bug SF# 3148126 (fixed in version 1.4.2)
+  handle->detachSocket();
+  delete handle;
 }
 
 void Session::get()

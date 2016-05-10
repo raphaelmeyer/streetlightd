@@ -14,7 +14,6 @@
 
 #include <Poco/Net/HTTPSClientSession.h>
 #include <Poco/URI.h>
-#include <memory>
 #include <functional>
 
 namespace http
@@ -26,6 +25,7 @@ public:
   typedef std::function<void(const std::string &content)> Callback;
 
   Session(const Poco::URI &uri, const SasTokenFactory &tokenFactory, Callback receiver = [](const std::string &){});
+  ~Session();
 
   void get();
   void post(const std::string &content);
@@ -34,7 +34,7 @@ private:
   Poco::URI uri;
   const Callback receiver;
   const SasTokenFactory &tokenFactory;
-  std::unique_ptr<Poco::Net::HTTPSClientSession> handle{};
+  Poco::Net::HTTPSClientSession *handle{nullptr};
 
   void transfer(const std::string &method, const std::string &content);
   void handleResponseCode(const Transfer &transfer) const;
