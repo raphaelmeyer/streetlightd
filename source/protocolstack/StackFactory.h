@@ -10,7 +10,7 @@
 #ifndef STACKFACTORY_H
 #define STACKFACTORY_H
 
-#include "../infrastructure/Factory.h"
+#include <infrastructure/Factory.h>
 #include <protocolstack/application/Application.h>
 #include <protocolstack/presentation/Presentation.h>
 #include <protocolstack/session/Session.h>
@@ -31,14 +31,18 @@ public:
 class StackFactory
 {
 public:
-  StackFactory(Factory<Application*> &applicationFactory, Factory<presentation::EncoderAndDecoder> &presentationFactory, Factory<Session*> &sessionFactory);
+  StackFactory();
+
+  std::set<std::string> applications() const;
+  std::set<std::string> presentations() const;
+  std::set<std::string> sessions() const;
 
   ProtocolStack produce(const StackConfiguration &configuration);
 
 private:
-  Factory<Application*> &applicationFactory;
-  Factory<presentation::EncoderAndDecoder> &presentationFactory;
-  Factory<Session*> &sessionFactory;
+  Factory<Application*> applicationFactory;
+  Factory<presentation::EncoderAndDecoder> presentationFactory;
+  Factory<Session*> sessionFactory;
 
 };
 

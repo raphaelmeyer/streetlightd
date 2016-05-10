@@ -5,25 +5,6 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-
-#include "protocolstack/application/ActiveApplication.h"
-#include "protocolstack/application/Debug.h"
-#include "protocolstack/application/Forwarder.h"
-#include "protocolstack/application/Offline.h"
-#include "protocolstack/presentation/BinaryDecoder.h"
-#include "protocolstack/presentation/BinaryEncoder.h"
-#include "protocolstack/presentation/JsonDecoder.h"
-#include "protocolstack/presentation/JsonEncoder.h"
-#include "protocolstack/presentation/KeyValueDecoder.h"
-#include "protocolstack/presentation/KeyValueEncoder.h"
-#include "protocolstack/presentation/Null.h"
-#include "protocolstack/session/AzureAmqp.h"
-#include "protocolstack/session/AzureHttp.h"
-#include "protocolstack/session/AzureMqtt.h"
-#include "protocolstack/session/SimpleMqtt.h"
-#include "protocolstack/session/mqtt/Client.h"
-#include "protocolstack/session/Null.h"
-
 #include "protocolstack/ProtocolStack.h"
 #include "protocolstack/StackFactory.h"
 
@@ -58,35 +39,18 @@ int main(int argc, char **argv)
 
   const std::vector<std::string> arg{argv, argv+argc};
 
-  Factory<Application*> applicationFactory;
-  applicationFactory.add("forwarder", []{return new Forwarder();});
-  applicationFactory.add("debug", []{return new Debug(std::cout);});
-  applicationFactory.add("offline", []{return new Offline();});
-
-  Factory<presentation::EncoderAndDecoder> encoderFactory;
-  encoderFactory.add("none", []{ return presentation::EncoderAndDecoder{presentation::null::encode, presentation::null::decode};});
-  encoderFactory.add("binary", []{ return presentation::EncoderAndDecoder{Binary::encode, Binary::decode};});
-  encoderFactory.add("key-value", []{ return presentation::EncoderAndDecoder{KeyValue::encode, KeyValue::decode};});
-  encoderFactory.add("json", []{ return presentation::EncoderAndDecoder{Json::encode, Json::decode};});
-
-  Factory<Session*> sessionFactory;
-  sessionFactory.add("none", []{return new session::Null();});
-  sessionFactory.add("azure-amqp", []{return new AzureAmqp();});
-  sessionFactory.add("azure-http", []{return new AzureHttp();});
-  sessionFactory.add("azure-mqtt", []{return new mqtt::Client(new AzureMqtt());});
-  sessionFactory.add("simple-mqtt", []{return new mqtt::Client(new SimpleMqtt());});
+  StackFactory factory;
 
   CommandLineParser parser{std::cout};
-  parser.addApplications(applicationFactory.workers());
-  parser.addPresentations(encoderFactory.workers());
-  parser.addSessions(sessionFactory.workers());
+  parser.addApplications(factory.applications());
+  parser.addPresentations(factory.presentations());
+  parser.addSessions(factory.sessions());
   Configuration configuration = parser.parse(arg);
 
   if (!configuration) {
     return -1;
   }
 
-  StackFactory factory{applicationFactory, encoderFactory, sessionFactory};
   ProtocolStack stack = factory.produce(configuration);
   stack.session->setConfiguration(configuration);
 

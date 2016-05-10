@@ -7,11 +7,30 @@
 
 #include "StackFactory.h"
 
-StackFactory::StackFactory(Factory<Application *> &_application, Factory<presentation::EncoderAndDecoder> &_presentation, Factory<Session *> &_session) :
-  applicationFactory{_application},
-  presentationFactory{_presentation},
-  sessionFactory{_session}
+#include "application/Factory.h"
+#include "session/Factory.h"
+#include "presentation/Factory.h"
+
+StackFactory::StackFactory() :
+  applicationFactory{application::factory()},
+  presentationFactory{presentation::factory()},
+  sessionFactory{session::factory()}
 {
+}
+
+std::set<std::string> StackFactory::applications() const
+{
+  return applicationFactory.workers();
+}
+
+std::set<std::string> StackFactory::presentations() const
+{
+  return presentationFactory.workers();
+}
+
+std::set<std::string> StackFactory::sessions() const
+{
+  return sessionFactory.workers();
 }
 
 static void connect(ProtocolStack &stack)
