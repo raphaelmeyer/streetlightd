@@ -49,7 +49,6 @@ Scenario Outline: Receive a warning and show it on the scoreboard
     | hello world                             |
     | I can write very long text to the board |
 
-@wip
 Scenario: Receive binary data from the cloud
   Given I have a DBus streetlight
   And I connect to the local mqtt broker

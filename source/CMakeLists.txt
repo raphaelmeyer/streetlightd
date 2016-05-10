@@ -29,12 +29,6 @@ file(GLOB RAW_SOURCES
     *.h
     protocolstack/*.h
     protocolstack/*.cpp
-    protocolstack/session/*.cpp
-    protocolstack/session/*.h
-    protocolstack/session/mqtt/*.h
-    protocolstack/session/mqtt/*.cpp
-    protocolstack/session/http/*.h
-    protocolstack/session/http/*.cpp
     dbus/*.cpp
     dbus/*.h
     protocolstack/presentation/*.cpp
@@ -47,6 +41,21 @@ file(GLOB RAW_SOURCES
     infrastructure/*.h
     infrastructure/concurrency/*.cpp
     infrastructure/concurrency/*.h
+    )
+
+file(GLOB SESSION_SOURCES
+    infrastructure/SasToken.cpp
+    infrastructure/SasToken.h
+    infrastructure/concurrency/Timer.cpp
+    infrastructure/concurrency/Timer.h
+    protocolstack/presentation/Message.cpp
+    protocolstack/presentation/Message.h
+    protocolstack/session/*.cpp
+    protocolstack/session/*.h
+    protocolstack/session/mqtt/*.h
+    protocolstack/session/mqtt/*.cpp
+    protocolstack/session/http/*.h
+    protocolstack/session/http/*.cpp
     protocolstack/session/amqp/AmqpSession.cpp
     )
 
@@ -75,8 +84,11 @@ file(GLOB_RECURSE TEST_SOURCES
     protocolstack/presentation/Null.cpp
     )
 
-add_executable(streetlightd streetlightd.cpp ${RAW_SOURCES})
+add_executable(streetlightd streetlightd.cpp ${RAW_SOURCES} ${SESSION_SOURCES})
 target_link_libraries(streetlightd mosquittopp dbus-c++-1 pthread PocoUtil jsoncpp PocoNet PocoNetSSL PocoFoundation iothub_client iothub_client_amqp_transport uamqp ssl crypto crypto++)
+
+add_executable(session-test session-test.cpp ${SESSION_SOURCES})
+target_link_libraries(session-test pthread mosquittopp PocoNet PocoNetSSL PocoFoundation crypto++ iothub_client iothub_client_amqp_transport uamqp ssl crypto)
 
 add_executable(unit-test ${TEST_SOURCES})
 target_link_libraries(unit-test pthread PocoUtil jsoncpp crypto++ PocoFoundation)
