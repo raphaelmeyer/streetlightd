@@ -75,7 +75,7 @@ file(GLOB_RECURSE TEST_SOURCES
     protocolstack/presentation/Null.cpp
     )
 
-add_executable(streetlightd main.cpp ${RAW_SOURCES})
+add_executable(streetlightd streetlightd.cpp ${RAW_SOURCES})
 target_link_libraries(streetlightd mosquittopp dbus-c++-1 pthread PocoUtil jsoncpp PocoNet PocoNetSSL PocoFoundation iothub_client iothub_client_amqp_transport uamqp ssl crypto crypto++)
 
 add_executable(unit-test ${TEST_SOURCES})
