@@ -12,6 +12,9 @@
 
 #include <functional>
 
+/**
+ * Turns on the light if it gets dark and turns it off again when it gehts brighter.
+ */
 class Offline :
     public Application
 {

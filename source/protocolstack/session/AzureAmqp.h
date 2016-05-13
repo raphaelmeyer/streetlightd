@@ -3,6 +3,9 @@
 #include <string>
 #include <functional>
 
+/**
+ * Azure connection via AMQP through azure iot sdk.
+ */
 class AzureAmqp :
     public Session
 {
@@ -18,6 +21,6 @@ public:
 
 private:
   std::string connectionString{};
-  void* iotHubClientHandle_{nullptr}; ///!< Our internal connection handle
-  Callback receivedFunction_; ///!< Function to execute on receiving
+  void* iotHubClientHandle_{nullptr};
+  Callback receivedFunction_;
 };

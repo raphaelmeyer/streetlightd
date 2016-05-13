@@ -13,8 +13,9 @@
 #include <functional>
 
 /**
- * Simple application logic that reads all values on a timeout and forwards it.
- * Same for receiving.
+ * Simple application logic that reads all values on an fixed interval forwards it.
+ *
+ * Whenever a new value is received, it is forwarded to the corresponding actor.
  */
 class Forwarder :
     public Application

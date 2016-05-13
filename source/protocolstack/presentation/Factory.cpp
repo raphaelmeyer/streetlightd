@@ -29,6 +29,9 @@ public:
   }
 };
 
+/**
+ * Own binary representation that never should be used.
+ */
 class Binary :
     public Presentation
 {
@@ -39,6 +42,9 @@ public:
   }
 };
 
+/**
+ * Own representation of key-value pairs that never should be used.
+ */
 class KeyValue :
     public Presentation
 {
@@ -49,6 +55,9 @@ public:
   }
 };
 
+/**
+ * Json representation for usage with the cloud.
+ */
 class Json :
     public Presentation
 {

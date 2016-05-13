@@ -13,6 +13,11 @@
 
 #include <memory>
 
+/**
+ * Encapsulates an application into a thread and connects the input via a message queue.
+ *
+ * Don't use it directly.
+ */
 class ActiveApplication :
     public Application
 {

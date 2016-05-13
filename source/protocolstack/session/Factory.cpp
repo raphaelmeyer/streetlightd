@@ -17,6 +17,9 @@
 namespace session
 {
 
+/**
+ * Azure connection via MQTT through mosquitto.
+ */
 class AzureMqtt :
     public mqtt::Client
 {
@@ -27,6 +30,9 @@ public:
   }
 };
 
+/**
+ * MQTT connector usable for unencrypted connections.
+ */
 class SimpleMqtt :
     public mqtt::Client
 {

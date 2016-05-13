@@ -12,19 +12,6 @@
 #include <protocolstack/presentation/Message.h>
 
 
-/**
- * Own binary format.
- *
- * document := { entry }
- * entry := key value
- * key := Byte
- * value := part | string
- * part := Byte (0: 0.0; 255: 1.0)
- * string := length { Byte }
- * length := Byte
- *
- */
-
 namespace presentation
 {
 namespace binary

@@ -10,14 +10,6 @@
 
 #include <protocolstack/application/message/Outgoing.h>
 
-/**
- * Own representation of key-value pairs that never should be used.
- *
- * document := { entry }
- * entry := identifier value '\n'
- * value := identifier | number
- */
-
 namespace presentation
 {
 namespace keyvalue

@@ -12,6 +12,10 @@
 
 #include <ostream>
 
+/**
+ * Sends debug messages to the cloud and receives messages.
+ * Prints all messages to the console.
+ */
 class Debug :
     public Application
 {

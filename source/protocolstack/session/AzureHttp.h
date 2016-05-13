@@ -17,6 +17,9 @@
 #include <Poco/Net/HTTPSClientSession.h>
 #include <Poco/URI.h>
 
+/**
+ * Azure connection via HTTP/1.1 through Poco.
+ */
 class AzureHttp :
     public Session
 {
