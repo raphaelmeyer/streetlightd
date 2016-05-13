@@ -14,7 +14,9 @@
 #include <sstream>
 #include <functional>
 
-namespace KeyValue
+namespace presentation
+{
+namespace keyvalue
 {
 
 class Format :
@@ -70,4 +72,5 @@ std::string encode(const message::Outgoing &message)
   return stream.str();
 }
 
+}
 }

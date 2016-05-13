@@ -9,7 +9,9 @@
 
 #include <sstream>
 
-namespace KeyValue
+namespace presentation
+{
+namespace keyvalue
 {
 
 static std::string trim(const std::string &value)
@@ -74,4 +76,5 @@ message::Incoming decode(const presentation::Message &message)
   return result;
 }
 
+}
 }

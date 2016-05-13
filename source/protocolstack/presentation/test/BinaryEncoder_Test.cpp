@@ -20,7 +20,7 @@ TEST(BinaryEncoder_Test, encode_empty_message)
 {
   const message::Outgoing message{};
 
-  ASSERT_EQ(std::vector<uint8_t>{}, Binary::encode(message).asBinary());
+  ASSERT_EQ(std::vector<uint8_t>{}, presentation::binary::encode(message).asBinary());
 }
 
 TEST(BinaryEncoder_Test, encode_positive_double_values)
@@ -29,13 +29,13 @@ TEST(BinaryEncoder_Test, encode_positive_double_values)
   message::Outgoing message{};
 
   message.brightness = 0;
-  ASSERT_EQ(std::vector<uint8_t>({key, 0}), Binary::encode(message).asBinary());
+  ASSERT_EQ(std::vector<uint8_t>({key, 0}), presentation::binary::encode(message).asBinary());
 
   message.brightness = 1;
-  ASSERT_EQ(std::vector<uint8_t>({key, 100}), Binary::encode(message).asBinary());
+  ASSERT_EQ(std::vector<uint8_t>({key, 100}), presentation::binary::encode(message).asBinary());
 
   message.brightness = 0.33;
-  ASSERT_EQ(std::vector<uint8_t>({key, 33}), Binary::encode(message).asBinary());
+  ASSERT_EQ(std::vector<uint8_t>({key, 33}), presentation::binary::encode(message).asBinary());
 }
 
 TEST(BinaryEncoder_Test, encode_negative_double_values)
@@ -44,13 +44,13 @@ TEST(BinaryEncoder_Test, encode_negative_double_values)
   message::Outgoing message{};
 
   message.proximity = -0;
-  ASSERT_EQ(std::vector<uint8_t>({key, 0}), Binary::encode(message).asBinary());
+  ASSERT_EQ(std::vector<uint8_t>({key, 0}), presentation::binary::encode(message).asBinary());
 
   message.proximity = -1;
-  ASSERT_EQ(std::vector<uint8_t>({key, 0x9c}), Binary::encode(message).asBinary());
+  ASSERT_EQ(std::vector<uint8_t>({key, 0x9c}), presentation::binary::encode(message).asBinary());
 
   message.proximity = -0.33;
-  ASSERT_EQ(std::vector<uint8_t>({key, 0xdf}), Binary::encode(message).asBinary());
+  ASSERT_EQ(std::vector<uint8_t>({key, 0xdf}), presentation::binary::encode(message).asBinary());
 }
 
 TEST(BinaryEncoder_Test, encode_string)
@@ -58,7 +58,7 @@ TEST(BinaryEncoder_Test, encode_string)
   message::Outgoing message{};
   message.info = "hi";
 
-  ASSERT_EQ(std::vector<uint8_t>({1, 2, 'h', 'i'}), Binary::encode(message).asBinary());
+  ASSERT_EQ(std::vector<uint8_t>({1, 2, 'h', 'i'}), presentation::binary::encode(message).asBinary());
 }
 
 TEST(BinaryEncoder_Test, encode_2_values)
@@ -67,5 +67,5 @@ TEST(BinaryEncoder_Test, encode_2_values)
   message.brightness = 0.78;
   message.info = "";
 
-  ASSERT_EQ(std::vector<uint8_t>({0, 78, 1, 0}), Binary::encode(message).asBinary());
+  ASSERT_EQ(std::vector<uint8_t>({0, 78, 1, 0}), presentation::binary::encode(message).asBinary());
 }

@@ -14,7 +14,9 @@
 #include <sstream>
 #include <functional>
 
-namespace Json
+namespace presentation
+{
+namespace json
 {
 
 class Format :
@@ -78,4 +80,5 @@ presentation::Message encode(const message::Outgoing &message)
   return stream.str();
 }
 
+}
 }

@@ -16,6 +16,9 @@
 
 #include <dbus-c++/dbus.h>
 
+namespace dbus
+{
+
 template<typename T>
 class DbusInterface :
     public T,
@@ -29,10 +32,64 @@ public:
   }
 };
 
-typedef DbusInterface<ch::bbv::brightness_proxy>  BrightnessSensor;
-typedef DbusInterface<ch::bbv::moisture_proxy>    MoistureSensor;
-typedef DbusInterface<ch::bbv::proximity_proxy>   ProximitySensor;
-typedef DbusInterface<ch::bbv::luminosity_proxy>  LuminosityActor;
-typedef DbusInterface<ch::bbv::warning_proxy>     WarningActor;
+
+template<typename T>
+class Sensor :
+    public DbusInterface<T>
+{
+public:
+  using DbusInterface<T>::DbusInterface;
+};
+
+
+class BrightnessSensor :
+    public Sensor<ch::bbv::brightness_proxy>
+{
+public:
+  using Sensor<ch::bbv::brightness_proxy>::Sensor;
+};
+
+
+class MoistureSensor :
+    public Sensor<ch::bbv::moisture_proxy>
+{
+public:
+  using Sensor<ch::bbv::moisture_proxy>::Sensor;
+};
+
+
+class ProximitySensor :
+    public Sensor<ch::bbv::proximity_proxy>
+{
+public:
+  using Sensor<ch::bbv::proximity_proxy>::Sensor;
+};
+
+
+template<typename T>
+class Actor :
+    public DbusInterface<T>
+{
+public:
+  using DbusInterface<T>::DbusInterface;
+};
+
+
+class LuminosityActor :
+    public Actor<ch::bbv::luminosity_proxy>
+{
+public:
+  using Actor<ch::bbv::luminosity_proxy>::Actor;
+};
+
+
+class WarningActor :
+    public Actor<ch::bbv::warning_proxy>
+{
+public:
+  using Actor<ch::bbv::warning_proxy>::Actor;
+};
+
+}
 
 #endif

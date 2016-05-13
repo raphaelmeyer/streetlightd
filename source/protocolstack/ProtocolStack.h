@@ -18,8 +18,7 @@ class ProtocolStack
 {
 public:
   std::unique_ptr<Application> application;
-  presentation::Encoder encoder;
-  presentation::Decoder decoder;
+  std::unique_ptr<Presentation> presentation;
   std::unique_ptr<Session> session;
 };
 

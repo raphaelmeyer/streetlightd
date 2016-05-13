@@ -36,12 +36,12 @@ std::set<std::string> StackFactory::sessions() const
 static void connect(ProtocolStack &stack)
 {
   stack.application->setSender([&stack](const message::Outgoing &message){
-    const auto encoded = stack.encoder(message);
+    const auto encoded = stack.presentation->encode(message);
     stack.session->send(encoded);
   });
 
   stack.session->setMessageCallback([&stack](const presentation::Message &message){
-    const auto decoded = stack.decoder(message);
+    const auto decoded = stack.presentation->decode(message);
     stack.application->received(decoded);
   });
 }
@@ -55,8 +55,7 @@ ProtocolStack StackFactory::produce(const StackConfiguration &configuration)
 
   ProtocolStack stack;
   stack.session = std::unique_ptr<Session>{session};
-  stack.encoder = presentation.first;
-  stack.decoder = presentation.second;
+  stack.presentation = std::unique_ptr<Presentation>{presentation};
   std::unique_ptr<Application> appptr{application};
   stack.application = std::unique_ptr<ActiveApplication>{new ActiveApplication(std::move(appptr))};
 

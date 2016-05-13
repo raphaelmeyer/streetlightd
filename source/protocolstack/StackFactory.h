@@ -41,7 +41,7 @@ public:
 
 private:
   Factory<Application*> applicationFactory;
-  Factory<presentation::EncoderAndDecoder> presentationFactory;
+  Factory<Presentation*> presentationFactory;
   Factory<Session*> sessionFactory;
 
 };

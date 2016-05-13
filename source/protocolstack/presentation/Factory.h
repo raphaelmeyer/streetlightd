@@ -15,7 +15,7 @@
 namespace presentation
 {
 
-Factory<presentation::EncoderAndDecoder> factory();
+Factory<Presentation *> factory();
 
 }
 

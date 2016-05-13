@@ -11,7 +11,9 @@
 
 #include <algorithm>
 
-namespace Binary
+namespace presentation
+{
+namespace binary
 {
 
 template<typename T>
@@ -83,4 +85,5 @@ message::Incoming decode(const presentation::Message &message)
   return result;
 }
 
+}
 }

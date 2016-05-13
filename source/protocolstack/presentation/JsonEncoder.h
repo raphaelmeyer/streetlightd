@@ -5,17 +5,20 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef JSONENCODER_H
-#define JSONENCODER_H
+#ifndef PRESENTATION_JSON_ENCODER_H
+#define PRESENTATION_JSON_ENCODER_H
 
 #include <protocolstack/application/message/Outgoing.h>
 #include <protocolstack/presentation/Message.h>
 
-namespace Json
+namespace presentation
+{
+namespace json
 {
 
 presentation::Message encode(const message::Outgoing &message);
 
+}
 }
 
 #endif

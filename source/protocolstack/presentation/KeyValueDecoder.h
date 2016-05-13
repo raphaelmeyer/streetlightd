@@ -5,17 +5,20 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef KEYVALUEDECODER_H
-#define KEYVALUEDECODER_H
+#ifndef PRESENTATION_KEYVALUE_DECODER_H
+#define PRESENTATION_KEYVALUE_DECODER_H
 
 #include <protocolstack/application/message/Incoming.h>
 #include <protocolstack/presentation/Message.h>
 
-namespace KeyValue
+namespace presentation
+{
+namespace keyvalue
 {
 
   message::Incoming decode(const presentation::Message &message);
 
+}
 }
 
 #endif

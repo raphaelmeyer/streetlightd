@@ -15,14 +15,34 @@
 #include <functional>
 #include <string>
 
-namespace presentation
+class Presentation
 {
+public:
+  typedef std::function<presentation::Message(const message::Outgoing &message)> Encoder;
+  typedef std::function<message::Incoming(const presentation::Message &message)> Decoder;
 
-  typedef std::function<Message(const message::Outgoing &message)> Encoder;
-  typedef std::function<message::Incoming(const Message &message)> Decoder;
-  typedef std::pair<Encoder,Decoder>  EncoderAndDecoder;
+  Presentation(Encoder _encoder, Decoder _decoder) :
+    encoder{_encoder},
+    decoder{_decoder}
+  {
+  }
 
-}
+  presentation::Message encode(const message::Outgoing &message) const
+  {
+    return encoder(message);
+  }
+
+  message::Incoming decode(const presentation::Message &message) const
+  {
+    return decoder(message);
+  }
+
+private:
+  Encoder encoder;
+  Decoder decoder;
+
+};
+
 
 #endif
 

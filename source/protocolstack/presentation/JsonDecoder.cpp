@@ -9,7 +9,9 @@
 
 #include <jsoncpp/json/json.h>
 
-namespace Json
+namespace presentation
+{
+namespace json
 {
 
 static void write(message::Value<double> &value, const Json::Value &raw)
@@ -47,4 +49,5 @@ message::Incoming decode(const presentation::Message &message)
   return result;
 }
 
+}
 }

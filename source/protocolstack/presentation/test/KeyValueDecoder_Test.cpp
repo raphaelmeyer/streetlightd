@@ -12,65 +12,65 @@
 
 TEST(KeyValueDecoder_Test, does_nothing_for_an_empty_message)
 {
-  ASSERT_NO_THROW(KeyValue::decode(""));
-  ASSERT_NO_THROW(KeyValue::decode("\n"));
-  ASSERT_NO_THROW(KeyValue::decode("\n\n"));
-  ASSERT_NO_THROW(KeyValue::decode("  "));
-  ASSERT_NO_THROW(KeyValue::decode("  \n"));
+  ASSERT_NO_THROW(presentation::keyvalue::decode(""));
+  ASSERT_NO_THROW(presentation::keyvalue::decode("\n"));
+  ASSERT_NO_THROW(presentation::keyvalue::decode("\n\n"));
+  ASSERT_NO_THROW(presentation::keyvalue::decode("  "));
+  ASSERT_NO_THROW(presentation::keyvalue::decode("  \n"));
 }
 
 TEST(KeyValueDecoder_Test, does_nothing_for_wrong_format)
 {
-  ASSERT_NO_THROW(KeyValue::decode("one-word\n"));
-  ASSERT_NO_THROW(KeyValue::decode("two words\n"));
-  ASSERT_FALSE(KeyValue::decode("luminosity not-a-double\n").luminosity.isValid());
+  ASSERT_NO_THROW(presentation::keyvalue::decode("one-word\n"));
+  ASSERT_NO_THROW(presentation::keyvalue::decode("two words\n"));
+  ASSERT_FALSE(presentation::keyvalue::decode("luminosity not-a-double\n").luminosity.isValid());
 }
 
 TEST(KeyValueDecoder_Test, last_newline_can_be_omitted)
 {
-  auto message = KeyValue::decode("luminosity 0.41");
+  auto message = presentation::keyvalue::decode("luminosity 0.41");
 
   ASSERT_EQ(0.41, message.luminosity());
 }
 
 TEST(KeyValueDecoder_Test, withespace_between_key_and_value_are_removed)
 {
-  auto message = KeyValue::decode("warning     test");
+  auto message = presentation::keyvalue::decode("warning     test");
 
   ASSERT_EQ("test", message.warning());
 }
 
 TEST(KeyValueDecoder_Test, withespace_after_value_are_removed)
 {
-  auto message = KeyValue::decode("warning test    ");
+  auto message = presentation::keyvalue::decode("warning test    ");
 
   ASSERT_EQ("test", message.warning());
 }
 
 TEST(KeyValueDecoder_Test, decode_warning_with_whitespaces)
 {
-  auto message = KeyValue::decode("warning a    b");
+  auto message = presentation::keyvalue::decode("warning a    b");
 
   ASSERT_EQ("a    b", message.warning());
 }
 
 TEST(KeyValueDecoder_Test, decode_warning_string)
 {
-  auto message = KeyValue::decode("warning test\n");
+  auto message = presentation::keyvalue::decode("warning test\n");
 
   ASSERT_EQ("test", message.warning());
 }
 
 TEST(KeyValueDecoder_Test, decode_luminosity)
 {
-  auto message = KeyValue::decode("luminosity 0.41\n");
+  auto message = presentation::keyvalue::decode("luminosity 0.41\n");
 
   ASSERT_EQ(0.41, message.luminosity());
 }
 
 TEST(KeyValueDecoder_Test, uses_latest_specified_value)
 {
-  auto message = KeyValue::decode("luminosity 0\nluminosity 0.12\nluminosity 0.89\n");
+  auto message = presentation::keyvalue::decode("luminosity 0\nluminosity 0.12\nluminosity 0.89\n");
 
   ASSERT_EQ(0.89, message.luminosity());
 }

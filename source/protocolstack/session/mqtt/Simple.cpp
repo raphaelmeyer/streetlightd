@@ -5,44 +5,48 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "SimpleMqtt.h"
+#include "Simple.h"
 
+namespace mqtt
+{
 
-std::string SimpleMqtt::deviceId() const
+std::string Simple::deviceId() const
 {
   return configuration.user;
 }
 
-std::string SimpleMqtt::receiveTopic() const
+std::string Simple::receiveTopic() const
 {
   return "streetlight/" + configuration.user + "/actor";
 }
 
-std::string SimpleMqtt::sendTopic() const
+std::string Simple::sendTopic() const
 {
   return "streetlight/" + configuration.user + "/sensor";
 }
 
-int SimpleMqtt::qos() const
+int Simple::qos() const
 {
   return 2;
 }
 
-std::string SimpleMqtt::address() const
+std::string Simple::address() const
 {
   return configuration.host;
 }
 
-int SimpleMqtt::port() const
+int Simple::port() const
 {
   return 1883;
 }
 
-void SimpleMqtt::configure(mosqpp::mosquittopp &) const
+void Simple::configure(mosqpp::mosquittopp &) const
 {
 }
 
-void SimpleMqtt::setConfiguration(const session::Configuration &value)
+void Simple::setConfiguration(const session::Configuration &value)
 {
   configuration = value;
+}
+
 }

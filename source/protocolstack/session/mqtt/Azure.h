@@ -5,13 +5,18 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef LOCALMQTTCONFIGURATION_H
-#define LOCALMQTTCONFIGURATION_H
+#ifndef MQTT_AZURE_H
+#define MQTT_AZURE_H
 
-#include "mqtt/Configuration.h"
+#include "Configuration.h"
 
-class SimpleMqtt :
-    public mqtt::Configuration
+#include <infrastructure/SasToken.h>
+
+namespace mqtt
+{
+
+class Azure :
+    public Configuration
 {
 public:
   std::string deviceId() const override;
@@ -27,7 +32,15 @@ public:
 
 private:
   session::Configuration configuration;
+  SasTokenFactory tokenFactory{"", ""};
+
+  std::string scope() const;
+  std::string username() const;
+  std::string password() const;
+  std::string topicPrefix() const;
 
 };
+
+}
 
 #endif

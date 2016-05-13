@@ -5,17 +5,20 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef BINARYDECODER_H
-#define BINARYDECODER_H
+#ifndef PRESENTATION_BINARY_DECODER_H
+#define PRESENTATION_BINARY_DECODER_H
 
 #include <protocolstack/application/message/Incoming.h>
 #include <protocolstack/presentation/Message.h>
 
-namespace Binary
+namespace presentation
+{
+namespace binary
 {
 
 message::Incoming decode(const presentation::Message &message);
 
+}
 }
 
 #endif

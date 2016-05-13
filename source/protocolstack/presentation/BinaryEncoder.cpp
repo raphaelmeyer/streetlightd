@@ -13,7 +13,9 @@
 
 #include <cmath>
 
-namespace Binary
+namespace presentation
+{
+namespace binary
 {
 
 class Format :
@@ -69,4 +71,5 @@ presentation::Message encode(const message::Outgoing &message)
   return presentation::Message{data};
 }
 
+}
 }

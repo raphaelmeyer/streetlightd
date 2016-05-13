@@ -19,13 +19,53 @@
 namespace presentation
 {
 
-Factory<presentation::EncoderAndDecoder> factory()
+class Null :
+    public Presentation
 {
-  Factory<presentation::EncoderAndDecoder> factory;
-  factory.add("none", []{ return presentation::EncoderAndDecoder{presentation::null::encode, presentation::null::decode};});
-  factory.add("binary", []{ return presentation::EncoderAndDecoder{Binary::encode, Binary::decode};});
-  factory.add("key-value", []{ return presentation::EncoderAndDecoder{KeyValue::encode, KeyValue::decode};});
-  factory.add("json", []{ return presentation::EncoderAndDecoder{Json::encode, Json::decode};});
+public:
+  Null() :
+    Presentation{null::encode, null::decode}
+  {
+  }
+};
+
+class Binary :
+    public Presentation
+{
+public:
+  Binary() :
+    Presentation{binary::encode, binary::decode}
+  {
+  }
+};
+
+class KeyValue :
+    public Presentation
+{
+public:
+  KeyValue() :
+    Presentation{keyvalue::encode, keyvalue::decode}
+  {
+  }
+};
+
+class Json :
+    public Presentation
+{
+public:
+  Json() :
+    Presentation{json::encode, json::decode}
+  {
+  }
+};
+
+Factory<Presentation*> factory()
+{
+  Factory<Presentation*> factory;
+  factory.add("none", []{ return new presentation::Null();});
+  factory.add("binary", []{ return new Binary();});
+  factory.add("key-value", []{ return new KeyValue();});
+  factory.add("json", []{ return new Json();});
   return factory;
 }
 

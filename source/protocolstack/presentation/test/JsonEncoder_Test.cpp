@@ -19,7 +19,7 @@ TEST(JsonEncoder_Test, encode_empty_message)
 {
   const message::Outgoing message{};
 
-  ASSERT_EQ("{}", Json::encode(message).asString());
+  ASSERT_EQ("{}", presentation::json::encode(message).asString());
 }
 
 TEST(JsonEncoder_Test, encode_brightness)
@@ -27,7 +27,7 @@ TEST(JsonEncoder_Test, encode_brightness)
   message::Outgoing message{};
   message.brightness = 0.78;
 
-  ASSERT_EQ("{\"brightness\":0.78}", Json::encode(message).asString());
+  ASSERT_EQ("{\"brightness\":0.78}", presentation::json::encode(message).asString());
 }
 
 TEST(JsonEncoder_Test, encode_moisture)
@@ -35,7 +35,7 @@ TEST(JsonEncoder_Test, encode_moisture)
   message::Outgoing message{};
   message.moisture = 0.78;
 
-  ASSERT_EQ("{\"moisture\":0.78}", Json::encode(message).asString());
+  ASSERT_EQ("{\"moisture\":0.78}", presentation::json::encode(message).asString());
 }
 
 TEST(JsonEncoder_Test, encode_info)
@@ -43,7 +43,7 @@ TEST(JsonEncoder_Test, encode_info)
   message::Outgoing message{};
   message.info = "hello world";
 
-  ASSERT_EQ("{\"info\":\"hello world\"}", Json::encode(message).asString());
+  ASSERT_EQ("{\"info\":\"hello world\"}", presentation::json::encode(message).asString());
 }
 
 TEST(JsonEncoder_Test, encode_multiple_values)
@@ -53,5 +53,5 @@ TEST(JsonEncoder_Test, encode_multiple_values)
   message.moisture = 0.12;
   message.info = "hello world";
 
-  ASSERT_EQ("{\"brightness\":0.78,\"moisture\":0.12,\"info\":\"hello world\"}", Json::encode(message).asString());
+  ASSERT_EQ("{\"brightness\":0.78,\"moisture\":0.12,\"info\":\"hello world\"}", presentation::json::encode(message).asString());
 }

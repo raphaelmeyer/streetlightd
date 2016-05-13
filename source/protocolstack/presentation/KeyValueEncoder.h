@@ -5,8 +5,8 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef KEYVALUEENCODER_H
-#define KEYVALUEENCODER_H
+#ifndef PRESENTATION_KEYVALUE_ENCODER_H
+#define PRESENTATION_KEYVALUE_ENCODER_H
 
 #include <protocolstack/application/message/Outgoing.h>
 
@@ -18,11 +18,14 @@
  * value := identifier | number
  */
 
-namespace KeyValue
+namespace presentation
+{
+namespace keyvalue
 {
 
   std::string encode(const message::Outgoing &message);
 
+}
 }
 
 #endif
