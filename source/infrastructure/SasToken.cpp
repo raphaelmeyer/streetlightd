@@ -119,10 +119,20 @@ std::string SasTokenFactory::produce() const
   return sastoken::sharedAccessSignature(scope, encodedSignature, expiration, "");
 }
 
+std::chrono::seconds SasTokenFactory::getValidityDuration() const
+{
+  return validityDuration;
+}
+
+void SasTokenFactory::setValidityDuration(std::chrono::seconds value)
+{
+  validityDuration = value;
+}
+
 std::string SasTokenFactory::calcExpirationString() const
 {
   const auto secondsSince1970 = getTime() - Time{std::chrono::seconds{0}};
-  const auto expiration = secondsSince1970 + std::chrono::hours(1);
+  const auto expiration = secondsSince1970 + validityDuration;
   return std::to_string(expiration.count());
 }
 

@@ -26,9 +26,13 @@ public:
 
   std::string produce() const;
 
+  std::chrono::seconds getValidityDuration() const;
+  void setValidityDuration(std::chrono::seconds value);
+
 private:
   std::vector<uint8_t> key;
   std::string scope;
+  std::chrono::seconds validityDuration{std::chrono::hours(1)};
   GetTime getTime;
 
   std::string calcExpirationString() const;

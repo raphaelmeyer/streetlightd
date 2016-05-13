@@ -35,6 +35,11 @@ def step_impl(context, application):
 	context.app = subprocess.Popen([application], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 	context.app.wait()
 
+@when(u'I run azure-sas-token arguments {key} {scope} {expiration} {absolute}')
+def step_impl(context, key, scope, absolute, expiration):
+	context.app = subprocess.Popen(['azure-sas-token', key, scope, expiration, absolute], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	context.app.wait()
+
 @then(u'I expect the following output of stdout')
 def step_impl(context):
 	expected = context.text

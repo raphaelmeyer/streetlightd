@@ -92,10 +92,28 @@ TEST(SasToken_Test, create_shared_access_signature)
 TEST(SasToken_Test, create_sas_token)
 {
   const std::string expected = "SharedAccessSignature sr=scope&sig=Z11UkW5tzlhaXIdegd7u%2BgnnD%2F0vaWvK0s0Oo7cRFU0%3D&se=1003600&skn=";
-  SasTokenFactory::GetTime getTime = []{return SasTokenFactory::Time{std::chrono::seconds(1000'000)};};
+  SasTokenFactory::GetTime getTime = []{return SasTokenFactory::Time{std::chrono::seconds(1'000'000)};};
   SasTokenFactory testee{"c3VyZS4=", "scope", getTime};
 
   const std::string token = testee.produce();
 
   ASSERT_EQ(expected, token);
+}
+
+TEST(SasToken_Test, default_expiration_time_is_one_hour)
+{
+  SasTokenFactory testee{"", ""};
+
+  ASSERT_EQ(std::chrono::hours(1), testee.getValidityDuration());
+}
+
+TEST(SasToken_Test, changeing_validity_duration_produces_different_sas_tokens)
+{
+  const std::string expected = "SharedAccessSignature sr=scope&sig=rjy9dNcZbwnIntvffvMPaUauCcOFRvnKgklPOGdzFZQ%3D&se=1000042&skn=";
+  SasTokenFactory::GetTime getTime = []{return SasTokenFactory::Time{std::chrono::seconds(1'000'000)};};
+  SasTokenFactory testee{"c3VyZS4=", "scope", getTime};
+
+  testee.setValidityDuration(std::chrono::seconds(42));
+
+  ASSERT_EQ(expected, testee.produce());
 }

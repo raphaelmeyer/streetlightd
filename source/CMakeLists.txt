@@ -43,6 +43,13 @@ file(GLOB RAW_SOURCES
     infrastructure/concurrency/*.h
     )
 
+file(GLOB SAS_SOURCES
+    infrastructure/SasToken.cpp
+    infrastructure/SasToken.h
+    infrastructure/CommandLineParser.cpp
+    infrastructure/CommandLineParser.h
+    )
+
 file(GLOB SESSION_SOURCES
     infrastructure/SasToken.cpp
     infrastructure/SasToken.h
@@ -90,6 +97,9 @@ target_link_libraries(streetlightd mosquittopp dbus-c++-1 pthread PocoUtil jsonc
 
 add_executable(session-test session-test.cpp ${SESSION_SOURCES})
 target_link_libraries(session-test pthread mosquittopp PocoNet PocoNetSSL PocoFoundation crypto++ iothub_client iothub_client_amqp_transport uamqp ssl crypto)
+
+add_executable(azure-sas-token azure-sas-token.cpp ${SAS_SOURCES})
+target_link_libraries(azure-sas-token PocoUtil crypto++ PocoFoundation)
 
 add_executable(unit-test ${TEST_SOURCES})
 target_link_libraries(unit-test pthread PocoUtil jsoncpp crypto++ PocoFoundation)
