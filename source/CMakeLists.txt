@@ -63,6 +63,7 @@ file(GLOB_RECURSE TEST_SOURCES
     *_Test.cpp
     *_Mock.h
     infrastructure/CommandLineParser.cpp
+    infrastructure/StreetlightdArgumentParser.cpp
     infrastructure/Factory.h
     infrastructure/SasToken.cpp
     protocolstack/application/message/Outgoing.cpp

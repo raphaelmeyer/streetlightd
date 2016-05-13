@@ -30,3 +30,14 @@ def step_impl(context):
 def step_impl(context):
 	context.application = subprocess.Popen(['session-test', 'simple-mqtt', 'localhost', 'lamp1', '', 'hello world'])
 
+@when(u'I run {application} with no arguments')
+def step_impl(context, application):
+	context.app = subprocess.Popen([application], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+	context.app.wait()
+
+@then(u'I expect the following output of stdout')
+def step_impl(context):
+	expected = context.text
+	output = context.app.stdout.read()
+	assert output == expected, 'expected to see:\n' + expected + '\ngot:\n' + output + '\n'
+

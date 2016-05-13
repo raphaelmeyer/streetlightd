@@ -19,197 +19,111 @@ class CommandLineParser_Test:
 {
 public:
   std::stringstream output{};
-  CommandLineParser testee{output};
-
-  const std::string DefaultHelp {
-    "usage: \n"
-    "-h, --help                                       print this help\n"
-    "-a<application>, --application=<application>     <application>:\n"
-    "-p<presentation>, --presentation=<presentation>  <presentation>:\n"
-    "-s<session>, --session=<session>                 <session>:\n"
-    "--host=<host>                                    host to connect to\n"
-    "--user=<user>                                    user of connection\n"
-    "--password=<password>                            password for connection\n"
-    "--external-timer                                 trigger updates via DBus\n"
-  };
+  CommandLineParserImplementation testee{output};
 
 };
 
-TEST_F(CommandLineParser_Test, output_is_not_valid_when_not_provided_all_arguments)
-{
-  const auto result = testee.parse({});
-
-  ASSERT_FALSE(result);
-}
-
 TEST_F(CommandLineParser_Test, show_help_when_requested)
 {
-  testee.parse({"--help"});
+  const std::string ExpectedHelp {
+    "usage: \n"
+    "-t, --test  \n"
+  };
+  Poco::Util::OptionSet options;
+  options.addOption(Poco::Util::Option{"test", "t", "", false});
+  testee.parse({}, options);
 
-  ASSERT_EQ(DefaultHelp, output.str());
+  testee.printHelp();
+
+  ASSERT_EQ(ExpectedHelp, output.str());
 }
 
-TEST_F(CommandLineParser_Test, show_help_when_missing_required_arguments)
+TEST_F(CommandLineParser_Test, is_not_valid_when_not_provided_all_arguments)
 {
-  testee.parse({});
+  Poco::Util::OptionSet options;
+  options.addOption(Poco::Util::Option{"test", "t", "", true});
 
-  ASSERT_EQ(DefaultHelp, output.str());
+  testee.parse({}, options);
+
+  ASSERT_FALSE(testee.isValid());
 }
 
-TEST_F(CommandLineParser_Test, show_help_for_missing_option_argument)
+TEST_F(CommandLineParser_Test, is_not_valid_when_missing_required_arguments)
 {
-  testee.parse({"--application", "-px", "-sx"});
+  Poco::Util::OptionSet options;
+  options.addOption(Poco::Util::Option{"test", "t", "", true});
 
-  ASSERT_EQ(DefaultHelp, output.str());
+  testee.parse({}, options);
+
+  ASSERT_FALSE(testee.isValid());
 }
 
-TEST_F(CommandLineParser_Test, show_help_if_unknown_option_is_provided)
+TEST_F(CommandLineParser_Test, is_not_valid_when_missing_option_argument)
 {
-  testee.parse({"-ax", "-px", "-sx", "--unknown"});
+  Poco::Util::OptionSet options;
+  options.addOption(Poco::Util::Option{"test", "t", "", true}.argument("value"));
 
-  ASSERT_EQ(DefaultHelp, output.str());
+  testee.parse({"--test"}, options);
+
+  ASSERT_FALSE(testee.isValid());
 }
 
-TEST_F(CommandLineParser_Test, output_is_valid_when_provided_with_valid_arguments)
+TEST_F(CommandLineParser_Test, is_not_valid_if_unknown_option_is_provided)
 {
-  testee.addApplications({"A"});
-  testee.addPresentations({"P"});
-  testee.addSessions({"S"});
+  Poco::Util::OptionSet options;
+  options.addOption(Poco::Util::Option{"test", "t", "", false});
 
-  const auto result = testee.parse({"--application=A", "--presentation=P", "--session=S"});
+  testee.parse({"--unknown"}, options);
 
-  ASSERT_TRUE(output.str().empty());
-  ASSERT_TRUE(result);
+  ASSERT_FALSE(testee.isValid());
 }
 
-TEST_F(CommandLineParser_Test, output_is_not_valid_when_provided_invalid_arguments)
+TEST_F(CommandLineParser_Test, return_the_specified_value)
 {
-  testee.addApplications({"A"});
-  testee.addPresentations({"P"});
-  testee.addSessions({"S"});
+  Poco::Util::OptionSet options;
+  options.addOption(Poco::Util::Option{"test", "t", "", true}.argument("value"));
 
-  const auto result = testee.parse({"--application=X", "--presentation=P", "--session=S"});
+  testee.parse({"--test=theValue"}, options);
 
-  ASSERT_FALSE(result);
+  ASSERT_TRUE(testee.isValid());
+  ASSERT_EQ("theValue", testee.value("test"));
 }
 
-TEST_F(CommandLineParser_Test, show_available_applications_in_help)
+TEST_F(CommandLineParser_Test, can_not_get_value_if_value_does_not_exists)
 {
-  testee.addApplications({"app1", "app2", "app3"});
+  Poco::Util::OptionSet options;
 
-  testee.parse({});
+  testee.parse({}, options);
 
-  const std::string message{output.str()};
-  const bool found = message.find("<application>: app1 app2 app3") != std::string::npos;
-  ASSERT_TRUE(found) << "got: " << std::endl << message;
+  ASSERT_THROW(testee.value("test"), std::invalid_argument);
 }
 
-TEST_F(CommandLineParser_Test, show_available_presentations_in_help)
+TEST_F(CommandLineParser_Test, value_with_default_returns_default_if_value_does_not_exists)
 {
-  testee.addPresentations({"pres1", "pres2"});
+  Poco::Util::OptionSet options;
 
-  testee.parse({});
+  testee.parse({}, options);
 
-  const std::string message{output.str()};
-  const bool found = message.find("<presentation>: pres1 pres2") != std::string::npos;
-  ASSERT_TRUE(found) << "got: " << std::endl << message;
+  ASSERT_EQ("default", testee.value("test", "default"));
 }
 
-TEST_F(CommandLineParser_Test, show_available_sessions_in_help)
+TEST_F(CommandLineParser_Test, value_with_default_returns_value_if_value_exists)
 {
-  testee.addSessions({"one", "two"});
+  Poco::Util::OptionSet options;
+  options.addOption(Poco::Util::Option{"test", "t", "", true}.argument("value"));
 
-  testee.parse({});
+  testee.parse({"--test=hello"}, options);
 
-  const std::string message{output.str()};
-  const bool found = message.find("<session>: one two") != std::string::npos;
-  ASSERT_TRUE(found) << "got: " << std::endl << message;
+  ASSERT_EQ("hello", testee.value("test", "default"));
 }
 
-TEST_F(CommandLineParser_Test, return_the_specified_application)
+TEST_F(CommandLineParser_Test, can_check_if_flag_is_set_or_not)
 {
-  testee.addApplications({"theApplication"});
-  testee.addPresentations({"x"});
-  testee.addSessions({"x"});
+  Poco::Util::OptionSet options;
+  options.addOption(Poco::Util::Option{"hello", ""});
 
-  const auto result = testee.parse({"--application=theApplication", "-px", "-sx"});
+  testee.parse({"--hello"}, options);
 
-  ASSERT_EQ("theApplication", result.application);
-}
-
-TEST_F(CommandLineParser_Test, return_the_specified_presentation)
-{
-  testee.addPresentations({"thePresentation"});
-  testee.addApplications({"x"});
-  testee.addSessions({"x"});
-
-  const auto result = testee.parse({"--presentation=thePresentation", "-ax", "-sx"});
-
-  ASSERT_EQ("thePresentation", result.presentation);
-}
-
-TEST_F(CommandLineParser_Test, return_the_specified_session)
-{
-  testee.addSessions({"theSession"});
-  testee.addPresentations({"x"});
-  testee.addApplications({"x"});
-
-  const auto result = testee.parse({"--session=theSession", "-ax", "-px"});
-
-  ASSERT_EQ("theSession", result.session);
-}
-
-TEST_F(CommandLineParser_Test, can_specify_the_host)
-{
-  testee.addSessions({"x"});
-  testee.addPresentations({"x"});
-  testee.addApplications({"x"});
-
-  const auto result = testee.parse({"--host=someAddress", "-ax", "-px", "-sx"});
-
-  ASSERT_EQ("someAddress", result.host);
-}
-
-TEST_F(CommandLineParser_Test, can_specify_the_user)
-{
-  testee.addSessions({"x"});
-  testee.addPresentations({"x"});
-  testee.addApplications({"x"});
-
-  const auto result = testee.parse({"--user=someUser", "-ax", "-px", "-sx"});
-
-  ASSERT_EQ("someUser", result.user);
-}
-
-TEST_F(CommandLineParser_Test, can_specify_password)
-{
-  testee.addSessions({"x"});
-  testee.addPresentations({"x"});
-  testee.addApplications({"x"});
-
-  const auto result = testee.parse({"--password=mySecret", "-ax", "-px", "-sx"});
-
-  ASSERT_EQ("mySecret", result.password);
-}
-
-TEST_F(CommandLineParser_Test, do_not_use_external_timer_by_default)
-{
-  testee.addSessions({"x"});
-  testee.addPresentations({"x"});
-  testee.addApplications({"x"});
-
-  const auto result = testee.parse({"-ax", "-px", "-sx"});
-
-  ASSERT_FALSE(result.externalTimer);
-}
-
-TEST_F(CommandLineParser_Test, can_specify_to_use_external_timer)
-{
-  testee.addSessions({"x"});
-  testee.addPresentations({"x"});
-  testee.addApplications({"x"});
-
-  const auto result = testee.parse({"--external-timer", "-ax", "-px", "-sx"});
-
-  ASSERT_TRUE(result.externalTimer);
+  ASSERT_TRUE(testee.contains("hello"));
+  ASSERT_FALSE(testee.contains("world"));
 }

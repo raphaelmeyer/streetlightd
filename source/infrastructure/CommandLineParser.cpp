@@ -14,199 +14,75 @@
 #include <Poco/Util/HelpFormatter.h>
 #include <map>
 
-static const std::string HOST_ARGUMENT = "host";
-static const std::string USER_ARGUMENT = "user";
-static const std::string PASSWORD_ARGUMENT = "password";
-static const std::string TIMER_ARGUMENT = "external-timer";
-
-CommandLineParser::CommandLineParser(std::ostream &_output) :
+CommandLineParserImplementation::CommandLineParserImplementation(std::ostream &_output) :
   output{_output}
 {
-  enums[Layer::Application] = EnumEntry{"application", "a", {}};
-  enums[Layer::Presentation] = EnumEntry{"presentation", "p", {}};
-  enums[Layer::Session] = EnumEntry{"session", "s", {}};
 }
 
-void CommandLineParser::addApplications(const std::set<std::string> &values)
-{
-  enums[Layer::Application].values.insert(values.begin(), values.end());
-}
-
-void CommandLineParser::addPresentations(const std::set<std::string> &values)
-{
-  enums[Layer::Presentation].values.insert(values.begin(), values.end());
-}
-
-void CommandLineParser::addSessions(const std::set<std::string> &values)
-{
-  enums[Layer::Session].values.insert(values.begin(), values.end());
-}
-
-Configuration CommandLineParser::parse(const std::vector<std::string> &arguments) const
-{
-  const Poco::Util::OptionSet options = createOptions();
-
-   auto values = parseToMap(arguments, options);  //TODO make const again
-
-  if (values.empty()) {
-    printHelp(options);
-    return {};
-  }
-
-  auto enumValues = fillEnumValues(values);
-  if (enumValues.empty()) {
-    printHelp(options);
-    return {};
-  }
-
-  if (values.find("help") != values.end()) {
-    printHelp(options);
-    return {};
-  }
-
-  Configuration config{};
-  fillStackConfig(config, enumValues);
-  fillSessionConfig(config, values);
-  fillTimerConfig(config, values);
-  return config;
-}
-
-std::map<std::string, std::string> CommandLineParser::parseToMap(const std::vector<std::string> &arguments, const Poco::Util::OptionSet &options) const
-{
-  Poco::Util::OptionProcessor p1(options);
-  p1.setUnixStyle(true);
-
-  std::map<std::string, std::string> values;
-
-  for (const auto &arg : arguments) {
-    std::string name;
-    std::string value;
-    try {
-      if (p1.process(arg, name, value)) {
-        values[name] = value;
-      }
-    } catch (Poco::Util::MissingArgumentException) {
-      return {};
-    } catch (Poco::Util::UnknownOptionException) {
-      return {};
-    }
-  }
-
-  try {
-    p1.checkRequired();
-  } catch (Poco::Util::MissingOptionException) {
-    return {};
-  }
-
-  return values;
-}
-
-std::map<CommandLineParser::Layer,std::string> CommandLineParser::fillEnumValues(const std::map<std::string, std::string> &values) const
-{
-  std::map<Layer,std::string> enumValues{};
-  for (const auto layer : {Layer::Application, Layer::Presentation, Layer::Session}) {
-    const auto value = valueFor(layer, values);
-    if (value.empty()) {
-      return {};
-    }
-    enumValues[layer] = value;
-  }
-
-  return enumValues;
-}
-
-void CommandLineParser::fillStackConfig(StackConfiguration &config, std::map<Layer, std::string> enumValues) const
-{
-  config.application = enumValues[Layer::Application];
-  config.presentation = enumValues[Layer::Presentation];
-  config.session = enumValues[Layer::Session];
-}
-
-void CommandLineParser::fillSessionConfig(session::Configuration &config, std::map<std::string, std::string> values) const
-{
-  config.host = values[HOST_ARGUMENT];
-  config.user = values[USER_ARGUMENT];
-  config.password = values[PASSWORD_ARGUMENT];
-}
-
-void CommandLineParser::fillTimerConfig(TimerConfiguration &config, std::map<std::string, std::string> values) const
-{
-  config.externalTimer = values.find(TIMER_ARGUMENT) != values.end();
-}
-
-Poco::Util::OptionSet CommandLineParser::createOptions() const
-{
-  Poco::Util::OptionSet options{};
-
-  options.addOption(Poco::Util::Option{"help",         "h", "print this help", false});
-
-  for (const auto &opt : enums) {
-    options.addOption(opt.second.asOption());
-  }
-
-  options.addOption(Poco::Util::Option{HOST_ARGUMENT,     "", "host to connect to", false}.argument("<" + HOST_ARGUMENT + ">"));
-  options.addOption(Poco::Util::Option{USER_ARGUMENT,     "", "user of connection", false}.argument("<" + USER_ARGUMENT + ">"));
-  options.addOption(Poco::Util::Option{PASSWORD_ARGUMENT, "", "password for connection", false}.argument("<" + PASSWORD_ARGUMENT + ">"));
-  options.addOption(Poco::Util::Option{TIMER_ARGUMENT,    "", "trigger updates via DBus", false});
-  return options;
-}
-
-void CommandLineParser::printHelp(const Poco::Util::OptionSet &options) const
+void CommandLineParserImplementation::printHelp() const
 {
   Poco::Util::HelpFormatter formatter{options};
   formatter.setUnixStyle(true);
   formatter.format(output);
 }
 
-std::string CommandLineParser::keyFor(CommandLineParser::Layer entry) const
+bool CommandLineParserImplementation::isValid() const
 {
-  const auto &pos = enums.find(entry);
-  if (pos == enums.end()) {
-    throw std::runtime_error("entry not defined: " + std::to_string(int(entry)));
-  }
-  return pos->second.longName;
+  return valid;
 }
 
-CommandLineParser::EnumEntry CommandLineParser::entryFor(CommandLineParser::Layer entry) const
+void CommandLineParserImplementation::parse(const std::vector<std::string> &arguments, const Poco::Util::OptionSet &options)
 {
-  const auto &pos = enums.find(entry);
-  if (pos == enums.end()) {
-    throw std::runtime_error("entry not defined: " + std::to_string(int(entry)));
+  this->options = options;
+  valid = false;
+  map.clear();
+
+  Poco::Util::OptionProcessor p1(options);
+  p1.setUnixStyle(true);
+
+  for (const auto &arg : arguments) {
+    std::string name;
+    std::string value;
+    try {
+      if (p1.process(arg, name, value)) {
+        map[name] = value;
+      }
+    } catch (Poco::Util::MissingArgumentException) {
+      return;
+    } catch (Poco::Util::UnknownOptionException) {
+      return;
+    }
+  }
+
+  try {
+    p1.checkRequired();
+  } catch (Poco::Util::MissingOptionException) {
+    return;
+  }
+
+  valid = true;
+}
+
+std::string CommandLineParserImplementation::value(const std::string &key) const
+{
+  const auto pos = map.find(key);
+  if (pos == map.end()) {
+    throw std::invalid_argument("key not available: " + key);
   }
   return pos->second;
 }
 
-std::string CommandLineParser::valueFor(CommandLineParser::Layer type, const std::map<std::string, std::string> &values) const
+std::string CommandLineParserImplementation::value(const std::string &key, const std::string &def) const
 {
-  EnumEntry entry = entryFor(type);
-  const auto &pos = values.find(entry.longName);
-
-  if (pos == values.end()) {
-    return {};
+  const auto pos = map.find(key);
+  if (pos == map.end()) {
+    return def;
+  } else {
+    return pos->second;
   }
-
-  const auto value = pos->second;
-  const auto contains = entry.values.find(value) != entry.values.end();
-
-  if (!contains) {
-    return {};
-  }
-
-  return value;
 }
 
-static std::string join(const std::set<std::string> &list)
+bool CommandLineParserImplementation::contains(const std::string &key) const
 {
-  std::string result{};
-  for (const auto &product : list) {
-    result += " " + product;
-  }
-  return result;
-}
-
-Poco::Util::Option CommandLineParser::EnumEntry::asOption() const
-{
-  const std::string argument{"<"+longName+">"};
-  const std::string help{argument + ":" + join(values)};
-  return Poco::Util::Option{longName,  shortName, help, true}.argument(argument);
+  return map.find(key) != map.end();
 }

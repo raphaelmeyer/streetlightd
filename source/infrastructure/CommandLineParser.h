@@ -8,62 +8,47 @@
 #ifndef COMMANDLINEPARSER_H
 #define COMMANDLINEPARSER_H
 
-#include <protocolstack/StackFactory.h>
-#include <protocolstack/session/Configuration.h>
-#include <infrastructure/TimerConfiguration.h>
-
 #include <Poco/Util/OptionSet.h>
 #include <ostream>
-#include <vector>
-#include <set>
 #include <string>
+#include <vector>
 #include <map>
-
-class Configuration :
-    public StackConfiguration,
-    public session::Configuration,
-    public TimerConfiguration
-{
-};
 
 class CommandLineParser
 {
 public:
-  CommandLineParser(std::ostream &output);
+  virtual void parse(const std::vector<std::string> &arguments, const Poco::Util::OptionSet &options) = 0;
+  virtual void printHelp() const = 0;
 
-  void addApplications(const std::set<std::string> &values);
-  void addPresentations(const std::set<std::string> &values);
-  void addSessions(const std::set<std::string> &values);
+  virtual bool isValid() const = 0;
 
-  Configuration parse(const std::vector<std::string> &arguments) const;
+  virtual std::string value(const std::string &key) const = 0;
+  virtual std::string value(const std::string &key, const std::string &def) const = 0;
+  virtual bool contains(const std::string &key) const = 0;
+};
+
+
+class CommandLineParserImplementation :
+    public CommandLineParser
+{
+public:
+  CommandLineParserImplementation(std::ostream &output);
+
+  void parse(const std::vector<std::string> &arguments, const Poco::Util::OptionSet &options) override;
+  void printHelp() const override;
+
+  bool isValid() const override;
+
+  std::string value(const std::string &key) const override;
+  std::string value(const std::string &key, const std::string &def) const override;
+  bool contains(const std::string &key) const override;
+
 private:
-  class EnumEntry {
-  public:
-    std::string longName;
-    std::string shortName;
-    std::set<std::string> values;
-
-    Poco::Util::Option asOption() const;
-  };
-  enum class Layer {
-    Application,
-    Presentation,
-    Session
-  };
-
+  Poco::Util::OptionSet options;
   std::ostream &output;
-  std::map<Layer, EnumEntry> enums;
+  bool valid{false};
+  std::map<std::string, std::string> map;
 
-  Poco::Util::OptionSet createOptions() const;
-  void printHelp(const Poco::Util::OptionSet &options) const;
-  std::string keyFor(Layer entry) const;
-  EnumEntry entryFor(Layer entry) const;
-  std::string valueFor(Layer type, const std::map<std::string, std::string> &values) const;
-  std::map<CommandLineParser::Layer, std::string> fillEnumValues(const std::map<std::string, std::string> &values) const;
-  std::map<std::string, std::string> parseToMap(const std::vector<std::string> &arguments, const Poco::Util::OptionSet &options) const;
-  void fillStackConfig(StackConfiguration &config, std::map<Layer, std::string> enumValues) const;
-  void fillSessionConfig(session::Configuration &config, std::map<std::string, std::string> values) const;
-  void fillTimerConfig(TimerConfiguration &config, std::map<std::string, std::string> values) const;
 };
 
 #endif
