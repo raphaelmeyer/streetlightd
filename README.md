@@ -14,11 +14,11 @@ The program can also receive luminosity values via the Cloud and propagate this 
 This program is used for a bbv internal workshop.
 It might also be useful to show people how to connect to the Azure Cloud.
 
-#Who
+# Who
 
 This program is authored by [bbv Software Services AG](https://www.bbv.ch).
 
-#Prerequisites
+# Prerequisites
 
 Installed  at least version **1.4.8** of libmosquitto-dev, libmosquittopp0-dev, libmosquittopp0.
 You will also need libdus-c++, build-essential, libgtest-dev, google-mock, libpoco-dev, libcrypto++-dev libjsoncpp-dev libssl-dev. On Ubuntu Xenial all these packages can be installed by the command
@@ -34,7 +34,6 @@ The azure sdk needs following packages installed
 *There might be more prerequisites for the project at the moment, let us now if you find any which should be included here.*
 
 
-
-#License
+# License
 
 This program is licensed under the GNU V3 license.

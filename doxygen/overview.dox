@@ -1,0 +1,76 @@
+/**
+\page page_overview Overview
+
+The feature tests are in the directory `features`, you find a readme file there.
+
+Unit tests are located in `test/*_Test.cpp` of a corresponding unit.
+
+The main application is \ref streetlightd.cpp.
+
+High level structure
+--------------------
+
+\dot
+digraph overview {
+
+  graph [ fontname=Helvetica fontsize=12 fontcolor=grey ]
+  node [ shape="record" fontname=Helvetica fontsize=12 width=2 ]
+
+  graph []
+
+  rankdir=LR
+  splines=true
+  overlap=false
+
+  sensor [ label="Sensor" URL="\ref dbus::Sensor" ]
+  timer [ label="Timer" URL="\ref Timer" ]
+  actor [ label="Actor" URL="\ref dbus::Actor" ]
+  application [ label="Application" URL="\ref Application" ]
+  presentation [ label="Presentation" URL="\ref Presentation" ]
+  session [ label="Session" URL="\ref Session" ]
+  cloud [ label="Cloud" ]
+
+  {
+    rank = same
+    application
+    presentation
+    session
+    cloud
+  }
+
+  sensor -> application
+  timer -> application
+  application -> actor
+
+  application -> presentation
+  presentation -> session
+  session -> cloud
+
+  cloud -> session
+  session -> presentation
+  presentation -> application
+
+}
+\enddot
+
+
+Adding a new implementation
+---------------------------
+
+If you want to add a new implementation for a layer, take a look into the corresponding factory.
+
+- \ref application::factory
+- \ref presentation::factory
+- \ref session::factory
+
+
+Exchange new value with the cloud
+---------------------------------
+
+If you want to exechange another value with the cloud, take a look into the corresponding message.
+
+- \ref message::Incoming
+- \ref message::Outgoing
+
+*/
+

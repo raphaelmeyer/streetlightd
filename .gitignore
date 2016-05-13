@@ -5,4 +5,5 @@
 **/Makefile
 *.pyc
 Streetlightd
+doxygen/html/
 
