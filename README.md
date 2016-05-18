@@ -1,4 +1,4 @@
-# streetlightd
+# streetlightd [![Build Status](https://travis-ci.org/bbvch/streetlightd.svg?branch=master)](https://travis-ci.org/bbvch/streetlightd)
 
 This is a program which connects the Microsoft Azure Cloud (C) with D-Bus.
 It is the counter part to [street-light-simulator](https://github.com/bbvch/street-light-simulator).
