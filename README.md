@@ -18,21 +18,15 @@ It might also be useful to show people how to connect to the Azure Cloud.
 
 This program is authored by [bbv Software Services AG](https://www.bbv.ch).
 
-# Prerequisites
+# How
 
-Installed  at least version **1.4.8** of libmosquitto-dev, libmosquittopp0-dev, libmosquittopp0.
-You will also need libdus-c++, build-essential, libgtest-dev, google-mock, libpoco-dev, libcrypto++-dev libjsoncpp-dev libssl-dev. On Ubuntu Xenial all these packages can be installed by the command
+Clone this repopsitory:
 
-    sudo apt-get install libmosquittopp-dev libmosquittopp1 libmosquitto-dev libdbus-c++ build-essential libgtest-dev google-mock libpoco-dev libcrypto++-dev libjsoncpp-dev libssl-dev
+    git clone https://github.com/bbvch/streetlightd.git
+    cd streetlightd
+    git submodule update --init --recursive
 
-**After installation you will have to build gtest and gmock like [this](http://askubuntu.com/questions/145887/why-no-library-files-installed-for-google-test)**
-
-The azure sdk needs following packages installed
-
-    sudo apt-get install libcurl4-openssl-dev uuid-dev
-
-*There might be more prerequisites for the project at the moment, let us now if you find any which should be included here.*
-
+Check the [continuous integration](ci/) part for build and test instructions.
 
 # License
 
