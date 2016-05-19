@@ -110,9 +110,9 @@ Poco::Util::OptionSet Streetlightd::createOptions() const
     options.addOption(opt.second.asOption());
   }
 
-  options.addOption(Poco::Util::Option{HOST_ARGUMENT,     "", "host to connect to", false}.argument("<" + HOST_ARGUMENT + ">"));
-  options.addOption(Poco::Util::Option{USER_ARGUMENT,     "", "user of connection", false}.argument("<" + USER_ARGUMENT + ">"));
-  options.addOption(Poco::Util::Option{PASSWORD_ARGUMENT, "", "password for connection", false}.argument("<" + PASSWORD_ARGUMENT + ">"));
+  options.addOption(Poco::Util::Option{HOST_ARGUMENT,     "", "host to connect to\nfor azure-* sessions, this is <iot hub name>.azure-devices.net", false}.argument("<" + HOST_ARGUMENT + ">"));
+  options.addOption(Poco::Util::Option{USER_ARGUMENT,     "", "username for the session\nfor azure-* sessions, this is the device name", false}.argument("<" + USER_ARGUMENT + ">"));
+  options.addOption(Poco::Util::Option{PASSWORD_ARGUMENT, "", "password for the session\nfor azure-* sessions, this is the key", false}.argument("<" + PASSWORD_ARGUMENT + ">"));
   options.addOption(Poco::Util::Option{TIMER_ARGUMENT,    "", "trigger updates via DBus", false});
   return options;
 }

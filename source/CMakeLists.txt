@@ -71,6 +71,8 @@ file(GLOB SESSION_SOURCES
 file(GLOB_RECURSE TEST_SOURCES
     *_Test.cpp
     *_Mock.h
+    *_Dummy.h
+    *_Dummy.cpp
     infrastructure/cli/PocoParser.cpp
     infrastructure/cli/Streetlightd.cpp
     infrastructure/cli/EnumOption.cpp

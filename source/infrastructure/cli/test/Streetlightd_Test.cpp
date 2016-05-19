@@ -7,6 +7,7 @@
 
 #include "../Streetlightd.h"
 #include "Parser_Mock.h"
+#include "Parser_Dummy.h"
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
@@ -19,7 +20,7 @@ class Streetlightd_Test:
     public testing::Test
 {
 public:
-  cli::ParserMock parser;
+  testing::NiceMock<cli::ParserMock> parser;
   cli::Streetlightd testee{parser};
 
   void fillDefaultEnums()
@@ -129,6 +130,21 @@ TEST_F(Streetlightd_Test, can_specify_the_host)
   ASSERT_EQ("someAddress", result.host);
 }
 
+TEST_F(Streetlightd_Test, the_host_argument_has_a_informative_description)
+{
+  const std::string expected{
+    "host to connect to\n"
+    "for azure-* sessions, this is <iot hub name>.azure-devices.net"
+  };
+  cli::ParserDummy dummy;
+  cli::Streetlightd parser{dummy};
+  parser.parse({});
+
+  const auto testee = dummy.parseOptions.getOption("host");
+
+  ASSERT_EQ(expected, testee.description());
+}
+
 TEST_F(Streetlightd_Test, can_specify_the_user)
 {
   fillDefaultEnums();
@@ -140,6 +156,21 @@ TEST_F(Streetlightd_Test, can_specify_the_user)
   ASSERT_EQ("someUser", result.user);
 }
 
+TEST_F(Streetlightd_Test, the_user_argument_has_a_informative_description)
+{
+  const std::string expected{
+    "username for the session\n"
+    "for azure-* sessions, this is the device name"
+  };
+  cli::ParserDummy dummy;
+  cli::Streetlightd parser{dummy};
+  parser.parse({});
+
+  const auto testee = dummy.parseOptions.getOption("user");
+
+  ASSERT_EQ(expected, testee.description());
+}
+
 TEST_F(Streetlightd_Test, can_specify_password)
 {
   fillDefaultEnums();
@@ -149,6 +180,21 @@ TEST_F(Streetlightd_Test, can_specify_password)
   const auto result = testee.parse({});
 
   ASSERT_EQ("mySecret", result.password);
+}
+
+TEST_F(Streetlightd_Test, the_password_argument_has_a_informative_description)
+{
+  const std::string expected{
+    "password for the session\n"
+    "for azure-* sessions, this is the key"
+  };
+  cli::ParserDummy dummy;
+  cli::Streetlightd parser{dummy};
+  parser.parse({});
+
+  const auto testee = dummy.parseOptions.getOption("password");
+
+  ASSERT_EQ(expected, testee.description());
 }
 
 TEST_F(Streetlightd_Test, do_not_use_external_timer_by_default)

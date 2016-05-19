@@ -25,6 +25,7 @@ PocoParser::PocoParser(std::ostream &_output) :
 void PocoParser::printHelp() const
 {
   Poco::Util::HelpFormatter formatter{options};
+  formatter.setWidth(120);
   formatter.setUnixStyle(true);
   formatter.format(output);
 }

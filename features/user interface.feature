@@ -32,8 +32,11 @@ Scenario: print the help
                                        none
                                        simple-mqtt
     --host=<host>                      host to connect to
-    --user=<user>                      user of connection
-    --password=<password>              password for connection
+                                       for azure-* sessions, this is <iot hub name>.azure-devices.net
+    --user=<user>                      username for the session
+                                       for azure-* sessions, this is the device name
+    --password=<password>              password for the session
+                                       for azure-* sessions, this is the key
     --external-timer                   trigger updates via DBus
 
     """
