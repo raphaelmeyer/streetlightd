@@ -27,10 +27,10 @@ public:
 static Configuration parseCommandline(const std::vector<std::string> &arg, const std::set<std::string> &sessions)
 {
   if (arg.size() != 6) {
-    std::cerr << "expected: session-test <session> <host> <user> <password> <message>" << std::endl;
-    std::cerr << "with session:" << std::endl;
+    std::cout << "usage: session-test <session> <host> <user> <password> <message>" << std::endl;
+    std::cout << "with session:" << std::endl;
     for (const auto& name : sessions) {
-      std::cerr << "  " << name << std::endl;
+      std::cout << "  " << name << std::endl;
     }
     return {};
   }
