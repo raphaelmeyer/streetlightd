@@ -6,7 +6,7 @@
  */
 
 #include "infrastructure/SasToken.h"
-#include "infrastructure/CommandLineParser.h"
+#include "infrastructure/cli/CommandLineParser.h"
 
 #include <Poco/Util/OptionSet.h>
 #include <Poco/Util/OptionProcessor.h>
@@ -45,7 +45,7 @@ static void printHelp(const Poco::Util::OptionSet &options)
 
 static Configuration parseCommandLine(const std::vector<std::string> &arguments)
 {
-  CommandLineParserImplementation parser{std::cout};
+  cli::CommandLineParserImplementation parser{std::cout};
 
   Poco::Util::OptionSet options{};
   options.addOption(Poco::Util::Option{"key",        "", "base64 encoded password", true}.argument("<key>"));

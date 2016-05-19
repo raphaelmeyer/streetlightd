@@ -5,8 +5,8 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef STREETLIGHTDARGUMENTPARSER_H
-#define STREETLIGHTDARGUMENTPARSER_H
+#ifndef CLI_STREETLIGHTDARGUMENTPARSER_H
+#define CLI_STREETLIGHTDARGUMENTPARSER_H
 
 #include "CommandLineParser.h"
 
@@ -17,6 +17,9 @@
 #include <Poco/Util/OptionSet.h>
 #include <string>
 #include <map>
+
+namespace cli
+{
 
 class Configuration :
     public StackConfiguration,
@@ -63,5 +66,7 @@ private:
   void fillSessionConfig(session::Configuration &config) const;
   void fillTimerConfig(TimerConfiguration &config) const;
 };
+
+}
 
 #endif

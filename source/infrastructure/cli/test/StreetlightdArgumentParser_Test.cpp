@@ -20,7 +20,7 @@ class StreetlightdArgumentParser_Test:
 {
 public:
   CommandLineParserMock parser;
-  StreetlightdArgumentParser testee{parser};
+  cli::StreetlightdArgumentParser testee{parser};
 
   void fillDefaultEnums()
   {

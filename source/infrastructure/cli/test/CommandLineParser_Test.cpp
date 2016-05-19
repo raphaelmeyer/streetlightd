@@ -19,7 +19,7 @@ class CommandLineParser_Test:
 {
 public:
   std::stringstream output{};
-  CommandLineParserImplementation testee{output};
+  cli::CommandLineParserImplementation testee{output};
 
 };
 

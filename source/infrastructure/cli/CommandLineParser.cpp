@@ -14,6 +14,9 @@
 #include <Poco/Util/HelpFormatter.h>
 #include <map>
 
+namespace cli
+{
+
 CommandLineParserImplementation::CommandLineParserImplementation(std::ostream &_output) :
   output{_output}
 {
@@ -85,4 +88,6 @@ std::string CommandLineParserImplementation::value(const std::string &key, const
 bool CommandLineParserImplementation::contains(const std::string &key) const
 {
   return map.find(key) != map.end();
+}
+
 }

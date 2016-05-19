@@ -5,14 +5,17 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef COMMANDLINEPARSER_H
-#define COMMANDLINEPARSER_H
+#ifndef CLI_COMMANDLINEPARSER_H
+#define CLI_COMMANDLINEPARSER_H
 
 #include <Poco/Util/OptionSet.h>
 #include <ostream>
 #include <string>
 #include <vector>
 #include <map>
+
+namespace cli
+{
 
 class CommandLineParser
 {
@@ -50,5 +53,7 @@ private:
   std::map<std::string, std::string> map;
 
 };
+
+}
 
 #endif

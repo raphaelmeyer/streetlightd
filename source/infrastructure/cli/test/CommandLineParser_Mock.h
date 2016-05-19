@@ -13,7 +13,7 @@
 #include <gmock/gmock.h>
 
 class CommandLineParserMock :
-    public CommandLineParser
+    public cli::CommandLineParser
 {
 public:
   MOCK_METHOD2(parse, void(const std::vector<std::string> &, const Poco::Util::OptionSet &));

@@ -12,7 +12,7 @@
 #include "dbus/Streetlight.h"
 
 #include "infrastructure/Factory.h"
-#include "infrastructure/StreetlightdArgumentParser.h"
+#include "infrastructure/cli/StreetlightdArgumentParser.h"
 #include "infrastructure/TimerFactory.h"
 
 #include <dbus-c++/dbus.h>
@@ -40,12 +40,12 @@ int main(int argc, char **argv)
   const std::vector<std::string> arg{argv, argv+argc};
 
   StackFactory factory;
-  CommandLineParserImplementation baseParser{std::cout};
-  StreetlightdArgumentParser parser{baseParser};
+  cli::CommandLineParserImplementation baseParser{std::cout};
+  cli::StreetlightdArgumentParser parser{baseParser};
   parser.addApplications(factory.applications());
   parser.addPresentations(factory.presentations());
   parser.addSessions(factory.sessions());
-  Configuration configuration = parser.parse(arg);
+  auto const configuration = parser.parse(arg);
 
   if (!configuration) {
     return -1;

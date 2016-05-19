@@ -39,6 +39,8 @@ file(GLOB RAW_SOURCES
     protocolstack/application/message/*.cpp
     infrastructure/*.cpp
     infrastructure/*.h
+    infrastructure/cli/*.cpp
+    infrastructure/cli/*.h
     infrastructure/concurrency/*.cpp
     infrastructure/concurrency/*.h
     )
@@ -46,8 +48,8 @@ file(GLOB RAW_SOURCES
 file(GLOB SAS_SOURCES
     infrastructure/SasToken.cpp
     infrastructure/SasToken.h
-    infrastructure/CommandLineParser.cpp
-    infrastructure/CommandLineParser.h
+    infrastructure/cli/CommandLineParser.cpp
+    infrastructure/cli/CommandLineParser.h
     )
 
 file(GLOB SESSION_SOURCES
@@ -69,8 +71,8 @@ file(GLOB SESSION_SOURCES
 file(GLOB_RECURSE TEST_SOURCES
     *_Test.cpp
     *_Mock.h
-    infrastructure/CommandLineParser.cpp
-    infrastructure/StreetlightdArgumentParser.cpp
+    infrastructure/cli/CommandLineParser.cpp
+    infrastructure/cli/StreetlightdArgumentParser.cpp
     infrastructure/Factory.h
     infrastructure/SasToken.cpp
     protocolstack/application/message/Outgoing.cpp

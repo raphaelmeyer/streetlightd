@@ -9,6 +9,9 @@
 
 #include <map>
 
+namespace cli
+{
+
 static const std::string HOST_ARGUMENT = "host";
 static const std::string USER_ARGUMENT = "user";
 static const std::string PASSWORD_ARGUMENT = "password";
@@ -163,4 +166,6 @@ Poco::Util::Option StreetlightdArgumentParser::EnumEntry::asOption() const
   const std::string argument{"<"+longName+">"};
   const std::string help{argument + ":" + join(values)};
   return Poco::Util::Option{longName,  shortName, help, true}.argument(argument);
+}
+
 }
