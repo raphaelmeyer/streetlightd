@@ -15,18 +15,26 @@ Scenario: print the help
   Then I expect the following output of stdout:
     """
     usage: 
-    -h, --help                                       print this help
-    -a<application>, --application=<application>     <application>: debug 
-                                                     forwarder offline
-    -p<presentation>, --presentation=<presentation>  <presentation>: binary json 
-                                                     key-value none
-    -s<session>, --session=<session>                 <session>: azure-amqp 
-                                                     azure-http azure-mqtt none 
-                                                     simple-mqtt
-    --host=<host>                                    host to connect to
-    --user=<user>                                    user of connection
-    --password=<password>                            password for connection
-    --external-timer                                 trigger updates via DBus
+    -h, --help                         print this help
+    -a<value>, --application=<value>   <value> is one of:
+                                       debug
+                                       forwarder
+                                       offline
+    -p<value>, --presentation=<value>  <value> is one of:
+                                       binary
+                                       json
+                                       key-value
+                                       none
+    -s<value>, --session=<value>       <value> is one of:
+                                       azure-amqp
+                                       azure-http
+                                       azure-mqtt
+                                       none
+                                       simple-mqtt
+    --host=<host>                      host to connect to
+    --user=<user>                      user of connection
+    --password=<password>              password for connection
+    --external-timer                   trigger updates via DBus
 
     """
 

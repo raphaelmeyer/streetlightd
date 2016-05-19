@@ -40,9 +40,9 @@ TEST(EnumOption_Test, can_convert_to_Poco_Pption_values)
 
   const Poco::Util::Option option = testee.asOption();
 
-  ASSERT_EQ("<hello long>", option.argumentName());
+  ASSERT_EQ("<value>", option.argumentName());
   ASSERT_EQ(true, option.argumentRequired());
-  ASSERT_EQ("<hello long>: value1 value2", option.description());
+  ASSERT_EQ("<value> is one of:\nvalue1\nvalue2", option.description());
   ASSERT_EQ("hello long", option.fullName());
   ASSERT_EQ(false, option.repeatable());
   ASSERT_EQ(true, option.required());
