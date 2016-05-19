@@ -5,7 +5,7 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "CommandLineParser.h"
+#include "PocoParser.h"
 
 #include <Poco/Util/OptionSet.h>
 #include <Poco/Util/OptionProcessor.h>
@@ -17,24 +17,24 @@
 namespace cli
 {
 
-CommandLineParserImplementation::CommandLineParserImplementation(std::ostream &_output) :
+PocoParser::PocoParser(std::ostream &_output) :
   output{_output}
 {
 }
 
-void CommandLineParserImplementation::printHelp() const
+void PocoParser::printHelp() const
 {
   Poco::Util::HelpFormatter formatter{options};
   formatter.setUnixStyle(true);
   formatter.format(output);
 }
 
-bool CommandLineParserImplementation::isValid() const
+bool PocoParser::isValid() const
 {
   return valid;
 }
 
-void CommandLineParserImplementation::parse(const std::vector<std::string> &arguments, const Poco::Util::OptionSet &options)
+void PocoParser::parse(const std::vector<std::string> &arguments, const Poco::Util::OptionSet &options)
 {
   this->options = options;
   valid = false;
@@ -66,7 +66,7 @@ void CommandLineParserImplementation::parse(const std::vector<std::string> &argu
   valid = true;
 }
 
-std::string CommandLineParserImplementation::value(const std::string &key) const
+std::string PocoParser::value(const std::string &key) const
 {
   const auto pos = map.find(key);
   if (pos == map.end()) {
@@ -75,7 +75,7 @@ std::string CommandLineParserImplementation::value(const std::string &key) const
   return pos->second;
 }
 
-std::string CommandLineParserImplementation::value(const std::string &key, const std::string &def) const
+std::string PocoParser::value(const std::string &key, const std::string &def) const
 {
   const auto pos = map.find(key);
   if (pos == map.end()) {
@@ -85,7 +85,7 @@ std::string CommandLineParserImplementation::value(const std::string &key, const
   }
 }
 
-bool CommandLineParserImplementation::contains(const std::string &key) const
+bool PocoParser::contains(const std::string &key) const
 {
   return map.find(key) != map.end();
 }

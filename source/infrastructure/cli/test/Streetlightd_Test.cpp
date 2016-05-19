@@ -5,8 +5,8 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "../StreetlightdArgumentParser.h"
-#include "CommandLineParser_Mock.h"
+#include "../Streetlightd.h"
+#include "Parser_Mock.h"
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
@@ -15,12 +15,12 @@
 #include <set>
 #include <string>
 
-class StreetlightdArgumentParser_Test:
+class Streetlightd_Test:
     public testing::Test
 {
 public:
-  CommandLineParserMock parser;
-  cli::StreetlightdArgumentParser testee{parser};
+  cli::ParserMock parser;
+  cli::Streetlightd testee{parser};
 
   void fillDefaultEnums()
   {
@@ -36,14 +36,14 @@ public:
   }
 };
 
-TEST_F(StreetlightdArgumentParser_Test, output_is_not_valid_when_not_provided_all_arguments)
+TEST_F(Streetlightd_Test, output_is_not_valid_when_not_provided_all_arguments)
 {
   const auto result = testee.parse({});
 
   ASSERT_FALSE(result);
 }
 
-TEST_F(StreetlightdArgumentParser_Test, show_help_when_requested)
+TEST_F(Streetlightd_Test, show_help_when_requested)
 {
   ON_CALL(parser, isValid()).WillByDefault(testing::Return(true));
   ON_CALL(parser, contains("help")).WillByDefault(testing::Return(true));
@@ -53,7 +53,7 @@ TEST_F(StreetlightdArgumentParser_Test, show_help_when_requested)
   testee.parse({});
 }
 
-TEST_F(StreetlightdArgumentParser_Test, show_help_when_missing_required_arguments)
+TEST_F(Streetlightd_Test, show_help_when_missing_required_arguments)
 {
   EXPECT_CALL(parser, printHelp());
   ON_CALL(parser, isValid()).WillByDefault(testing::Return(true));
@@ -62,7 +62,7 @@ TEST_F(StreetlightdArgumentParser_Test, show_help_when_missing_required_argument
   testee.parse({});
 }
 
-TEST_F(StreetlightdArgumentParser_Test, output_is_valid_when_provided_with_valid_arguments)
+TEST_F(Streetlightd_Test, output_is_valid_when_provided_with_valid_arguments)
 {
   ON_CALL(parser, isValid()).WillByDefault(testing::Return(true));
   ON_CALL(parser, contains("application")).WillByDefault(testing::Return(true));
@@ -80,7 +80,7 @@ TEST_F(StreetlightdArgumentParser_Test, output_is_valid_when_provided_with_valid
   ASSERT_TRUE(result);
 }
 
-TEST_F(StreetlightdArgumentParser_Test, output_is_not_valid_when_provided_invalid_arguments)
+TEST_F(Streetlightd_Test, output_is_not_valid_when_provided_invalid_arguments)
 {
   ON_CALL(parser, isValid()).WillByDefault(testing::Return(true));
   ON_CALL(parser, contains("application")).WillByDefault(testing::Return(true));
@@ -98,7 +98,7 @@ TEST_F(StreetlightdArgumentParser_Test, output_is_not_valid_when_provided_invali
   ASSERT_FALSE(result);
 }
 
-TEST_F(StreetlightdArgumentParser_Test, return_the_specified_enum_values)
+TEST_F(Streetlightd_Test, return_the_specified_enum_values)
 {
   ON_CALL(parser, isValid()).WillByDefault(testing::Return(true));
   ON_CALL(parser, contains("application")).WillByDefault(testing::Return(true));
@@ -118,7 +118,7 @@ TEST_F(StreetlightdArgumentParser_Test, return_the_specified_enum_values)
   ASSERT_EQ("i", result.session);
 }
 
-TEST_F(StreetlightdArgumentParser_Test, can_specify_the_host)
+TEST_F(Streetlightd_Test, can_specify_the_host)
 {
   fillDefaultEnums();
   ON_CALL(parser, isValid()).WillByDefault(testing::Return(true));
@@ -129,7 +129,7 @@ TEST_F(StreetlightdArgumentParser_Test, can_specify_the_host)
   ASSERT_EQ("someAddress", result.host);
 }
 
-TEST_F(StreetlightdArgumentParser_Test, can_specify_the_user)
+TEST_F(Streetlightd_Test, can_specify_the_user)
 {
   fillDefaultEnums();
   ON_CALL(parser, isValid()).WillByDefault(testing::Return(true));
@@ -140,7 +140,7 @@ TEST_F(StreetlightdArgumentParser_Test, can_specify_the_user)
   ASSERT_EQ("someUser", result.user);
 }
 
-TEST_F(StreetlightdArgumentParser_Test, can_specify_password)
+TEST_F(Streetlightd_Test, can_specify_password)
 {
   fillDefaultEnums();
   ON_CALL(parser, isValid()).WillByDefault(testing::Return(true));
@@ -151,7 +151,7 @@ TEST_F(StreetlightdArgumentParser_Test, can_specify_password)
   ASSERT_EQ("mySecret", result.password);
 }
 
-TEST_F(StreetlightdArgumentParser_Test, do_not_use_external_timer_by_default)
+TEST_F(Streetlightd_Test, do_not_use_external_timer_by_default)
 {
   fillDefaultEnums();
 
@@ -160,7 +160,7 @@ TEST_F(StreetlightdArgumentParser_Test, do_not_use_external_timer_by_default)
   ASSERT_FALSE(result.externalTimer);
 }
 
-TEST_F(StreetlightdArgumentParser_Test, can_specify_to_use_external_timer)
+TEST_F(Streetlightd_Test, can_specify_to_use_external_timer)
 {
   fillDefaultEnums();
   ON_CALL(parser, isValid()).WillByDefault(testing::Return(true));

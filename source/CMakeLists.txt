@@ -48,8 +48,8 @@ file(GLOB RAW_SOURCES
 file(GLOB SAS_SOURCES
     infrastructure/SasToken.cpp
     infrastructure/SasToken.h
-    infrastructure/cli/CommandLineParser.cpp
-    infrastructure/cli/CommandLineParser.h
+    infrastructure/cli/PocoParser.cpp
+    infrastructure/cli/PocoParser.h
     )
 
 file(GLOB SESSION_SOURCES
@@ -71,8 +71,8 @@ file(GLOB SESSION_SOURCES
 file(GLOB_RECURSE TEST_SOURCES
     *_Test.cpp
     *_Mock.h
-    infrastructure/cli/CommandLineParser.cpp
-    infrastructure/cli/StreetlightdArgumentParser.cpp
+    infrastructure/cli/PocoParser.cpp
+    infrastructure/cli/Streetlightd.cpp
     infrastructure/Factory.h
     infrastructure/SasToken.cpp
     protocolstack/application/message/Outgoing.cpp

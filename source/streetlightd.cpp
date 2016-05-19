@@ -12,7 +12,8 @@
 #include "dbus/Streetlight.h"
 
 #include "infrastructure/Factory.h"
-#include "infrastructure/cli/StreetlightdArgumentParser.h"
+#include "infrastructure/cli/PocoParser.h"
+#include "infrastructure/cli/Streetlightd.h"
 #include "infrastructure/TimerFactory.h"
 
 #include <dbus-c++/dbus.h>
@@ -40,8 +41,8 @@ int main(int argc, char **argv)
   const std::vector<std::string> arg{argv, argv+argc};
 
   StackFactory factory;
-  cli::CommandLineParserImplementation baseParser{std::cout};
-  cli::StreetlightdArgumentParser parser{baseParser};
+  cli::PocoParser baseParser{std::cout};
+  cli::Streetlightd parser{baseParser};
   parser.addApplications(factory.applications());
   parser.addPresentations(factory.presentations());
   parser.addSessions(factory.sessions());

@@ -5,8 +5,10 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef CLI_COMMANDLINEPARSER_H
-#define CLI_COMMANDLINEPARSER_H
+#ifndef CLI_POCOPARSER_H
+#define CLI_POCOPARSER_H
+
+#include "Parser.h"
 
 #include <Poco/Util/OptionSet.h>
 #include <ostream>
@@ -17,25 +19,11 @@
 namespace cli
 {
 
-class CommandLineParser
+class PocoParser :
+    public Parser
 {
 public:
-  virtual void parse(const std::vector<std::string> &arguments, const Poco::Util::OptionSet &options) = 0;
-  virtual void printHelp() const = 0;
-
-  virtual bool isValid() const = 0;
-
-  virtual std::string value(const std::string &key) const = 0;
-  virtual std::string value(const std::string &key, const std::string &def) const = 0;
-  virtual bool contains(const std::string &key) const = 0;
-};
-
-
-class CommandLineParserImplementation :
-    public CommandLineParser
-{
-public:
-  CommandLineParserImplementation(std::ostream &output);
+  PocoParser(std::ostream &output);
 
   void parse(const std::vector<std::string> &arguments, const Poco::Util::OptionSet &options) override;
   void printHelp() const override;

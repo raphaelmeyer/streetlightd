@@ -5,10 +5,10 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef CLI_STREETLIGHTDARGUMENTPARSER_H
-#define CLI_STREETLIGHTDARGUMENTPARSER_H
+#ifndef CLI_STREETLIGHTD_H
+#define CLI_STREETLIGHTD_H
 
-#include "CommandLineParser.h"
+#include "Parser.h"
 
 #include <protocolstack/StackFactory.h>
 #include <protocolstack/session/Configuration.h>
@@ -28,10 +28,10 @@ class Configuration :
 {
 };
 
-class StreetlightdArgumentParser
+class Streetlightd
 {
 public:
-  StreetlightdArgumentParser(CommandLineParser &parser);
+  Streetlightd(Parser &parser);
 
   void addApplications(const std::set<std::string> &values);
   void addPresentations(const std::set<std::string> &values);
@@ -54,14 +54,14 @@ private:
     Session
   };
 
-  CommandLineParser &parser;
+  Parser &parser;
   std::map<Layer, EnumEntry> enums;
 
   Poco::Util::OptionSet createOptions() const;
   std::string keyFor(Layer entry) const;
   EnumEntry entryFor(Layer entry) const;
   std::string valueFor(Layer type) const;
-  std::map<StreetlightdArgumentParser::Layer, std::string> fillEnumValues() const;
+  std::map<Streetlightd::Layer, std::string> fillEnumValues() const;
   void fillStackConfig(StackConfiguration &config, std::map<Layer, std::string> enumValues) const;
   void fillSessionConfig(session::Configuration &config) const;
   void fillTimerConfig(TimerConfiguration &config) const;

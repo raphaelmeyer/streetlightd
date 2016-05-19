@@ -5,7 +5,7 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "StreetlightdArgumentParser.h"
+#include "Streetlightd.h"
 
 #include <map>
 
@@ -17,7 +17,7 @@ static const std::string USER_ARGUMENT = "user";
 static const std::string PASSWORD_ARGUMENT = "password";
 static const std::string TIMER_ARGUMENT = "external-timer";
 
-StreetlightdArgumentParser::StreetlightdArgumentParser(CommandLineParser &_parser) :
+Streetlightd::Streetlightd(Parser &_parser) :
   parser{_parser}
 {
   enums[Layer::Application] = EnumEntry{"application", "a", {}};
@@ -25,22 +25,22 @@ StreetlightdArgumentParser::StreetlightdArgumentParser(CommandLineParser &_parse
   enums[Layer::Session] = EnumEntry{"session", "s", {}};
 }
 
-void StreetlightdArgumentParser::addApplications(const std::set<std::string> &values)
+void Streetlightd::addApplications(const std::set<std::string> &values)
 {
   enums[Layer::Application].values.insert(values.begin(), values.end());
 }
 
-void StreetlightdArgumentParser::addPresentations(const std::set<std::string> &values)
+void Streetlightd::addPresentations(const std::set<std::string> &values)
 {
   enums[Layer::Presentation].values.insert(values.begin(), values.end());
 }
 
-void StreetlightdArgumentParser::addSessions(const std::set<std::string> &values)
+void Streetlightd::addSessions(const std::set<std::string> &values)
 {
   enums[Layer::Session].values.insert(values.begin(), values.end());
 }
 
-Configuration StreetlightdArgumentParser::parse(const std::vector<std::string> &arguments)
+Configuration Streetlightd::parse(const std::vector<std::string> &arguments)
 {
   parser.parse(arguments, createOptions());
   if (!parser.isValid()) {
@@ -67,7 +67,7 @@ Configuration StreetlightdArgumentParser::parse(const std::vector<std::string> &
   return config;
 }
 
-std::map<StreetlightdArgumentParser::Layer,std::string> StreetlightdArgumentParser::fillEnumValues() const
+std::map<Streetlightd::Layer,std::string> Streetlightd::fillEnumValues() const
 {
   std::map<Layer,std::string> enumValues{};
   for (const auto layer : {Layer::Application, Layer::Presentation, Layer::Session}) {
@@ -81,26 +81,26 @@ std::map<StreetlightdArgumentParser::Layer,std::string> StreetlightdArgumentPars
   return enumValues;
 }
 
-void StreetlightdArgumentParser::fillStackConfig(StackConfiguration &config, std::map<Layer, std::string> enumValues) const
+void Streetlightd::fillStackConfig(StackConfiguration &config, std::map<Layer, std::string> enumValues) const
 {
   config.application = enumValues[Layer::Application];
   config.presentation = enumValues[Layer::Presentation];
   config.session = enumValues[Layer::Session];
 }
 
-void StreetlightdArgumentParser::fillSessionConfig(session::Configuration &config) const
+void Streetlightd::fillSessionConfig(session::Configuration &config) const
 {
   config.host = parser.value(HOST_ARGUMENT, "");
   config.user = parser.value(USER_ARGUMENT, "");
   config.password = parser.value(PASSWORD_ARGUMENT, "");
 }
 
-void StreetlightdArgumentParser::fillTimerConfig(TimerConfiguration &config) const
+void Streetlightd::fillTimerConfig(TimerConfiguration &config) const
 {
   config.externalTimer = parser.contains(TIMER_ARGUMENT);
 }
 
-Poco::Util::OptionSet StreetlightdArgumentParser::createOptions() const
+Poco::Util::OptionSet Streetlightd::createOptions() const
 {
   Poco::Util::OptionSet options{};
 
@@ -117,7 +117,7 @@ Poco::Util::OptionSet StreetlightdArgumentParser::createOptions() const
   return options;
 }
 
-std::string StreetlightdArgumentParser::keyFor(StreetlightdArgumentParser::Layer entry) const
+std::string Streetlightd::keyFor(Streetlightd::Layer entry) const
 {
   const auto &pos = enums.find(entry);
   if (pos == enums.end()) {
@@ -126,7 +126,7 @@ std::string StreetlightdArgumentParser::keyFor(StreetlightdArgumentParser::Layer
   return pos->second.longName;
 }
 
-StreetlightdArgumentParser::EnumEntry StreetlightdArgumentParser::entryFor(StreetlightdArgumentParser::Layer entry) const
+Streetlightd::EnumEntry Streetlightd::entryFor(Streetlightd::Layer entry) const
 {
   const auto &pos = enums.find(entry);
   if (pos == enums.end()) {
@@ -135,7 +135,7 @@ StreetlightdArgumentParser::EnumEntry StreetlightdArgumentParser::entryFor(Stree
   return pos->second;
 }
 
-std::string StreetlightdArgumentParser::valueFor(StreetlightdArgumentParser::Layer type) const
+std::string Streetlightd::valueFor(Streetlightd::Layer type) const
 {
   EnumEntry entry = entryFor(type);
   if (!parser.contains(entry.longName)) {
@@ -161,7 +161,7 @@ static std::string join(const std::set<std::string> &list)
   return result;
 }
 
-Poco::Util::Option StreetlightdArgumentParser::EnumEntry::asOption() const
+Poco::Util::Option Streetlightd::EnumEntry::asOption() const
 {
   const std::string argument{"<"+longName+">"};
   const std::string help{argument + ":" + join(values)};

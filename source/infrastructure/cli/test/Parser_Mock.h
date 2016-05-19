@@ -5,15 +5,18 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef COMMANDLINEPARSER_MOCK_H
-#define COMMANDLINEPARSER_MOCK_H
+#ifndef CLI_PARSER_MOCK_H
+#define CLI_PARSER_MOCK_H
 
-#include "../CommandLineParser.h"
+#include "../Parser.h"
 
 #include <gmock/gmock.h>
 
-class CommandLineParserMock :
-    public cli::CommandLineParser
+namespace cli
+{
+
+class ParserMock :
+    public Parser
 {
 public:
   MOCK_METHOD2(parse, void(const std::vector<std::string> &, const Poco::Util::OptionSet &));
@@ -24,5 +27,7 @@ public:
   MOCK_CONST_METHOD1(contains, bool(const std::string &));
 
 };
+
+}
 
 #endif
