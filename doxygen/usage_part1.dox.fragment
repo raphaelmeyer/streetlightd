@@ -1,0 +1,8 @@
+/**
+\page page_usage Usage
+
+# streetlightd
+
+The application `streetlightd` is configured by the following command line arguments.
+
+\verbatim

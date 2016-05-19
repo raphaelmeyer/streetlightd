@@ -1,0 +1,9 @@
+\endverbatim
+
+For more information about the command line arguments, have a look at `streetlightd --help`
+
+# azure-sas-token
+
+The application `azure-sas-token` generates a SAS token which can be used to connect to azure via generic tools like `mosquitto_pub` or `curl`.
+
+\verbatim

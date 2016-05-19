@@ -1,0 +1,14 @@
+\endverbatim
+
+To connect to azure, the arguments can look like:
+
+    streetlightd --application=forwarder --presentation=json --session=azure-amqp --host=<iot hub name>.azure-devices.net --user=<device name> --password=<device key>
+
+`streetlightd` accesses the D-Bus object `ch.bbv.streetlight`.
+Ensure that some service is providing it before `streetlightd` is started.
+
+# session-test
+
+The application `session-test` is used to test or debug a session or connection to a server.
+
+\verbatim
