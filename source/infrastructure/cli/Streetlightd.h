@@ -9,6 +9,7 @@
 #define CLI_STREETLIGHTD_H
 
 #include "Parser.h"
+#include "EnumOption.h"
 
 #include <protocolstack/StackFactory.h>
 #include <protocolstack/session/Configuration.h>
@@ -40,14 +41,6 @@ public:
   Configuration parse(const std::vector<std::string> &arguments);
 
 private:
-  class EnumEntry {
-  public:
-    std::string longName;
-    std::string shortName;
-    std::set<std::string> values;
-
-    Poco::Util::Option asOption() const;
-  };
   enum class Layer {
     Application,
     Presentation,
@@ -55,11 +48,11 @@ private:
   };
 
   Parser &parser;
-  std::map<Layer, EnumEntry> enums;
+  std::map<Layer, EnumOption> enums;
 
   Poco::Util::OptionSet createOptions() const;
   std::string keyFor(Layer entry) const;
-  EnumEntry entryFor(Layer entry) const;
+  EnumOption entryFor(Layer entry) const;
   std::string valueFor(Layer type) const;
   std::map<Streetlightd::Layer, std::string> fillEnumValues() const;
   void fillStackConfig(StackConfiguration &config, std::map<Layer, std::string> enumValues) const;

@@ -73,6 +73,7 @@ file(GLOB_RECURSE TEST_SOURCES
     *_Mock.h
     infrastructure/cli/PocoParser.cpp
     infrastructure/cli/Streetlightd.cpp
+    infrastructure/cli/EnumOption.cpp
     infrastructure/Factory.h
     infrastructure/SasToken.cpp
     protocolstack/application/message/Outgoing.cpp

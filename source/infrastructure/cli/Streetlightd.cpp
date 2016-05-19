@@ -20,9 +20,9 @@ static const std::string TIMER_ARGUMENT = "external-timer";
 Streetlightd::Streetlightd(Parser &_parser) :
   parser{_parser}
 {
-  enums[Layer::Application] = EnumEntry{"application", "a", {}};
-  enums[Layer::Presentation] = EnumEntry{"presentation", "p", {}};
-  enums[Layer::Session] = EnumEntry{"session", "s", {}};
+  enums[Layer::Application] = EnumOption{"application", "a", {}};
+  enums[Layer::Presentation] = EnumOption{"presentation", "p", {}};
+  enums[Layer::Session] = EnumOption{"session", "s", {}};
 }
 
 void Streetlightd::addApplications(const std::set<std::string> &values)
@@ -126,7 +126,7 @@ std::string Streetlightd::keyFor(Streetlightd::Layer entry) const
   return pos->second.longName;
 }
 
-Streetlightd::EnumEntry Streetlightd::entryFor(Streetlightd::Layer entry) const
+EnumOption Streetlightd::entryFor(Streetlightd::Layer entry) const
 {
   const auto &pos = enums.find(entry);
   if (pos == enums.end()) {
@@ -137,7 +137,7 @@ Streetlightd::EnumEntry Streetlightd::entryFor(Streetlightd::Layer entry) const
 
 std::string Streetlightd::valueFor(Streetlightd::Layer type) const
 {
-  EnumEntry entry = entryFor(type);
+  EnumOption entry = entryFor(type);
   if (!parser.contains(entry.longName)) {
     return {};
   }
@@ -150,22 +150,6 @@ std::string Streetlightd::valueFor(Streetlightd::Layer type) const
   }
 
   return value;
-}
-
-static std::string join(const std::set<std::string> &list)
-{
-  std::string result{};
-  for (const auto &product : list) {
-    result += " " + product;
-  }
-  return result;
-}
-
-Poco::Util::Option Streetlightd::EnumEntry::asOption() const
-{
-  const std::string argument{"<"+longName+">"};
-  const std::string help{argument + ":" + join(values)};
-  return Poco::Util::Option{longName,  shortName, help, true}.argument(argument);
 }
 
 }
