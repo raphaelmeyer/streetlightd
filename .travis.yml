@@ -11,3 +11,4 @@ before_install:
 script:
   - docker run -v `pwd`:/home/root/streetlightd streetlightd bash -c "cd home/root/streetlightd/; ci/build.sh"
   - docker run -v `pwd`:/home/root/streetlightd streetlightd bash -c "cd home/root/streetlightd/; ci/test.sh"
+  - docker run -v `pwd`:/home/root/streetlightd streetlightd bash -c "cd home/root/streetlightd/; ci/documentation.sh"

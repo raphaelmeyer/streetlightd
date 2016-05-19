@@ -5,7 +5,9 @@ RUN apt-get -y install --fix-missing \
 	build-essential \
 	cmake \
 	dbus-x11 \
+	doxygen \
 	git \
+	graphviz \
 	libcrypto++-dev \
 	libcurl4-openssl-dev \
 	libdbus-c++-dev \
