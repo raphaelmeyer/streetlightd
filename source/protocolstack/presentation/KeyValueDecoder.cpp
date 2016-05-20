@@ -19,6 +19,13 @@ namespace presentation
 namespace keyvalue
 {
 
+message::Incoming decode(const presentation::Message &message)
+{
+  Parser parser;
+  parser.reset(message);
+  return decode(parser);
+}
+
 static std::string trim(const std::string &value)
 {
   const auto start = value.find_first_not_of(' ');
@@ -41,75 +48,61 @@ static std::pair<std::string,std::string> split(const std::string line)
   return {key, value};
 }
 
-
-class Parser :
-    public presentation::Parser
+void Parser::reset(const Message &message)
 {
-public:
-  Parser(const presentation::Message &message)
-  {
-    std::stringstream stream{message.asString()};
-    std::string line;
-    while (std::getline(stream, line, '\n')) {
-      line = trim(line);
-      if (!line.empty()) {
-        lines.push_back(line);
-      }
+  lines.clear();
+  currentData.clear();
+
+  std::stringstream stream{message.asString()};
+  std::string line;
+  while (std::getline(stream, line, '\n')) {
+    line = trim(line);
+    if (!line.empty()) {
+      lines.push_back(line);
     }
   }
+}
 
-  message::Property parseProperty() override
-  {
-    if (!hasMore()) {
-      throw std::invalid_argument("no more data");
-    }
-
-    const auto line = lines.front();
-    lines.pop_front();
-    const auto value = split(line);
-
-    currentData = value.second;
-
-    auto key = value.first;
-    if (key == message::propertyName(message::Property::Luminosity)) {
-      return message::Property::Luminosity;
-    }
-    if (key == message::propertyName(message::Property::Warning)) {
-      return message::Property::Warning;
-    }
-    throw std::invalid_argument("unknown property: " + key);
-  }
-
-  bool hasMore() const override
-  {
-    return !lines.empty();
-  }
-
-  void parse(double &value) override
-  {
-    try {
-      std::size_t count = 0;
-      value = std::stod(currentData, &count);
-    } catch (std::invalid_argument) {
-      throw std::invalid_argument("invalid double: " + currentData);
-    }
-  }
-
-  void parse(std::string &value) override
-  {
-    value = currentData;
-  }
-
-private:
-  std::list<std::string> lines;
-  std::string currentData;
-
-};
-
-message::Incoming decode(const presentation::Message &message)
+message::Property Parser::parseProperty()
 {
-  Parser parser{message};
-  return decode(parser);
+  if (!hasMore()) {
+    throw std::invalid_argument("no more data");
+  }
+
+  const auto line = lines.front();
+  lines.pop_front();
+  const auto value = split(line);
+
+  currentData = value.second;
+
+  auto key = value.first;
+  if (key == message::propertyName(message::Property::Luminosity)) {
+    return message::Property::Luminosity;
+  }
+  if (key == message::propertyName(message::Property::Warning)) {
+    return message::Property::Warning;
+  }
+  throw std::invalid_argument("unknown property: " + key);
+}
+
+bool Parser::hasMore() const
+{
+  return !lines.empty();
+}
+
+void Parser::parse(double &value)
+{
+  try {
+    std::size_t count = 0;
+    value = std::stod(currentData, &count);
+  } catch (std::invalid_argument) {
+    throw std::invalid_argument("invalid double: " + currentData);
+  }
+}
+
+void Parser::parse(std::__cxx11::string &value)
+{
+  value = currentData;
 }
 
 }

@@ -11,19 +11,21 @@
 #include "../application/message/Incoming.h"
 #include "../application/message/Outgoing.h"
 #include "Message.h"
+#include "Parser.h"
+#include "Decoder.h"
 
 #include <functional>
 #include <string>
+#include <memory>
 
 class Presentation
 {
 public:
   typedef std::function<presentation::Message(const message::Outgoing &message)> Encoder;
-  typedef std::function<message::Incoming(const presentation::Message &message)> Decoder;
 
-  Presentation(Encoder _encoder, Decoder _decoder) :
+  Presentation(Encoder _encoder, presentation::Parser *_parser) :
     encoder{_encoder},
-    decoder{_decoder}
+    parser{_parser}
   {
   }
 
@@ -32,14 +34,15 @@ public:
     return encoder(message);
   }
 
-  message::Incoming decode(const presentation::Message &message) const
+  message::Incoming decode(const presentation::Message &message)
   {
-    return decoder(message);
+    parser->reset(message);
+    return presentation::decode(*parser);
   }
 
 private:
   Encoder encoder;
-  Decoder decoder;
+  std::unique_ptr<presentation::Parser> parser;
 
 };
 

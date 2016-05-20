@@ -23,6 +23,30 @@ Message encode(const message::Outgoing &)
   return {};
 }
 
+void Parser::reset(const Message &)
+{
+}
+
+message::Property Parser::parseProperty()
+{
+  throw std::invalid_argument("no more data");
+}
+
+bool Parser::hasMore() const
+{
+  return false;
+}
+
+void Parser::parse(double &)
+{
+  throw std::invalid_argument("no more data");
+}
+
+void Parser::parse(std::__cxx11::string &)
+{
+  throw std::invalid_argument("no more data");
+}
+
 }
 
 }
