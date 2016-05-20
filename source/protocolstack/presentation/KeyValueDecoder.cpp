@@ -6,6 +6,7 @@
  */
 
 #include "KeyValueDecoder.h"
+#include "Decoder.h"
 
 #include <protocolstack/application/message/propertyNames.h>
 #include <protocolstack/application/message/Property.h>
@@ -41,11 +42,11 @@ static std::pair<std::string,std::string> split(const std::string line)
 }
 
 
-class Parser
+class Parser :
+    public presentation::Parser
 {
 public:
-
-  void init(const presentation::Message &message)
+  Parser(const presentation::Message &message)
   {
     std::stringstream stream{message.asString()};
     std::string line;
@@ -57,7 +58,7 @@ public:
     }
   }
 
-  message::Property parseProperty()
+  message::Property parseProperty() override
   {
     if (!hasMore()) {
       throw std::invalid_argument("no more data");
@@ -79,12 +80,12 @@ public:
     throw std::invalid_argument("unknown property: " + key);
   }
 
-  bool hasMore() const
+  bool hasMore() const override
   {
     return !lines.empty();
   }
 
-  void parse(double &value)
+  void parse(double &value) override
   {
     try {
       std::size_t count = 0;
@@ -94,7 +95,7 @@ public:
     }
   }
 
-  void parse(std::string &value)
+  void parse(std::string &value) override
   {
     value = currentData;
   }
@@ -105,55 +106,10 @@ private:
 
 };
 
-
-class Decoder
-{
-public:
-
-  void init(const presentation::Message &message)
-  {
-    parser.init(message);
-  }
-
-  message::Incoming decoded()
-  {
-    message::Incoming result{};
-
-    while (parser.hasMore()) {
-      auto property = parser.parseProperty();
-      switch (property) {
-      case message::Property::Luminosity:
-        parseFor(result.luminosity);
-        break;
-      case message::Property::Warning:
-        parseFor(result.warning);
-        break;
-      default:
-        throw std::invalid_argument("unknown property: " + int(property));
-        break;
-      }
-    }
-
-    return result;
-  }
-
-private:
-  Parser parser;
-
-  template<typename T>
-  void parseFor(message::Value<T> &value)
-  {
-    T raw;
-    parser.parse(raw);
-    value = raw;
-  }
-};
-
 message::Incoming decode(const presentation::Message &message)
 {
-  Decoder decoder;
-  decoder.init(message);
-  return decoder.decoded();
+  Parser parser{message};
+  return decode(parser);
 }
 
 }

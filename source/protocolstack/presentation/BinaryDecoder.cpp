@@ -6,6 +6,7 @@
  */
 
 #include "BinaryDecoder.h"
+#include "Decoder.h"
 
 #include <protocolstack/application/message/propertyNumbers.h>
 #include <protocolstack/application/message/Property.h>
@@ -19,17 +20,17 @@ namespace presentation
 namespace binary
 {
 
-class Parser
+class Parser :
+    public presentation::Parser
 {
 public:
-
-  void init(const presentation::Message &message)
+  Parser(const presentation::Message &message)
   {
     const auto values = message.asBinary();
     data = std::list<uint8_t>{values.cbegin(), values.cend()};
   }
 
-  message::Property parseProperty()
+  message::Property parseProperty() override
   {
     if (!hasMore()) {
       throw std::invalid_argument("no more data");
@@ -46,12 +47,12 @@ public:
     throw std::invalid_argument("unknown property: " + std::to_string(key));
   }
 
-  bool hasMore() const
+  bool hasMore() const override
   {
     return !data.empty();
   }
 
-  void parse(double &value)
+  void parse(double &value) override
   {
     if (data.empty()) {
       throw std::invalid_argument("expected 1 byte, got nothing");
@@ -64,7 +65,7 @@ public:
     value = double(raw) / 100;
   }
 
-  void parse(std::string &value)
+  void parse(std::string &value) override
   {
     if (data.empty()) {
       throw std::invalid_argument("expected 1 byte, got nothing");
@@ -94,57 +95,12 @@ private:
 
 };
 
-class Decoder
-{
-public:
-
-  void init(const presentation::Message &message)
-  {
-    parser.init(message);
-  }
-
-  message::Incoming decoded()
-  {
-    message::Incoming result{};
-
-    while (parser.hasMore()) {
-      auto property = parser.parseProperty();
-      switch (property) {
-      case message::Property::Luminosity:
-        parseFor(result.luminosity);
-        break;
-      case message::Property::Warning:
-        parseFor(result.warning);
-        break;
-      default:
-        throw std::invalid_argument("unknown property: " + int(property));
-        break;
-      }
-    }
-
-    return result;
-  }
-
-private:
-  Parser parser;
-
-  template<typename T>
-  void parseFor(message::Value<T> &value)
-  {
-    T raw;
-    parser.parse(raw);
-    value = raw;
-  }
-
-
-};
 
 
 message::Incoming decode(const presentation::Message &message)
 {
-  Decoder decoder;
-  decoder.init(message);
-  return decoder.decoded();
+  Parser parser{message};
+  return decode(parser);
 }
 
 }
