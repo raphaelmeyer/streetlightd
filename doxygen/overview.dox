@@ -28,7 +28,7 @@ digraph overview {
   application [ label="Application" URL="\ref Application" ]
   presentation [ label="Presentation" URL="\ref Presentation" ]
   session [ label="Session" URL="\ref Session" ]
-  cloud [ label="Cloud" ]
+  cloud [ label="Cloud" shape=oval ]
 
   {
     rank = same
