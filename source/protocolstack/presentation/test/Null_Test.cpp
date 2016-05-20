@@ -13,12 +13,12 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-TEST(presentation_Null_Test, decoder_returns_empty_message)
+TEST(presentation_Null_Test, parser_has_no_data)
 {
-  const auto message = presentation::null::decode("");
+  presentation::null::Parser parser;
+  parser.reset("la le lu");
 
-  ASSERT_FALSE(message.luminosity.isValid());
-  ASSERT_FALSE(message.warning.isValid());
+  ASSERT_FALSE(parser.hasMore());
 }
 
 TEST(presentation_Null_Test, encoder_returns_empty_message)

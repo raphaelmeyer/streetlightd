@@ -6,7 +6,6 @@
  */
 
 #include "JsonDecoder.h"
-#include "Decoder.h"
 
 #include <protocolstack/application/message/propertyNames.h>
 #include <protocolstack/application/message/Property.h>
@@ -17,13 +16,6 @@ namespace presentation
 {
 namespace json
 {
-
-message::Incoming decode(const presentation::Message &message)
-{
-  Parser parser;
-  parser.reset(message);
-  return decode(parser);
-}
 
 void Parser::reset(const Message &message)
 {
@@ -67,7 +59,7 @@ void Parser::parse(double &value)
   value = current.asDouble();
 }
 
-void Parser::parse(std::__cxx11::string &value)
+void Parser::parse(std::string &value)
 {
   value = current.asString();
 }

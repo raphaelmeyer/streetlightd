@@ -6,7 +6,6 @@
  */
 
 #include "KeyValueDecoder.h"
-#include "Decoder.h"
 
 #include <protocolstack/application/message/propertyNames.h>
 #include <protocolstack/application/message/Property.h>
@@ -18,13 +17,6 @@ namespace presentation
 {
 namespace keyvalue
 {
-
-message::Incoming decode(const presentation::Message &message)
-{
-  Parser parser;
-  parser.reset(message);
-  return decode(parser);
-}
 
 static std::string trim(const std::string &value)
 {
@@ -100,7 +92,7 @@ void Parser::parse(double &value)
   }
 }
 
-void Parser::parse(std::__cxx11::string &value)
+void Parser::parse(std::string &value)
 {
   value = currentData;
 }

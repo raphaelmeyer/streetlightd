@@ -10,67 +10,112 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-TEST(KeyValueDecoder_Test, does_nothing_for_an_empty_message)
+class KeyValueDecoder_Test :
+    public testing::Test
 {
-  ASSERT_NO_THROW(presentation::keyvalue::decode(""));
-  ASSERT_NO_THROW(presentation::keyvalue::decode("\n"));
-  ASSERT_NO_THROW(presentation::keyvalue::decode("\n\n"));
-  ASSERT_NO_THROW(presentation::keyvalue::decode("  "));
-  ASSERT_NO_THROW(presentation::keyvalue::decode("  \n"));
+public:
+  presentation::keyvalue::Parser testee;
+  double dvalue;
+  std::string svalue;
+
+};
+
+
+TEST_F(KeyValueDecoder_Test, does_nothing_for_an_empty_message)
+{
+  testee.reset("");
+  ASSERT_FALSE(testee.hasMore());
+
+  testee.reset("\n");
+  ASSERT_FALSE(testee.hasMore());
+
+  testee.reset("\n\n");
+  ASSERT_FALSE(testee.hasMore());
+
+  testee.reset("  ");
+  ASSERT_FALSE(testee.hasMore());
+
+  testee.reset("  \n");
+  ASSERT_FALSE(testee.hasMore());
 }
 
-TEST(KeyValueDecoder_Test, throws_error_for_wrong_format)
+TEST_F(KeyValueDecoder_Test, throws_error_for_wrong_format)
 {
-  ASSERT_THROW(presentation::keyvalue::decode("one-word\n"), std::invalid_argument);
-  ASSERT_THROW(presentation::keyvalue::decode("two words\n"), std::invalid_argument);
-  ASSERT_THROW(presentation::keyvalue::decode("luminosity not-a-double\n"), std::invalid_argument);
+  testee.reset("one-word\n");
+  ASSERT_THROW(testee.parseProperty(), std::invalid_argument);
+
+  testee.reset("two words\n");
+  ASSERT_THROW(testee.parseProperty(), std::invalid_argument);
 }
 
-TEST(KeyValueDecoder_Test, last_newline_can_be_omitted)
+TEST_F(KeyValueDecoder_Test, withespace_between_key_and_value_are_removed)
 {
-  auto message = presentation::keyvalue::decode("luminosity 0.41");
+  testee.reset("warning     test");
 
-  ASSERT_EQ(0.41, message.luminosity());
+  testee.parseProperty();
+  testee.parse(svalue);
+
+  ASSERT_EQ("test", svalue);
 }
 
-TEST(KeyValueDecoder_Test, withespace_between_key_and_value_are_removed)
+TEST_F(KeyValueDecoder_Test, withespace_after_value_are_removed)
 {
-  auto message = presentation::keyvalue::decode("warning     test");
+  testee.reset("warning test    ");
+  testee.parseProperty();
 
-  ASSERT_EQ("test", message.warning());
+  testee.parse(svalue);
+
+  ASSERT_EQ("test", svalue);
 }
 
-TEST(KeyValueDecoder_Test, withespace_after_value_are_removed)
+TEST_F(KeyValueDecoder_Test, whitespaces_in_string_are_kept)
 {
-  auto message = presentation::keyvalue::decode("warning test    ");
+  testee.reset("warning a    b");
+  testee.parseProperty();
 
-  ASSERT_EQ("test", message.warning());
+  testee.parse(svalue);
+
+  ASSERT_EQ("a    b", svalue);
 }
 
-TEST(KeyValueDecoder_Test, decode_warning_with_whitespaces)
+TEST_F(KeyValueDecoder_Test, decode_warning)
 {
-  auto message = presentation::keyvalue::decode("warning a    b");
+  testee.reset("warning test");
 
-  ASSERT_EQ("a    b", message.warning());
+  ASSERT_EQ(message::Property::Warning, testee.parseProperty());
 }
 
-TEST(KeyValueDecoder_Test, decode_warning_string)
+TEST_F(KeyValueDecoder_Test, decode_luminosity)
 {
-  auto message = presentation::keyvalue::decode("warning test\n");
+  testee.reset("luminosity 0.41\n");
 
-  ASSERT_EQ("test", message.warning());
+  ASSERT_EQ(message::Property::Luminosity, testee.parseProperty());
 }
 
-TEST(KeyValueDecoder_Test, decode_luminosity)
+TEST_F(KeyValueDecoder_Test, decode_double)
 {
-  auto message = presentation::keyvalue::decode("luminosity 0.41\n");
+  testee.reset("luminosity 0.41\n");
+  testee.parseProperty();
 
-  ASSERT_EQ(0.41, message.luminosity());
+  testee.parse(dvalue);
+
+  ASSERT_EQ(0.41, dvalue);
 }
 
-TEST(KeyValueDecoder_Test, uses_latest_specified_value)
+TEST_F(KeyValueDecoder_Test, decode_2_values)
 {
-  auto message = presentation::keyvalue::decode("luminosity 0\nluminosity 0.12\nluminosity 0.89\n");
+  testee.reset("luminosity 0.41\nwarning test");
 
-  ASSERT_EQ(0.89, message.luminosity());
+  ASSERT_EQ(message::Property::Luminosity, testee.parseProperty());
+  testee.parse(dvalue);
+
+  ASSERT_EQ(message::Property::Warning, testee.parseProperty());
+  testee.parse(svalue);
+
+  ASSERT_FALSE(testee.hasMore());
+
+  ASSERT_EQ(0.41, dvalue);
+  ASSERT_EQ("test", svalue);
 }
+
+//TODO add test when reading a double but a string is provided

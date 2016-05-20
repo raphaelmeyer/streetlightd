@@ -16,6 +16,8 @@
 #include <jsoncpp/json/json.h>
 #include <list>
 
+//TODO rename file to *Parser
+
 namespace presentation
 {
 namespace json
@@ -41,9 +43,6 @@ private:
   Json::Value root;
 
 };
-
-
-  message::Incoming decode(const presentation::Message &message);
 
 }
 }

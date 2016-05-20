@@ -15,6 +15,8 @@
 
 #include <list>
 
+//TODO rename file to *Parser
+
 namespace presentation
 {
 namespace binary
@@ -38,8 +40,6 @@ private:
   std::list<uint8_t> data;
 
 };
-
-message::Incoming decode(const presentation::Message &message);
 
 }
 }

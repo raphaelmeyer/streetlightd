@@ -36,7 +36,6 @@ public:
 
 };
 
-message::Incoming decode(const Message &message);
 Message encode(const message::Outgoing &message);
 
 }

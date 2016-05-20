@@ -12,42 +12,71 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-TEST(JsonDecoder_Test, throws_error_for_invalid_format)
+class JsonDecoder_Test :
+    public testing::Test
 {
-  ASSERT_THROW(presentation::json::decode(""), std::invalid_argument);
-  ASSERT_THROW(presentation::json::decode("wrong"), std::invalid_argument);
+public:
+  presentation::json::Parser testee;
+  double dvalue;
+  std::string svalue;
+
+};
+
+
+TEST_F(JsonDecoder_Test, throws_error_for_invalid_format)
+{
+  ASSERT_THROW(testee.reset(""), std::invalid_argument);
+  ASSERT_THROW(testee.reset("wrong"), std::invalid_argument);
 }
 
-TEST(JsonDecoder_Test, does_nothing_for_an_empty_message)
+TEST_F(JsonDecoder_Test, does_nothing_for_an_empty_message)
 {
-  ASSERT_NO_THROW(presentation::json::decode("{}"));
-  ASSERT_NO_THROW(presentation::json::decode("null\n"));
+  testee.reset("{}");
+  ASSERT_FALSE(testee.hasMore());
+
+  testee.reset("null\n");
+  ASSERT_FALSE(testee.hasMore());
 }
 
-TEST(JsonDecoder_Test, decode_luminosity)
+TEST_F(JsonDecoder_Test, decode_luminosity)
 {
-  auto message = presentation::json::decode("{\"luminosity\":0.41}");
+  testee.reset("{\"luminosity\":0.41}");
 
-  ASSERT_EQ(0.41, message.luminosity());
+  ASSERT_EQ(message::Property::Luminosity, testee.parseProperty());
 }
 
-TEST(JsonDecoder_Test, throws_error_for_invalid_key)
+TEST_F(JsonDecoder_Test, decode_double)
 {
-  ASSERT_THROW(presentation::json::decode("{\"a-different-key\":0.23}"), std::invalid_argument);
+  testee.reset("{\"luminosity\":0.41}");
+  testee.parseProperty();
+
+  testee.parse(dvalue);
+
+  ASSERT_EQ(0.41, dvalue);
 }
 
-TEST(JsonDecoder_Test, uses_latest_specified_value)
+TEST_F(JsonDecoder_Test, throws_error_for_invalid_key)
 {
-  auto message = presentation::json::decode("{\"luminosity\":0,\"luminosity\":0.12,\"luminosity\":0.89}");
+  testee.reset("{\"a-different-key\":0.23}");
 
-  ASSERT_EQ(0.89, message.luminosity());
+  ASSERT_THROW(testee.parseProperty(), std::invalid_argument);
 }
 
-TEST(JsonDecoder_Test, decode_warning_string)
+TEST_F(JsonDecoder_Test, decode_warning)
 {
-  auto message = presentation::json::decode("{\"warning\":\"hello world\"}");
+  testee.reset("{\"warning\":\"hello world\"}");
 
-  ASSERT_EQ("hello world", message.warning());
+  ASSERT_EQ(message::Property::Warning, testee.parseProperty());
 }
 
-//TODO test for multiple values
+TEST_F(JsonDecoder_Test, decode_string)
+{
+  testee.reset("{\"warning\":\"hello world\"}");
+  testee.parseProperty();
+
+  testee.parse(svalue);
+
+  ASSERT_EQ("hello world", svalue);
+}
+
+//TODO add test when reading a double but a string is provided

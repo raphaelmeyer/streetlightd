@@ -13,62 +13,114 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-TEST(BinaryDecoder_Test, throws_error_for_invalid_key)
+class BinaryDecoder_Test :
+    public testing::Test
 {
-  ASSERT_THROW(presentation::binary::decode(std::vector<uint8_t>{100}), std::invalid_argument);
+public:
+  presentation::binary::Parser testee;
+  double dvalue;
+  std::string svalue;
+
+};
+
+TEST_F(BinaryDecoder_Test, throws_error_for_invalid_key)
+{
+  testee.reset(std::vector<uint8_t>{100});
+
+  ASSERT_THROW(testee.parseProperty(), std::invalid_argument);
 }
 
-TEST(BinaryDecoder_Test, throws_error_when_double_value_is_missing)
-{
-  const auto key = message::propertyNumber(message::Property::Luminosity);
-
-  ASSERT_THROW(presentation::binary::decode(std::vector<uint8_t>{key}), std::invalid_argument);
-}
-
-TEST(BinaryDecoder_Test, throws_error_when_string_length_is_missing)
-{
-  const auto key = message::propertyNumber(message::Property::Warning);
-
-  ASSERT_THROW(presentation::binary::decode(std::vector<uint8_t>{key}), std::invalid_argument);
-}
-
-TEST(BinaryDecoder_Test, throws_error_when_string_length_is_too_big)
-{
-  const auto key = message::propertyNumber(message::Property::Warning);
-
-  ASSERT_THROW(presentation::binary::decode(std::vector<uint8_t>{key, 4, 'a', 'a', 'a'}), std::invalid_argument);
-}
-
-TEST(BinaryDecoder_Test, does_nothing_for_an_empty_message)
-{
-  ASSERT_NO_THROW(presentation::binary::decode({}));
-}
-
-TEST(BinaryDecoder_Test, decode_double)
+TEST_F(BinaryDecoder_Test, throws_error_when_double_value_is_missing)
 {
   const auto key = message::propertyNumber(message::Property::Luminosity);
+  testee.reset(std::vector<uint8_t>{key});
 
-  auto message = presentation::binary::decode(std::vector<uint8_t>{key, 57});
+  testee.parseProperty();
 
-  ASSERT_NEAR(0.57, message.luminosity(), 0.001);
+  ASSERT_THROW(testee.parse(dvalue), std::invalid_argument);
 }
 
-TEST(BinaryDecoder_Test, decode_string)
+TEST_F(BinaryDecoder_Test, throws_error_when_string_length_is_missing)
 {
   const auto key = message::propertyNumber(message::Property::Warning);
+  testee.reset(std::vector<uint8_t>{key});
 
-  auto message = presentation::binary::decode(std::vector<uint8_t>{key, 4, 'd', 'o', 'h', '!'});
+  testee.parseProperty();
 
-  ASSERT_EQ("doh!", message.warning());
+  ASSERT_THROW(testee.parse(svalue), std::invalid_argument);
 }
 
-TEST(BinaryDecoder_Test, decode_2_values)
+TEST_F(BinaryDecoder_Test, throws_error_when_string_length_is_too_big)
+{
+  const auto key = message::propertyNumber(message::Property::Warning);
+  testee.reset(std::vector<uint8_t>{key, 4, 'a', 'a', 'a'});
+
+  testee.parseProperty();
+
+  ASSERT_THROW(testee.parse(svalue), std::invalid_argument);
+}
+
+TEST_F(BinaryDecoder_Test, an_empty_message_is_valid)
+{
+  testee.reset(std::vector<uint8_t>{});
+
+  ASSERT_FALSE(testee.hasMore());
+}
+
+TEST_F(BinaryDecoder_Test, decode_luminosity)
+{
+  const auto key = message::propertyNumber(message::Property::Luminosity);
+  testee.reset(std::vector<uint8_t>{key, 57});
+
+  ASSERT_EQ(message::Property::Luminosity, testee.parseProperty());
+}
+
+TEST_F(BinaryDecoder_Test, decode_double)
+{
+  const auto key = message::propertyNumber(message::Property::Luminosity);
+  testee.reset(std::vector<uint8_t>{key, 57});
+  testee.parseProperty();
+
+  testee.parse(dvalue);
+
+  ASSERT_NEAR(0.57, dvalue, 0.001);
+}
+
+TEST_F(BinaryDecoder_Test, decode_warning)
+{
+  const auto key = message::propertyNumber(message::Property::Warning);
+  testee.reset(std::vector<uint8_t>{key, 4, 'd', 'o', 'h', '!'});
+
+  ASSERT_EQ(message::Property::Warning, testee.parseProperty());
+}
+
+TEST_F(BinaryDecoder_Test, decode_string)
+{
+  const auto key = message::propertyNumber(message::Property::Warning);
+  testee.reset(std::vector<uint8_t>{key, 4, 'd', 'o', 'h', '!'});
+  testee.parseProperty();
+
+  testee.parse(svalue);
+
+  ASSERT_EQ("doh!", svalue);
+}
+
+TEST_F(BinaryDecoder_Test, decode_2_values)
 {
   const auto key1 = message::propertyNumber(message::Property::Warning);
   const auto key2 = message::propertyNumber(message::Property::Luminosity);
+  testee.reset(std::vector<uint8_t>{key1, 4, 'd', 'o', 'h', '!', key2, 22});
 
-  auto message = presentation::binary::decode(std::vector<uint8_t>{key1, 4, 'd', 'o', 'h', '!', key2, 22});
+  ASSERT_EQ(message::Property::Warning, testee.parseProperty());
+  testee.parse(svalue);
 
-  ASSERT_NEAR(0.22, message.luminosity(), 0.001);
-  ASSERT_EQ("doh!", message.warning());
+  ASSERT_EQ(message::Property::Luminosity, testee.parseProperty());
+  testee.parse(dvalue);
+
+  ASSERT_FALSE(testee.hasMore());
+
+  ASSERT_NEAR(0.22, dvalue, 0.001);
+  ASSERT_EQ("doh!", svalue);
 }
+
+//TODO add test when reading a double but a string is provided

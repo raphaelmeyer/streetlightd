@@ -15,6 +15,8 @@
 
 #include <list>
 
+//TODO rename file to *Parser
+
 namespace presentation
 {
 namespace keyvalue
@@ -40,8 +42,6 @@ private:
 
 };
 
-
-message::Incoming decode(const presentation::Message &message);
 
 }
 }

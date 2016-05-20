@@ -13,11 +13,6 @@ namespace presentation
 namespace null
 {
 
-message::Incoming decode(const Message &)
-{
-  return {};
-}
-
 Message encode(const message::Outgoing &)
 {
   return {};
@@ -42,7 +37,7 @@ void Parser::parse(double &)
   throw std::invalid_argument("no more data");
 }
 
-void Parser::parse(std::__cxx11::string &)
+void Parser::parse(std::string &)
 {
   throw std::invalid_argument("no more data");
 }

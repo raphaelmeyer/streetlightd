@@ -6,7 +6,6 @@
  */
 
 #include "BinaryDecoder.h"
-#include "Decoder.h"
 
 #include <protocolstack/application/message/propertyNumbers.h>
 #include <protocolstack/application/message/Property.h>
@@ -19,17 +18,6 @@ namespace presentation
 
 namespace binary
 {
-
-
-
-
-message::Incoming decode(const presentation::Message &message)
-{
-  Parser parser;
-  parser.reset(message);
-  return decode(parser);
-}
-
 
 void Parser::reset(const Message &message)
 {
@@ -72,7 +60,7 @@ void Parser::parse(double &value)
   value = double(raw) / 100;
 }
 
-void Parser::parse(std::__cxx11::string &value)
+void Parser::parse(std::string &value)
 {
   if (data.empty()) {
     throw std::invalid_argument("expected 1 byte, got nothing");
