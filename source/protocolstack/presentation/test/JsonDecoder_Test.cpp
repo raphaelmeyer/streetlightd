@@ -31,11 +31,9 @@ TEST(JsonDecoder_Test, decode_luminosity)
   ASSERT_EQ(0.41, message.luminosity());
 }
 
-TEST(JsonDecoder_Test, does_not_call_luminosity_for_different_key)
+TEST(JsonDecoder_Test, throws_error_for_invalid_key)
 {
-  auto message = presentation::json::decode("{\"a-different-key\":0.23}");
-
-  ASSERT_FALSE(message.luminosity.isValid());
+  ASSERT_THROW(presentation::json::decode("{\"a-different-key\":0.23}"), std::invalid_argument);
 }
 
 TEST(JsonDecoder_Test, uses_latest_specified_value)

@@ -6,54 +6,82 @@
  */
 
 #include "JsonDecoder.h"
+#include "Decoder.h"
 
 #include <protocolstack/application/message/propertyNames.h>
 #include <protocolstack/application/message/Property.h>
 
 #include <jsoncpp/json/json.h>
 
+#include <list>
+
 namespace presentation
 {
 namespace json
 {
 
-static void write(message::Value<double> &value, const Json::Value &raw)
+class Parser :
+    public presentation::Parser
 {
-  value = raw.asDouble();
-}
+public:
+  Parser(const presentation::Message &message)
+  {
+    Json::Reader reader;
 
-static void write(message::Value<std::string> &value, const Json::Value &raw)
-{
-  value = raw.asString();
-}
+    if (!reader.parse(message.asString(), root)) {
+      throw std::invalid_argument("not valid json: " + message.asString());
+    }
 
-template<typename T>
-static void writeIfMatched(message::Property property, message::Value<T> &destination, const std::pair<std::string, Json::Value> &value)
-{
-  if (value.first == message::propertyName(property)) {
-    write(destination, value.second);
+    const auto mem = root.getMemberNames();
+    members = std::list<std::string>{mem.cbegin(), mem.cend()};
   }
-}
+
+  message::Property parseProperty() override
+  {
+    if (!hasMore()) {
+      throw std::invalid_argument("no more data");
+    }
+
+    auto key = members.front();
+    members.pop_front();
+
+    current = root[key];
+
+    if (key == message::propertyName(message::Property::Luminosity)) {
+      return message::Property::Luminosity;
+    }
+    if (key == message::propertyName(message::Property::Warning)) {
+      return message::Property::Warning;
+    }
+    throw std::invalid_argument("unknown property: " + key);
+  }
+
+  bool hasMore() const override
+  {
+    return !members.empty();
+  }
+
+  void parse(double &value) override
+  {
+    value = current.asDouble();
+  }
+
+  void parse(std::string &value) override
+  {
+    value = current.asString();
+  }
+
+private:
+  std::list<std::string> members;
+  Json::Value current;
+  Json::Value root;
+
+};
 
 message::Incoming decode(const presentation::Message &message)
 {
-  Json::Reader reader;
-  Json::Value root;
-
-  if (!reader.parse(message.asString(), root)) {
-    throw std::invalid_argument("not valid json: " + message.asString());
-  }
-
-  message::Incoming result{};
-
-  for (const auto member : root.getMemberNames()) {
-    std::pair<std::string, Json::Value> pair{member, root[member]};
-
-    writeIfMatched(message::Property::Luminosity, result.luminosity, pair);
-    writeIfMatched(message::Property::Warning, result.warning, pair);
-  }
-
-  return result;
+  Parser parser{message};
+  return decode(parser);
 }
 
 }
