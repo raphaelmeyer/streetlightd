@@ -15,43 +15,23 @@
 
 namespace presentation
 {
+
 namespace binary
 {
 
-class Decoder
+class Parser
 {
 public:
-  Decoder(const presentation::Message &message)
+
+  void init(const presentation::Message &message)
   {
     const auto values = message.asBinary();
     data = std::list<uint8_t>{values.cbegin(), values.cend()};
   }
 
-  message::Incoming decoded()
-  {
-    message::Incoming result{};
-
-    while (hasMore()) {
-      auto type = parseProperty();
-      switch (type) {
-      case message::Property::Luminosity:
-        parseFor(result.luminosity);
-        break;
-      case message::Property::Warning:
-        parseFor(result.warning);
-        break;
-      default:
-        throw std::invalid_argument("unknown type: " + std::to_string(int(type)));
-        break;
-      }
-    }
-
-    return result;
-  }
-
   message::Property parseProperty()
   {
-    if (data.empty()) {
+    if (!hasMore()) {
       throw std::invalid_argument("no more data");
     }
 
@@ -66,19 +46,47 @@ public:
     throw std::invalid_argument("unknown property: " + std::to_string(key));
   }
 
-  template<typename T>
-  T parse();
-
-  template<typename T>
-  void parseFor(message::Value<T> &value)
-  {
-    value = parse<T>();
-  }
-
   bool hasMore() const
   {
     return !data.empty();
   }
+
+  void parse(double &value)
+  {
+    if (data.empty()) {
+      throw std::invalid_argument("expected 1 byte, got nothing");
+    }
+
+
+    const int8_t raw = static_cast<int8_t>(data.front());
+    data.pop_front();
+
+    value = double(raw) / 100;
+  }
+
+  void parse(std::string &value)
+  {
+    if (data.empty()) {
+      throw std::invalid_argument("expected 1 byte, got nothing");
+    }
+
+    const uint8_t length = data.front();
+    data.pop_front();
+
+    if (data.size() < length) {
+      throw std::invalid_argument("invalid length for string: " + std::to_string(length));
+    }
+
+    std::string text{};
+    auto textEnd = data.begin();
+    std::advance(textEnd, length);
+    text.resize(length);
+    std::transform(data.begin(), textEnd, text.begin(), [](uint8_t sym){return sym;});
+    data.erase(data.begin(), textEnd);
+
+    value = text;
+  }
+
 
 
 private:
@@ -86,48 +94,57 @@ private:
 
 };
 
-template<>
-double Decoder::parse<double>()
+class Decoder
 {
-  if (data.empty()) {
-    throw std::invalid_argument("expected 1 byte, got nothing");
+public:
+
+  void init(const presentation::Message &message)
+  {
+    parser.init(message);
+  }
+
+  message::Incoming decoded()
+  {
+    message::Incoming result{};
+
+    while (parser.hasMore()) {
+      auto property = parser.parseProperty();
+      switch (property) {
+      case message::Property::Luminosity:
+        parseFor(result.luminosity);
+        break;
+      case message::Property::Warning:
+        parseFor(result.warning);
+        break;
+      default:
+        throw std::invalid_argument("unknown property: " + int(property));
+        break;
+      }
+    }
+
+    return result;
+  }
+
+private:
+  Parser parser;
+
+  template<typename T>
+  void parseFor(message::Value<T> &value)
+  {
+    T raw;
+    parser.parse(raw);
+    value = raw;
   }
 
 
-  const int8_t raw = static_cast<int8_t>(data.front());
-  data.pop_front();
-
-  return double(raw) / 100;
-}
-
-template<>
-std::string Decoder::parse<std::string>()
-{
-  if (data.empty()) {
-    throw std::invalid_argument("expected 1 byte, got nothing");
-  }
-
-  const uint8_t length = data.front();
-  data.pop_front();
-
-  if (data.size() < length) {
-    throw std::invalid_argument("invalid length for string: " + std::to_string(length));
-  }
-
-  std::string text{};
-  auto textEnd = data.begin();
-  std::advance(textEnd, length);
-  text.resize(length);
-  std::transform(data.begin(), textEnd, text.begin(), [](uint8_t sym){return sym;});
-  data.erase(data.begin(), textEnd);
-
-  return text;
-}
+};
 
 
 message::Incoming decode(const presentation::Message &message)
 {
-  return Decoder{message}.decoded();
+  Decoder decoder;
+  decoder.init(message);
+  return decoder.decoded();
 }
 
 }

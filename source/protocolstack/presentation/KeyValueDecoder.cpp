@@ -40,10 +40,12 @@ static std::pair<std::string,std::string> split(const std::string line)
   return {key, value};
 }
 
-class Decoder
+
+class Parser
 {
 public:
-  Decoder(const presentation::Message &message)
+
+  void init(const presentation::Message &message)
   {
     std::stringstream stream{message.asString()};
     std::string line;
@@ -55,31 +57,9 @@ public:
     }
   }
 
-  message::Incoming decoded()
-  {
-    message::Incoming result{};
-
-    while (hasMore()) {
-      auto type = parseProperty();
-      switch (type) {
-      case message::Property::Luminosity:
-        parseFor(result.luminosity);
-        break;
-      case message::Property::Warning:
-        parseFor(result.warning);
-        break;
-      default:
-        throw std::invalid_argument("unknown type: " + std::to_string(int(type)));
-        break;
-      }
-    }
-
-    return result;
-  }
-
   message::Property parseProperty()
   {
-    if (lines.empty()) {
+    if (!hasMore()) {
       throw std::invalid_argument("no more data");
     }
 
@@ -99,18 +79,24 @@ public:
     throw std::invalid_argument("unknown property: " + key);
   }
 
-  template<typename T>
-  T parse();
-
-  template<typename T>
-  void parseFor(message::Value<T> &value)
-  {
-    value = parse<T>();
-  }
-
   bool hasMore() const
   {
     return !lines.empty();
+  }
+
+  void parse(double &value)
+  {
+    try {
+      std::size_t count = 0;
+      value = std::stod(currentData, &count);
+    } catch (std::invalid_argument) {
+      throw std::invalid_argument("invalid double: " + currentData);
+    }
+  }
+
+  void parse(std::string &value)
+  {
+    value = currentData;
   }
 
 private:
@@ -119,26 +105,55 @@ private:
 
 };
 
-template<>
-double Decoder::parse<double>()
-{
-  try {
-    std::size_t count = 0;
-    return std::stod(currentData, &count);
-  } catch (std::invalid_argument) {
-    throw std::invalid_argument("invalid double: " + currentData);
-  }
-}
 
-template<>
-std::string Decoder::parse<std::string>()
+class Decoder
 {
-  return currentData;
-}
+public:
+
+  void init(const presentation::Message &message)
+  {
+    parser.init(message);
+  }
+
+  message::Incoming decoded()
+  {
+    message::Incoming result{};
+
+    while (parser.hasMore()) {
+      auto property = parser.parseProperty();
+      switch (property) {
+      case message::Property::Luminosity:
+        parseFor(result.luminosity);
+        break;
+      case message::Property::Warning:
+        parseFor(result.warning);
+        break;
+      default:
+        throw std::invalid_argument("unknown property: " + int(property));
+        break;
+      }
+    }
+
+    return result;
+  }
+
+private:
+  Parser parser;
+
+  template<typename T>
+  void parseFor(message::Value<T> &value)
+  {
+    T raw;
+    parser.parse(raw);
+    value = raw;
+  }
+};
 
 message::Incoming decode(const presentation::Message &message)
 {
-  return Decoder{message}.decoded();
+  Decoder decoder;
+  decoder.init(message);
+  return decoder.decoded();
 }
 
 }
