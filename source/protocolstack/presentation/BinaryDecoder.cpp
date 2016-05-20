@@ -8,6 +8,7 @@
 #include "BinaryDecoder.h"
 
 #include <protocolstack/application/message/propertyNumbers.h>
+#include <protocolstack/application/message/Property.h>
 
 #include <algorithm>
 
@@ -55,9 +56,17 @@ std::string read<std::string>(std::vector<uint8_t>::const_iterator &start, std::
 }
 
 template<typename T>
-static void readTo(message::Value<T> &value, std::vector<uint8_t>::const_iterator &start, std::vector<uint8_t>::const_iterator &end)
+static void write(message::Value<T> &value, std::vector<uint8_t>::const_iterator &start, std::vector<uint8_t>::const_iterator &end)
 {
   value = read<T>(start, end);
+}
+
+template<typename T>
+static void writeIfMatched(message::Property property, message::Value<T> &destination, uint8_t key, std::vector<uint8_t>::const_iterator &start, std::vector<uint8_t>::const_iterator &end)
+{
+  if (key == message::propertyNumber(property)) {
+    write(destination, start, end);
+  }
 }
 
 message::Incoming decode(const presentation::Message &message)
@@ -72,12 +81,12 @@ message::Incoming decode(const presentation::Message &message)
   while (start != end) {
     const uint8_t key = *start;
     start++;
+    const auto oldStart = start;
 
-    if (key == message::propertyNumber(message::Property::Luminosity)) {
-      readTo(result.luminosity, start, end);
-    } else if (key == message::propertyNumber(message::Property::Warning)) {
-      readTo(result.warning, start, end);
-    } else {
+    writeIfMatched(message::Property::Luminosity, result.luminosity, key, start, end);
+    writeIfMatched(message::Property::Warning, result.warning, key, start, end);
+
+    if (start == oldStart) {
       throw std::invalid_argument("invalid key: " + std::to_string(key));
     }
   }

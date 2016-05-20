@@ -7,6 +7,9 @@
 
 #include "KeyValueDecoder.h"
 
+#include <protocolstack/application/message/propertyNames.h>
+#include <protocolstack/application/message/Property.h>
+
 #include <sstream>
 
 namespace presentation
@@ -52,9 +55,9 @@ static void write(message::Value<std::string> &value, const std::string &raw)
 }
 
 template<typename T>
-static void writeIfMatched(const std::string &name, message::Value<T> &destination, const std::pair<std::string,std::string> &value)
+static void writeIfMatched(message::Property property, message::Value<T> &destination, const std::pair<std::string,std::string> &value)
 {
-  if (value.first == name) {
+  if (value.first == message::propertyName(property)) {
     write(destination, value.second);
   }
 }
@@ -69,8 +72,8 @@ message::Incoming decode(const presentation::Message &message)
   while (std::getline(stream, line, '\n')) {
     const auto value = split(line);
 
-    writeIfMatched("luminosity", result.luminosity, value);
-    writeIfMatched("warning", result.warning, value);
+    writeIfMatched(message::Property::Luminosity, result.luminosity, value);
+    writeIfMatched(message::Property::Warning, result.warning, value);
   }
 
   return result;

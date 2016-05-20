@@ -8,7 +8,7 @@
 #ifndef MESSAGE_PROPERTYNAMES_H
 #define MESSAGE_PROPERTYNAMES_H
 
-#include "Property.h"
+#include <protocolstack/application/message/Property.h>
 
 #include <string>
 

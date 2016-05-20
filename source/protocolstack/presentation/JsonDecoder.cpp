@@ -7,6 +7,9 @@
 
 #include "JsonDecoder.h"
 
+#include <protocolstack/application/message/propertyNames.h>
+#include <protocolstack/application/message/Property.h>
+
 #include <jsoncpp/json/json.h>
 
 namespace presentation
@@ -25,10 +28,10 @@ static void write(message::Value<std::string> &value, const Json::Value &raw)
 }
 
 template<typename T>
-static void writeIfValid(message::Value<T> &destination, const Json::Value &value)
+static void writeIfMatched(message::Property property, message::Value<T> &destination, const std::pair<std::string, Json::Value> &value)
 {
-  if (!value.isNull()) {
-    write(destination, value);
+  if (value.first == message::propertyName(property)) {
+    write(destination, value.second);
   }
 }
 
@@ -43,8 +46,12 @@ message::Incoming decode(const presentation::Message &message)
 
   message::Incoming result{};
 
-  writeIfValid(result.luminosity, root["luminosity"]);
-  writeIfValid(result.warning, root["warning"]);
+  for (const auto member : root.getMemberNames()) {
+    std::pair<std::string, Json::Value> pair{member, root[member]};
+
+    writeIfMatched(message::Property::Luminosity, result.luminosity, pair);
+    writeIfMatched(message::Property::Warning, result.warning, pair);
+  }
 
   return result;
 }
