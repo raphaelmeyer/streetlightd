@@ -11,87 +11,123 @@
 #include <protocolstack/application/message/Property.h>
 
 #include <algorithm>
+#include <list>
 
 namespace presentation
 {
 namespace binary
 {
 
-template<typename T>
-static T read(std::vector<uint8_t>::const_iterator &start, std::vector<uint8_t>::const_iterator &end);
+class Decoder
+{
+public:
+  Decoder(const presentation::Message &message)
+  {
+    const auto values = message.asBinary();
+    data = std::list<uint8_t>{values.cbegin(), values.cend()};
+  }
+
+  message::Incoming decoded()
+  {
+    message::Incoming result{};
+
+    while (hasMore()) {
+      auto type = parseProperty();
+      switch (type) {
+      case message::Property::Luminosity:
+        parseFor(result.luminosity);
+        break;
+      case message::Property::Warning:
+        parseFor(result.warning);
+        break;
+      default:
+        throw std::invalid_argument("unknown type: " + std::to_string(int(type)));
+        break;
+      }
+    }
+
+    return result;
+  }
+
+  message::Property parseProperty()
+  {
+    if (data.empty()) {
+      throw std::invalid_argument("no more data");
+    }
+
+    auto key = data.front();
+    data.pop_front();
+    if (key == message::propertyNumber(message::Property::Luminosity)) {
+      return message::Property::Luminosity;
+    }
+    if (key == message::propertyNumber(message::Property::Warning)) {
+      return message::Property::Warning;
+    }
+    throw std::invalid_argument("unknown property: " + std::to_string(key));
+  }
+
+  template<typename T>
+  T parse();
+
+  template<typename T>
+  void parseFor(message::Value<T> &value)
+  {
+    value = parse<T>();
+  }
+
+  bool hasMore() const
+  {
+    return !data.empty();
+  }
+
+
+private:
+  std::list<uint8_t> data;
+
+};
 
 template<>
-double read<double>(std::vector<uint8_t>::const_iterator &start, std::vector<uint8_t>::const_iterator &end)
+double Decoder::parse<double>()
 {
-  if (start == end) {
+  if (data.empty()) {
     throw std::invalid_argument("expected 1 byte, got nothing");
   }
 
-  const int8_t raw = static_cast<int8_t>(*start);
-  start++;
+
+  const int8_t raw = static_cast<int8_t>(data.front());
+  data.pop_front();
 
   return double(raw) / 100;
 }
 
 template<>
-std::string read<std::string>(std::vector<uint8_t>::const_iterator &start, std::vector<uint8_t>::const_iterator &end)
+std::string Decoder::parse<std::string>()
 {
-  if (start == end) {
+  if (data.empty()) {
     throw std::invalid_argument("expected 1 byte, got nothing");
   }
 
-  const uint8_t length = *start;
-  start++;
+  const uint8_t length = data.front();
+  data.pop_front();
 
-  if (std::distance(start, end) < length) {
+  if (data.size() < length) {
     throw std::invalid_argument("invalid length for string: " + std::to_string(length));
   }
 
   std::string text{};
-  const auto textEnd = start + length;
+  auto textEnd = data.begin();
+  std::advance(textEnd, length);
   text.resize(length);
-  std::transform(start, textEnd, text.begin(), [](uint8_t sym){return sym;});
-  start = textEnd;
+  std::transform(data.begin(), textEnd, text.begin(), [](uint8_t sym){return sym;});
+  data.erase(data.begin(), textEnd);
+
   return text;
 }
 
-template<typename T>
-static void write(message::Value<T> &value, std::vector<uint8_t>::const_iterator &start, std::vector<uint8_t>::const_iterator &end)
-{
-  value = read<T>(start, end);
-}
-
-template<typename T>
-static void writeIfMatched(message::Property property, message::Value<T> &destination, uint8_t key, std::vector<uint8_t>::const_iterator &start, std::vector<uint8_t>::const_iterator &end)
-{
-  if (key == message::propertyNumber(property)) {
-    write(destination, start, end);
-  }
-}
 
 message::Incoming decode(const presentation::Message &message)
 {
-  const std::vector<uint8_t> data = message.asBinary();
-
-  message::Incoming result{};
-
-  auto start = data.begin();
-  auto end = data.end();
-
-  while (start != end) {
-    const uint8_t key = *start;
-    start++;
-    const auto oldStart = start;
-
-    writeIfMatched(message::Property::Luminosity, result.luminosity, key, start, end);
-    writeIfMatched(message::Property::Warning, result.warning, key, start, end);
-
-    if (start == oldStart) {
-      throw std::invalid_argument("invalid key: " + std::to_string(key));
-    }
-  }
-
-  return result;
+  return Decoder{message}.decoded();
 }
 
 }
