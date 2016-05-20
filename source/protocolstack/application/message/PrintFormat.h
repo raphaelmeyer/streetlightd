@@ -15,6 +15,20 @@
 namespace message
 {
 
+/**
+ * Used to serialize a message into a varity of formats.
+ *
+ * For the message:
+ *   name = "quixli"
+ *   size = 42
+ *   id = 1337
+ *
+ * The methods are called:
+ *
+ * writeSeparator(true)  writeKey(name) writeKeyValueSeparator writeValue("quixli")
+ * writeSeparator(false) writeKey(size) writeKeyValueSeparator writeValue(42)
+ * writeSeparator(false) writeKey(id)   writeKeyValueSeparator writeValue(1337)
+ */
 class PrintFormat
 {
 public:
