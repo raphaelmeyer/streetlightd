@@ -11,6 +11,7 @@
 #include <protocolstack/application/message/Property.h>
 
 #include <sstream>
+#include <list>
 
 namespace presentation
 {
@@ -24,7 +25,7 @@ static std::string trim(const std::string &value)
     return {};
   }
   const auto end = value.find_last_not_of(' ');
-  return value.substr(start, end);
+  return value.substr(start, end+1);
 }
 
 static std::pair<std::string,std::string> split(const std::string line)
@@ -39,44 +40,105 @@ static std::pair<std::string,std::string> split(const std::string line)
   return {key, value};
 }
 
-static void write(message::Value<double> &value, const std::string &raw)
+class Decoder
+{
+public:
+  Decoder(const presentation::Message &message)
+  {
+    std::stringstream stream{message.asString()};
+    std::string line;
+    while (std::getline(stream, line, '\n')) {
+      line = trim(line);
+      if (!line.empty()) {
+        lines.push_back(line);
+      }
+    }
+  }
+
+  message::Incoming decoded()
+  {
+    message::Incoming result{};
+
+    while (hasMore()) {
+      auto type = parseProperty();
+      switch (type) {
+      case message::Property::Luminosity:
+        parseFor(result.luminosity);
+        break;
+      case message::Property::Warning:
+        parseFor(result.warning);
+        break;
+      default:
+        throw std::invalid_argument("unknown type: " + std::to_string(int(type)));
+        break;
+      }
+    }
+
+    return result;
+  }
+
+  message::Property parseProperty()
+  {
+    if (lines.empty()) {
+      throw std::invalid_argument("no more data");
+    }
+
+    const auto line = lines.front();
+    lines.pop_front();
+    const auto value = split(line);
+
+    currentData = value.second;
+
+    auto key = value.first;
+    if (key == message::propertyName(message::Property::Luminosity)) {
+      return message::Property::Luminosity;
+    }
+    if (key == message::propertyName(message::Property::Warning)) {
+      return message::Property::Warning;
+    }
+    throw std::invalid_argument("unknown property: " + key);
+  }
+
+  template<typename T>
+  T parse();
+
+  template<typename T>
+  void parseFor(message::Value<T> &value)
+  {
+    value = parse<T>();
+  }
+
+  bool hasMore() const
+  {
+    return !lines.empty();
+  }
+
+private:
+  std::list<std::string> lines;
+  std::string currentData;
+
+};
+
+template<>
+double Decoder::parse<double>()
 {
   try {
     std::size_t count = 0;
-    double parsed  = std::stod(raw, &count);
-    value = parsed;
+    return std::stod(currentData, &count);
   } catch (std::invalid_argument) {
+    throw std::invalid_argument("invalid double: " + currentData);
   }
 }
 
-static void write(message::Value<std::string> &value, const std::string &raw)
+template<>
+std::string Decoder::parse<std::string>()
 {
-  value = raw;
-}
-
-template<typename T>
-static void writeIfMatched(message::Property property, message::Value<T> &destination, const std::pair<std::string,std::string> &value)
-{
-  if (value.first == message::propertyName(property)) {
-    write(destination, value.second);
-  }
+  return currentData;
 }
 
 message::Incoming decode(const presentation::Message &message)
 {
-  message::Incoming result{};
-
-  std::stringstream stream{message.asString()};
-
-  std::string line;
-  while (std::getline(stream, line, '\n')) {
-    const auto value = split(line);
-
-    writeIfMatched(message::Property::Luminosity, result.luminosity, value);
-    writeIfMatched(message::Property::Warning, result.warning, value);
-  }
-
-  return result;
+  return Decoder{message}.decoded();
 }
 
 }

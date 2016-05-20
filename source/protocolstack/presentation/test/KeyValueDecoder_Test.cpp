@@ -19,11 +19,11 @@ TEST(KeyValueDecoder_Test, does_nothing_for_an_empty_message)
   ASSERT_NO_THROW(presentation::keyvalue::decode("  \n"));
 }
 
-TEST(KeyValueDecoder_Test, does_nothing_for_wrong_format)
+TEST(KeyValueDecoder_Test, throws_error_for_wrong_format)
 {
-  ASSERT_NO_THROW(presentation::keyvalue::decode("one-word\n"));
-  ASSERT_NO_THROW(presentation::keyvalue::decode("two words\n"));
-  ASSERT_FALSE(presentation::keyvalue::decode("luminosity not-a-double\n").luminosity.isValid());
+  ASSERT_THROW(presentation::keyvalue::decode("one-word\n"), std::invalid_argument);
+  ASSERT_THROW(presentation::keyvalue::decode("two words\n"), std::invalid_argument);
+  ASSERT_THROW(presentation::keyvalue::decode("luminosity not-a-double\n"), std::invalid_argument);
 }
 
 TEST(KeyValueDecoder_Test, last_newline_can_be_omitted)
