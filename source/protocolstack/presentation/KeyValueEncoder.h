@@ -9,13 +9,14 @@
 #define PRESENTATION_KEYVALUE_ENCODER_H
 
 #include <protocolstack/application/message/Outgoing.h>
+#include <protocolstack/presentation/Message.h>
 
 namespace presentation
 {
 namespace keyvalue
 {
 
-  std::string encode(const message::Outgoing &message);
+  presentation::Message encode(const message::Outgoing &message);
 
 }
 }

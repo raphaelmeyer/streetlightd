@@ -23,12 +23,18 @@ class Format :
     public message::PrintFormat
 {
 public:
-  typedef std::function<std::string(message::Property)> PropertyNameGetter;
-
-  Format(std::ostream &_output, PropertyNameGetter _propertyName) :
-    output{_output},
-    propertyName{_propertyName}
+  void header()
   {
+    output.clear();
+  }
+
+  void footer()
+  {
+  }
+
+  presentation::Message message() const
+  {
+    return output.str();
   }
 
   void writeValue(double value) override
@@ -43,7 +49,7 @@ public:
 
   void writeKey(message::Property key) override
   {
-    output << propertyName(key);
+    output << message::propertyName(key);
   }
 
   void writeKeyValueSeparator() override
@@ -56,20 +62,20 @@ public:
   }
 
 private:
-  std::ostream &output;
-  PropertyNameGetter propertyName{};
+  std::stringstream output;
 
 };
 
-std::string encode(const message::Outgoing &message)
+Message encode(const message::Outgoing &message)
 {
-  std::stringstream stream;
-  Format format{stream, message::propertyName};
+  Format format{};
   message::Printer printer{format};
 
+  format.header();
   message.accept(printer);
+  format.footer();
 
-  return stream.str();
+  return format.message();
 }
 
 }

@@ -22,12 +22,18 @@ class Format :
     public message::PrintFormat
 {
 public:
-  typedef std::function<int(message::Property)> PropertyNumberGetter;
-
-  Format(std::vector<uint8_t> &_output, PropertyNumberGetter _propertyNumber) :
-    output{_output},
-    propertyNumber{_propertyNumber}
+  void header()
   {
+    output.clear();
+  }
+
+  void footer()
+  {
+  }
+
+  presentation::Message message() const
+  {
+    return output;
   }
 
   void writeValue(double value) override
@@ -43,7 +49,7 @@ public:
 
   void writeKey(message::Property key) override
   {
-    output.push_back(propertyNumber(key));
+    output.push_back(message::propertyNumber(key));
   }
 
   void writeKeyValueSeparator() override
@@ -55,20 +61,20 @@ public:
   }
 
 private:
-  std::vector<uint8_t> &output;
-  PropertyNumberGetter propertyNumber{};
+  std::vector<uint8_t> output;
 
 };
 
 presentation::Message encode(const message::Outgoing &message)
 {
-  std::vector<uint8_t> data{};
-  Format format{data, message::propertyNumber};
+  Format format{};
   message::Printer printer{format};
 
+  format.header();
   message.accept(printer);
+  format.footer();
 
-  return presentation::Message{data};
+  return format.message();
 }
 
 }
