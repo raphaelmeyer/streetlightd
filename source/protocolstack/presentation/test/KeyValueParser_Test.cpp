@@ -5,12 +5,12 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "../KeyValueDecoder.h"
+#include "../KeyValueParser.h"
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-class KeyValueDecoder_Test :
+class KeyValueParser_Test :
     public testing::Test
 {
 public:
@@ -21,7 +21,7 @@ public:
 };
 
 
-TEST_F(KeyValueDecoder_Test, does_nothing_for_an_empty_message)
+TEST_F(KeyValueParser_Test, does_nothing_for_an_empty_message)
 {
   testee.reset("");
   ASSERT_FALSE(testee.hasMore());
@@ -39,7 +39,7 @@ TEST_F(KeyValueDecoder_Test, does_nothing_for_an_empty_message)
   ASSERT_FALSE(testee.hasMore());
 }
 
-TEST_F(KeyValueDecoder_Test, throws_error_for_wrong_format)
+TEST_F(KeyValueParser_Test, throws_error_for_wrong_format)
 {
   testee.reset("one-word\n");
   ASSERT_THROW(testee.parseProperty(), std::invalid_argument);
@@ -48,7 +48,7 @@ TEST_F(KeyValueDecoder_Test, throws_error_for_wrong_format)
   ASSERT_THROW(testee.parseProperty(), std::invalid_argument);
 }
 
-TEST_F(KeyValueDecoder_Test, withespace_between_key_and_value_are_removed)
+TEST_F(KeyValueParser_Test, withespace_between_key_and_value_are_removed)
 {
   testee.reset("warning     test");
 
@@ -58,7 +58,7 @@ TEST_F(KeyValueDecoder_Test, withespace_between_key_and_value_are_removed)
   ASSERT_EQ("test", svalue);
 }
 
-TEST_F(KeyValueDecoder_Test, withespace_after_value_are_removed)
+TEST_F(KeyValueParser_Test, withespace_after_value_are_removed)
 {
   testee.reset("warning test    ");
   testee.parseProperty();
@@ -68,7 +68,7 @@ TEST_F(KeyValueDecoder_Test, withespace_after_value_are_removed)
   ASSERT_EQ("test", svalue);
 }
 
-TEST_F(KeyValueDecoder_Test, whitespaces_in_string_are_kept)
+TEST_F(KeyValueParser_Test, whitespaces_in_string_are_kept)
 {
   testee.reset("warning a    b");
   testee.parseProperty();
@@ -78,21 +78,21 @@ TEST_F(KeyValueDecoder_Test, whitespaces_in_string_are_kept)
   ASSERT_EQ("a    b", svalue);
 }
 
-TEST_F(KeyValueDecoder_Test, decode_warning)
+TEST_F(KeyValueParser_Test, decode_warning)
 {
   testee.reset("warning test");
 
   ASSERT_EQ(message::Property::Warning, testee.parseProperty());
 }
 
-TEST_F(KeyValueDecoder_Test, decode_luminosity)
+TEST_F(KeyValueParser_Test, decode_luminosity)
 {
   testee.reset("luminosity 0.41\n");
 
   ASSERT_EQ(message::Property::Luminosity, testee.parseProperty());
 }
 
-TEST_F(KeyValueDecoder_Test, decode_double)
+TEST_F(KeyValueParser_Test, decode_double)
 {
   testee.reset("luminosity 0.41\n");
   testee.parseProperty();
@@ -102,7 +102,7 @@ TEST_F(KeyValueDecoder_Test, decode_double)
   ASSERT_EQ(0.41, dvalue);
 }
 
-TEST_F(KeyValueDecoder_Test, decode_2_values)
+TEST_F(KeyValueParser_Test, decode_2_values)
 {
   testee.reset("luminosity 0.41\nwarning test");
 

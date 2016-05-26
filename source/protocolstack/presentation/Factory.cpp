@@ -8,11 +8,11 @@
 #include "Factory.h"
 
 #include "Presentation.h"
-#include "BinaryDecoder.h"
+#include "BinaryParser.h"
 #include "BinaryEncoder.h"
-#include "JsonDecoder.h"
+#include "JsonParser.h"
 #include "JsonEncoder.h"
-#include "KeyValueDecoder.h"
+#include "KeyValueParser.h"
 #include "KeyValueEncoder.h"
 #include "Null.h"
 

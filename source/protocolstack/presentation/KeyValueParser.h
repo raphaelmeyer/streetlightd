@@ -5,8 +5,8 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef PRESENTATION_KEYVALUE_DECODER_H
-#define PRESENTATION_KEYVALUE_DECODER_H
+#ifndef PRESENTATION_KEYVALUE_PARSER_H
+#define PRESENTATION_KEYVALUE_PARSER_H
 
 #include "Parser.h"
 
@@ -14,8 +14,6 @@
 #include <protocolstack/presentation/Message.h>
 
 #include <list>
-
-//TODO rename file to *Parser
 
 namespace presentation
 {

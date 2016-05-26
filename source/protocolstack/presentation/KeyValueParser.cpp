@@ -5,7 +5,7 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "KeyValueDecoder.h"
+#include "KeyValueParser.h"
 
 #include <protocolstack/application/message/propertyNames.h>
 #include <protocolstack/application/message/Property.h>

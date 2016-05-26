@@ -5,7 +5,7 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "../BinaryDecoder.h"
+#include "../BinaryParser.h"
 
 #include <protocolstack/application/message/Incoming.h>
 #include <protocolstack/application/message/propertyNumbers.h>
@@ -13,7 +13,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-class BinaryDecoder_Test :
+class BinaryParser_Test :
     public testing::Test
 {
 public:
@@ -23,14 +23,14 @@ public:
 
 };
 
-TEST_F(BinaryDecoder_Test, throws_error_for_invalid_key)
+TEST_F(BinaryParser_Test, throws_error_for_invalid_key)
 {
   testee.reset(std::vector<uint8_t>{100});
 
   ASSERT_THROW(testee.parseProperty(), std::invalid_argument);
 }
 
-TEST_F(BinaryDecoder_Test, throws_error_when_double_value_is_missing)
+TEST_F(BinaryParser_Test, throws_error_when_double_value_is_missing)
 {
   const auto key = message::propertyNumber(message::Property::Luminosity);
   testee.reset(std::vector<uint8_t>{key});
@@ -40,7 +40,7 @@ TEST_F(BinaryDecoder_Test, throws_error_when_double_value_is_missing)
   ASSERT_THROW(testee.parse(dvalue), std::invalid_argument);
 }
 
-TEST_F(BinaryDecoder_Test, throws_error_when_string_length_is_missing)
+TEST_F(BinaryParser_Test, throws_error_when_string_length_is_missing)
 {
   const auto key = message::propertyNumber(message::Property::Warning);
   testee.reset(std::vector<uint8_t>{key});
@@ -50,7 +50,7 @@ TEST_F(BinaryDecoder_Test, throws_error_when_string_length_is_missing)
   ASSERT_THROW(testee.parse(svalue), std::invalid_argument);
 }
 
-TEST_F(BinaryDecoder_Test, throws_error_when_string_length_is_too_big)
+TEST_F(BinaryParser_Test, throws_error_when_string_length_is_too_big)
 {
   const auto key = message::propertyNumber(message::Property::Warning);
   testee.reset(std::vector<uint8_t>{key, 4, 'a', 'a', 'a'});
@@ -60,14 +60,14 @@ TEST_F(BinaryDecoder_Test, throws_error_when_string_length_is_too_big)
   ASSERT_THROW(testee.parse(svalue), std::invalid_argument);
 }
 
-TEST_F(BinaryDecoder_Test, an_empty_message_is_valid)
+TEST_F(BinaryParser_Test, an_empty_message_is_valid)
 {
   testee.reset(std::vector<uint8_t>{});
 
   ASSERT_FALSE(testee.hasMore());
 }
 
-TEST_F(BinaryDecoder_Test, decode_luminosity)
+TEST_F(BinaryParser_Test, decode_luminosity)
 {
   const auto key = message::propertyNumber(message::Property::Luminosity);
   testee.reset(std::vector<uint8_t>{key, 57});
@@ -75,7 +75,7 @@ TEST_F(BinaryDecoder_Test, decode_luminosity)
   ASSERT_EQ(message::Property::Luminosity, testee.parseProperty());
 }
 
-TEST_F(BinaryDecoder_Test, decode_double)
+TEST_F(BinaryParser_Test, decode_double)
 {
   const auto key = message::propertyNumber(message::Property::Luminosity);
   testee.reset(std::vector<uint8_t>{key, 57});
@@ -86,7 +86,7 @@ TEST_F(BinaryDecoder_Test, decode_double)
   ASSERT_NEAR(0.57, dvalue, 0.001);
 }
 
-TEST_F(BinaryDecoder_Test, decode_warning)
+TEST_F(BinaryParser_Test, decode_warning)
 {
   const auto key = message::propertyNumber(message::Property::Warning);
   testee.reset(std::vector<uint8_t>{key, 4, 'd', 'o', 'h', '!'});
@@ -94,7 +94,7 @@ TEST_F(BinaryDecoder_Test, decode_warning)
   ASSERT_EQ(message::Property::Warning, testee.parseProperty());
 }
 
-TEST_F(BinaryDecoder_Test, decode_string)
+TEST_F(BinaryParser_Test, decode_string)
 {
   const auto key = message::propertyNumber(message::Property::Warning);
   testee.reset(std::vector<uint8_t>{key, 4, 'd', 'o', 'h', '!'});
@@ -105,7 +105,7 @@ TEST_F(BinaryDecoder_Test, decode_string)
   ASSERT_EQ("doh!", svalue);
 }
 
-TEST_F(BinaryDecoder_Test, decode_2_values)
+TEST_F(BinaryParser_Test, decode_2_values)
 {
   const auto key1 = message::propertyNumber(message::Property::Warning);
   const auto key2 = message::propertyNumber(message::Property::Luminosity);

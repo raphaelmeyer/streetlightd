@@ -5,22 +5,19 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef PRESENTATION_JSON_DECODER_H
-#define PRESENTATION_JSON_DECODER_H
+#ifndef PRESENTATION_BINARY_PARSER_H
+#define PRESENTATION_BINARY_PARSER_H
 
 #include "Parser.h"
 
 #include <protocolstack/application/message/Incoming.h>
 #include <protocolstack/presentation/Message.h>
 
-#include <jsoncpp/json/json.h>
 #include <list>
-
-//TODO rename file to *Parser
 
 namespace presentation
 {
-namespace json
+namespace binary
 {
 
 class Parser :
@@ -38,9 +35,7 @@ public:
   void parse(std::string &value) override;
 
 private:
-  std::list<std::string> members;
-  Json::Value current;
-  Json::Value root;
+  std::list<uint8_t> data;
 
 };
 
