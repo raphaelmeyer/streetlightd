@@ -17,22 +17,12 @@ namespace message
 
 void Outgoing::accept(Visitor &visitor) const
 {
+  visitor.outgoingHeader();
   visitor.visit(Property::Brightness, brightness);
   visitor.visit(Property::Moisture, moisture);
   visitor.visit(Property::Proximity, proximity);
   visitor.visit(Property::Info, info);
+  visitor.outgoingFooter();
 }
 
-}
-
-std::ostream& operator<<(std::ostream &stream, const message::Outgoing &message)
-{
-  message::DebugFormat format{stream, message::propertyName};
-  message::Printer printer{format};
-
-  stream << "message::Outgoing(";
-  message.accept(printer);
-  stream << ")";
-
-  return stream;
 }

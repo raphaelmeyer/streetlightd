@@ -78,6 +78,7 @@ file(GLOB_RECURSE TEST_SOURCES
     infrastructure/cli/EnumOption.cpp
     infrastructure/Factory.h
     infrastructure/SasToken.cpp
+    protocolstack/application/message/Message.cpp
     protocolstack/application/message/Outgoing.cpp
     protocolstack/application/message/Incoming.cpp
     protocolstack/application/message/Printer.cpp

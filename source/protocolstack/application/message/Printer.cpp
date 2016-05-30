@@ -7,12 +7,35 @@
 
 #include "Printer.h"
 
+#include "Incoming.h"
+#include "Outgoing.h"
+
 namespace message
 {
 
 Printer::Printer(PrintFormat &_format) :
   format{_format}
 {
+}
+
+void Printer::incomingHeader()
+{
+  format.writeIncomingHeader();
+}
+
+void Printer::incomingFooter()
+{
+  format.writeFooter();
+}
+
+void Printer::outgoingHeader()
+{
+  format.writeOutgoingHeader();
+}
+
+void Printer::outgoingFooter()
+{
+  format.writeFooter();
 }
 
 void Printer::visit(Property property, const Value<double> &value)

@@ -32,6 +32,16 @@ TEST_F(message_Outgoing_Test, can_print_message)
   ASSERT_EQ("message::Outgoing(brightness=\"0.420000\" info=\"hello world\")", output.str());
 }
 
+TEST_F(message_Outgoing_Test, visit_header_and_footer)
+{
+  testing::StrictMock<VisitorMock> visitor;
+
+  EXPECT_CALL(visitor, outgoingHeader());
+  EXPECT_CALL(visitor, outgoingFooter());
+
+  testee.accept(visitor);
+}
+
 TEST_F(message_Outgoing_Test, visit_all_values)
 {
   const VisitorMock::VisitDouble expectedDoubles = {
@@ -42,11 +52,10 @@ TEST_F(message_Outgoing_Test, visit_all_values)
   const VisitorMock::VisitString expectedStrings = {
     {message::Property::Info, &testee.info}
   };
-  testing::StrictMock<VisitorMock> visitor;
+  testing::NiceMock<VisitorMock> visitor;
 
   testee.accept(visitor);
 
   ASSERT_EQ(expectedDoubles, visitor.visitDouble);
   ASSERT_EQ(expectedStrings, visitor.visitString);
 }
-

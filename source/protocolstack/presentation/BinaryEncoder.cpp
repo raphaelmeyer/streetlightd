@@ -22,12 +22,17 @@ class Format :
     public message::PrintFormat
 {
 public:
-  void header()
+  void writeIncomingHeader() override
   {
     output.clear();
   }
 
-  void footer()
+  void writeOutgoingHeader() override
+  {
+    writeIncomingHeader();
+  }
+
+  void writeFooter() override
   {
   }
 
@@ -70,9 +75,7 @@ presentation::Message encode(const message::Outgoing &message)
   Format format{};
   message::Printer printer{format};
 
-  format.header();
   message.accept(printer);
-  format.footer();
 
   return format.message();
 }

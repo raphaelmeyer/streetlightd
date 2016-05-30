@@ -16,21 +16,10 @@ namespace message
 
 void Incoming::accept(Visitor &visitor) const
 {
+  visitor.incomingHeader();
   visitor.visit(Property::Luminosity, luminosity);
   visitor.visit(Property::Warning, warning);
+  visitor.incomingFooter();
 }
 
 }
-
-std::ostream& operator<<(std::ostream &stream, const message::Incoming &message)
-{
-  message::DebugFormat format{stream, message::propertyName};
-  message::Printer printer{format};
-
-  stream << "message::Incoming(";
-  message.accept(printer);
-  stream << ")";
-
-  return stream;
-}
-

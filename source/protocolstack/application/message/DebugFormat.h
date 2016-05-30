@@ -26,6 +26,9 @@ public:
 
   DebugFormat(std::ostream &output, PropertyNameGetter propertyName);
 
+  void writeIncomingHeader() override;
+  void writeOutgoingHeader() override;
+  void writeFooter() override;
   void writeSeparator(bool first) override;
   void writeKey(Property key) override;
   void writeKeyValueSeparator() override;

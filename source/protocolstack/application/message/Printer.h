@@ -26,6 +26,10 @@ public:
 
   Printer(PrintFormat &format);
 
+  void incomingHeader() override;
+  void incomingFooter() override;
+  void outgoingHeader() override;
+  void outgoingFooter() override;
   void visit(Property property, const Value<double> &value) override;
   void visit(Property property, const Value<std::string> &value) override;
 

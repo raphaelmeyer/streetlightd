@@ -32,6 +32,16 @@ TEST_F(message_Incoming_Test, can_print_message_)
   ASSERT_EQ("message::Incoming(luminosity=\"0.420000\" warning=\"hello world\")", output.str());
 }
 
+TEST_F(message_Incoming_Test, visit_header_and_footer)
+{
+  testing::StrictMock<VisitorMock> visitor;
+
+  EXPECT_CALL(visitor, incomingHeader());
+  EXPECT_CALL(visitor, incomingFooter());
+
+  testee.accept(visitor);
+}
+
 TEST_F(message_Incoming_Test, visit_all_values)
 {
   const VisitorMock::VisitDouble expectedDoubles = {
@@ -40,7 +50,7 @@ TEST_F(message_Incoming_Test, visit_all_values)
   const VisitorMock::VisitString expectedStrings = {
     {message::Property::Warning, &testee.warning}
   };
-  testing::StrictMock<VisitorMock> visitor;
+  testing::NiceMock<VisitorMock> visitor;
 
   testee.accept(visitor);
 

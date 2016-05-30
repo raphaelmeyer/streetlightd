@@ -10,13 +10,15 @@
 
 #include "Value.h"
 #include "Visitor.h"
+#include "Message.h"
 
 #include <ostream>
 
 namespace message
 {
 
-  class Outgoing
+  class Outgoing :
+      public Message
   {
   public:
 
@@ -25,11 +27,9 @@ namespace message
     Value<double> proximity{};
     Value<std::string> info{};
 
-    void accept(Visitor &visitor) const;
+    void accept(Visitor &visitor) const override;
   };
 
 }
-
-std::ostream &operator<<(std::ostream &stream, const message::Outgoing &message);
 
 #endif

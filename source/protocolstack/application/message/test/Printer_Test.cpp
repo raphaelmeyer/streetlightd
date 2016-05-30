@@ -9,6 +9,8 @@
 #include "PrintFormat_Mock.h"
 #include "../Value.h"
 #include "../Property.h"
+#include "../Incoming.h"
+#include "../Outgoing.h"
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
@@ -22,6 +24,34 @@ public:
   message::Printer testee{format};
 
 };
+
+TEST_F(message_Printer_Test, prints_header_for_incoming)
+{
+  EXPECT_CALL(format, writeIncomingHeader()).Times(1);
+
+  testee.incomingHeader();
+}
+
+TEST_F(message_Printer_Test, prints_footer_for_incoming)
+{
+  EXPECT_CALL(format, writeFooter()).Times(1);
+
+  testee.incomingFooter();
+}
+
+TEST_F(message_Printer_Test, prints_header_for_outgoing)
+{
+  EXPECT_CALL(format, writeOutgoingHeader()).Times(1);
+
+  testee.outgoingHeader();
+}
+
+TEST_F(message_Printer_Test, prints_footer_for_outgoing)
+{
+  EXPECT_CALL(format, writeFooter()).Times(1);
+
+  testee.outgoingFooter();
+}
 
 TEST_F(message_Printer_Test, prints_valid_double_value)
 {

@@ -10,12 +10,18 @@
 
 #include "../Visitor.h"
 
+#include <gmock/gmock.h>
 #include <vector>
 
 class VisitorMock :
     public message::Visitor
 {
 public:
+  MOCK_METHOD0(incomingHeader, void());
+  MOCK_METHOD0(outgoingHeader, void());
+  MOCK_METHOD0(incomingFooter, void());
+  MOCK_METHOD0(outgoingFooter, void());
+
   typedef std::vector<std::pair<message::Property, const message::Value<double>*>> VisitDouble;
   VisitDouble visitDouble{};
 

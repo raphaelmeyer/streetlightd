@@ -16,6 +16,21 @@ DebugFormat::DebugFormat(std::ostream &_output, PropertyNameGetter _propertyName
 {
 }
 
+void DebugFormat::writeIncomingHeader()
+{
+  output << "message::Incoming(";
+}
+
+void DebugFormat::writeOutgoingHeader()
+{
+  output << "message::Outgoing(";
+}
+
+void DebugFormat::writeFooter()
+{
+  output << ")";
+}
+
 void DebugFormat::writeKey(Property key)
 {
   output << propertyName(key);

@@ -16,6 +16,10 @@ class PrintFormatMock :
     public message::PrintFormat
 {
 public:
+
+  MOCK_METHOD0(writeIncomingHeader, void());
+  MOCK_METHOD0(writeOutgoingHeader, void());
+  MOCK_METHOD0(writeFooter, void());
   MOCK_METHOD1(writeSeparator, void(bool));
   MOCK_METHOD1(writeKey, void(message::Property));
   MOCK_METHOD0(writeKeyValueSeparator, void());
