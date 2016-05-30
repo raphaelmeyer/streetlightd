@@ -7,70 +7,38 @@
 
 #include "KeyValueEncoder.h"
 
-#include <protocolstack/application/message/propertyNames.h>
-#include <protocolstack/application/message/PrintFormat.h>
-#include <protocolstack/application/message/Printer.h>
-
-#include <sstream>
-#include <functional>
-
 namespace presentation
 {
 namespace keyvalue
 {
 
-class KeyValueFormat :
-    public message::PrintFormat
+void PrintFormat::incomingHeader()
 {
-public:
-  void incomingHeader() override
-  {
-    output.clear();
-  }
+  output.clear();
+}
 
-  void outgoingHeader() override
-  {
-    incomingHeader();
-  }
-
-  void footer() override
-  {
-  }
-
-  presentation::Message message() const
-  {
-    return output.str();
-  }
-
-  template<typename T>
-  void write(message::Property property, const T &value)
-  {
-    output << message::propertyName(property) << " " << value << std::endl;
-  }
-
-  void value(bool, message::Property property, double value) override
-  {
-    write(property, value);
-  }
-
-  void value(bool, message::Property property, const std::string &value) override
-  {
-    write(property, value);
-  }
-
-private:
-  std::stringstream output;
-
-};
-
-Message encode(const message::Outgoing &message)
+void PrintFormat::outgoingHeader()
 {
-  KeyValueFormat format{};
-  message::Printer printer{format};
+  incomingHeader();
+}
 
-  message.accept(printer);
+void PrintFormat::footer()
+{
+}
 
-  return format.message();
+Message PrintFormat::message() const
+{
+  return output.str();
+}
+
+void PrintFormat::value(bool, message::Property property, double value)
+{
+  write(property, value);
+}
+
+void PrintFormat::value(bool, message::Property property, const std::__cxx11::string &value)
+{
+  write(property, value);
 }
 
 }

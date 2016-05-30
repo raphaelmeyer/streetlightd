@@ -8,16 +8,42 @@
 #ifndef PRESENTATION_BINARY_ENCODER_H
 #define PRESENTATION_BINARY_ENCODER_H
 
-#include <protocolstack/application/message/Outgoing.h>
-#include <protocolstack/presentation/Message.h>
+#include "PrintFormat.h"
+#include "Message.h"
 
+#include <protocolstack/application/message/propertyNumbers.h>
 
 namespace presentation
 {
 namespace binary
 {
 
-presentation::Message encode(const message::Outgoing &message);
+class PrintFormat :
+    public presentation::PrintFormat
+{
+public:
+  void incomingHeader() override;
+  void outgoingHeader() override;
+  void footer() override;
+  void value(bool, message::Property property, double value) override;
+  void value(bool, message::Property property, const std::string &value) override;
+
+  presentation::Message message() const override;
+
+private:
+  std::vector<uint8_t> output;
+
+  void writeValue(double value);
+  void writeValue(const std::string &value);
+
+  template<typename T>
+  void write(message::Property property, const T &value)
+  {
+    output.push_back(message::propertyNumber(property));
+    writeValue(value);
+  }
+
+};
 
 }
 }

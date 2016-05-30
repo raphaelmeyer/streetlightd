@@ -24,7 +24,7 @@ class Null :
 {
 public:
   Null() :
-    Presentation{null::encode, new null::Parser()}
+    Presentation{new null::PrintFormat(), new null::Parser()}
   {
   }
 };
@@ -37,7 +37,7 @@ class Binary :
 {
 public:
   Binary() :
-    Presentation{binary::encode, new binary::Parser()}
+    Presentation{new binary::PrintFormat(), new binary::Parser()}
   {
   }
 };
@@ -50,7 +50,7 @@ class KeyValue :
 {
 public:
   KeyValue() :
-    Presentation{keyvalue::encode, new keyvalue::Parser()}
+    Presentation{new keyvalue::PrintFormat(), new keyvalue::Parser()}
   {
   }
 };
@@ -63,7 +63,7 @@ class Json :
 {
 public:
   Json() :
-    Presentation{json::encode, new json::Parser()}
+    Presentation{new json::PrintFormat(), new json::Parser()}
   {
   }
 };

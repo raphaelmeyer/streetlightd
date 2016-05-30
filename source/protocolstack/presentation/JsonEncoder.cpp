@@ -7,95 +7,57 @@
 
 #include "JsonEncoder.h"
 
-#include <protocolstack/application/message/propertyNames.h>
-#include <protocolstack/application/message/PrintFormat.h>
-#include <protocolstack/application/message/Printer.h>
-
-#include <sstream>
-#include <functional>
-
 namespace presentation
 {
 namespace json
 {
 
-class JsonFormat :
-    public message::PrintFormat
+void PrintFormat::incomingHeader()
 {
-public:
-  void incomingHeader() override
-  {
-    output.clear();
-    output << "{";
-  }
+  output.clear();
+  output << "{";
+}
 
-  void outgoingHeader() override
-  {
-    incomingHeader();
-  }
-
-  void footer() override
-  {
-    output << "}";
-  }
-
-  presentation::Message message() const
-  {
-    return output.str();
-  }
-
-  void writeValue(double value)
-  {
-    output << value;
-  }
-
-  void writeValue(const std::string &value)
-  {
-    output << "\"" << value << "\"";
-  }
-
-  void separator(bool first)
-  {
-    if (!first) {
-      output << ",";
-    }
-  }
-
-  template<typename T>
-  void write(bool first, message::Property property, const T &value)
-  {
-    separator(first);
-    output << "\"" + message::propertyName(property) + "\"";
-    output << ":";
-    writeValue(value);
-  }
-
-  void value(bool first, message::Property property, double value) override
-  {
-    write(first, property, value);
-  }
-
-  void value(bool first, message::Property property, const std::string &value) override
-  {
-    write(first, property, value);
-  }
-
-private:
-  std::stringstream output;
-
-};
-
-presentation::Message encode(const message::Outgoing &message)
+void PrintFormat::outgoingHeader()
 {
-  // A custom serializer is written since the tested libraries do not
-  // support custom float serializer.
+  incomingHeader();
+}
 
-  JsonFormat format{};
-  message::Printer printer{format};
+void PrintFormat::footer()
+{
+  output << "}";
+}
 
-  message.accept(printer);
+Message PrintFormat::message() const
+{
+  return output.str();
+}
 
-  return format.message();
+void PrintFormat::writeValue(double value)
+{
+  output << value;
+}
+
+void PrintFormat::writeValue(const std::__cxx11::string &value)
+{
+  output << "\"" << value << "\"";
+}
+
+void PrintFormat::separator(bool first)
+{
+  if (!first) {
+    output << ",";
+  }
+}
+
+void PrintFormat::value(bool first, message::Property property, double value)
+{
+  write(first, property, value);
+}
+
+void PrintFormat::value(bool first, message::Property property, const std::__cxx11::string &value)
+{
+  write(first, property, value);
 }
 
 }

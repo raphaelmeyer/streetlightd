@@ -13,11 +13,6 @@ namespace presentation
 namespace null
 {
 
-Message encode(const message::Outgoing &)
-{
-  return {};
-}
-
 void Parser::reset(const Message &)
 {
 }
@@ -40,6 +35,31 @@ void Parser::parse(double &)
 void Parser::parse(std::string &)
 {
   throw std::invalid_argument("no more data");
+}
+
+void PrintFormat::incomingHeader()
+{
+}
+
+void PrintFormat::outgoingHeader()
+{
+}
+
+void PrintFormat::footer()
+{
+}
+
+void PrintFormat::value(bool, message::Property, double)
+{
+}
+
+void PrintFormat::value(bool, message::Property, const std::__cxx11::string &)
+{
+}
+
+Message PrintFormat::message() const
+{
+  return {};
 }
 
 }

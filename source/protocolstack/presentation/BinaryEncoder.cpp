@@ -7,10 +7,6 @@
 
 #include "BinaryEncoder.h"
 
-#include <protocolstack/application/message/propertyNumbers.h>
-#include <protocolstack/application/message/PrintFormat.h>
-#include <protocolstack/application/message/Printer.h>
-
 #include <cmath>
 
 namespace presentation
@@ -18,70 +14,44 @@ namespace presentation
 namespace binary
 {
 
-class BinaryFormat :
-    public message::PrintFormat
+void PrintFormat::incomingHeader()
 {
-public:
-  void incomingHeader() override
-  {
-    output.clear();
-  }
+  output.clear();
+}
 
-  void outgoingHeader() override
-  {
-    incomingHeader();
-  }
-
-  void footer() override
-  {
-  }
-
-  presentation::Message message() const
-  {
-    return output;
-  }
-
-  void writeValue(double value)
-  {
-    output.push_back(uint8_t(std::round(value * 100)));
-  }
-
-  void writeValue(const std::string &value)
-  {
-    output.push_back(value.size());
-    output.insert(output.end(), value.begin(), value.end());
-  }
-
-  template<typename T>
-  void write(message::Property property, const T &value)
-  {
-    output.push_back(message::propertyNumber(property));
-    writeValue(value);
-  }
-
-  void value(bool, message::Property property, double value) override
-  {
-    write(property, value);
-  }
-
-  void value(bool, message::Property property, const std::string &value) override
-  {
-    write(property, value);
-  }
-
-private:
-  std::vector<uint8_t> output;
-
-};
-
-presentation::Message encode(const message::Outgoing &message)
+void PrintFormat::outgoingHeader()
 {
-  BinaryFormat format{};
-  message::Printer printer{format};
+  incomingHeader();
+}
 
-  message.accept(printer);
+void PrintFormat::footer()
+{
+}
 
-  return format.message();
+Message PrintFormat::message() const
+{
+  return output;
+}
+
+void PrintFormat::writeValue(double value)
+{
+  output.push_back(uint8_t(std::round(value * 100)));
+}
+
+void PrintFormat::writeValue(const std::__cxx11::string &value)
+{
+  output.push_back(value.size());
+  output.insert(output.end(), value.begin(), value.end());
+}
+
+void PrintFormat::value(bool, message::Property property, double value)
+{
+  write(property, value);
+}
+
+void PrintFormat::value(bool, message::Property property, const std::__cxx11::string &value)
+{
+  write(property, value);
 }
 
 }

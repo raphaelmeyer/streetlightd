@@ -7,48 +7,39 @@
 
 #include "../KeyValueEncoder.h"
 
+#include <protocolstack/application/message/Property.h>
+
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
 #include <string>
 #include <vector>
 
-TEST(KeyValueEncoder_Test, encode_empty_message)
+class KeyValuePrintFormat_Test :
+    public testing::Test
 {
-  const message::Outgoing message{};
+public:
+  presentation::keyvalue::PrintFormat testee;
+};
 
-  ASSERT_EQ("", presentation::keyvalue::encode(message).asString());
+TEST_F(KeyValuePrintFormat_Test, encode_empty_message)
+{
+  testee.outgoingHeader();
+  testee.footer();
+
+  ASSERT_EQ("", testee.message().asString());
 }
 
-TEST(KeyValueEncoder_Test, encode_brightness)
+TEST_F(KeyValuePrintFormat_Test, encode_double)
 {
-  message::Outgoing message{};
-  message.brightness = 0.78;
+  testee.value(false, message::Property::Brightness, 0.78);
 
-  ASSERT_EQ("brightness 0.78\n", presentation::keyvalue::encode(message).asString());
+  ASSERT_EQ("brightness 0.78\n", testee.message().asString());
 }
 
-TEST(KeyValueEncoder_Test, encode_moisture)
+TEST_F(KeyValuePrintFormat_Test, encode_string)
 {
-  message::Outgoing message{};
-  message.moisture = 0.123;
+  testee.value(true, message::Property::Info, "hello world");
 
-  ASSERT_EQ("moisture 0.123\n", presentation::keyvalue::encode(message).asString());
-}
-
-TEST(KeyValueEncoder_Test, encode_info)
-{
-  message::Outgoing message{};
-  message.info = "hello world";
-
-  ASSERT_EQ("info hello world\n", presentation::keyvalue::encode(message).asString());
-}
-
-TEST(KeyValueEncoder_Test, encode_multiple_values)
-{
-  message::Outgoing message{};
-  message.brightness = 0.78;
-  message.moisture = 0.123;
-
-  ASSERT_EQ("brightness 0.78\nmoisture 0.123\n", presentation::keyvalue::encode(message).asString());
+  ASSERT_EQ("info hello world\n", testee.message().asString());
 }

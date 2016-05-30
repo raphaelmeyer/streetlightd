@@ -15,43 +15,49 @@
 #include <string>
 #include <vector>
 
-TEST(JsonEncoder_Test, encode_empty_message)
+class JsonPrintFormat_Test :
+    public testing::Test
 {
-  const message::Outgoing message{};
+public:
+  presentation::json::PrintFormat testee;
+};
 
-  ASSERT_EQ("{}", presentation::json::encode(message).asString());
+TEST_F(JsonPrintFormat_Test, encode_empty_message)
+{
+  testee.outgoingHeader();
+  testee.footer();
+
+  ASSERT_EQ("{}", testee.message().asString());
 }
 
-TEST(JsonEncoder_Test, encode_brightness)
+TEST_F(JsonPrintFormat_Test, encode_double)
 {
-  message::Outgoing message{};
-  message.brightness = 0.78;
+  testee.value(true, message::Property::Brightness, 0.78);
 
-  ASSERT_EQ("{\"brightness\":0.78}", presentation::json::encode(message).asString());
+  ASSERT_EQ("\"brightness\":0.78", testee.message().asString());
 }
 
-TEST(JsonEncoder_Test, encode_moisture)
+TEST_F(JsonPrintFormat_Test, encode_string)
 {
-  message::Outgoing message{};
-  message.moisture = 0.78;
+  testee.value(true, message::Property::Info, "hello world");
 
-  ASSERT_EQ("{\"moisture\":0.78}", presentation::json::encode(message).asString());
+  ASSERT_EQ("\"info\":\"hello world\"", testee.message().asString());
 }
 
-TEST(JsonEncoder_Test, encode_info)
+TEST_F(JsonPrintFormat_Test, add_semicolon_as_separator)
 {
-  message::Outgoing message{};
-  message.info = "hello world";
+  testee.value(false, message::Property::Info, "hello world");
 
-  ASSERT_EQ("{\"info\":\"hello world\"}", presentation::json::encode(message).asString());
+  ASSERT_EQ(",\"info\":\"hello world\"", testee.message().asString());
 }
 
-TEST(JsonEncoder_Test, encode_multiple_values)
+TEST_F(JsonPrintFormat_Test, encode_full)
 {
-  message::Outgoing message{};
-  message.brightness = 0.78;
-  message.moisture = 0.12;
-  message.info = "hello world";
+  testee.outgoingHeader();
+  testee.value(true, message::Property::Brightness, 0.78);
+  testee.value(false, message::Property::Moisture, 0.12);
+  testee.value(false, message::Property::Info, "hello world");
+  testee.footer();
 
-  ASSERT_EQ("{\"brightness\":0.78,\"moisture\":0.12,\"info\":\"hello world\"}", presentation::json::encode(message).asString());
+  ASSERT_EQ("{\"brightness\":0.78,\"moisture\":0.12,\"info\":\"hello world\"}", testee.message().asString());
 }

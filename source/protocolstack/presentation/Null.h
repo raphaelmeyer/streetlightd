@@ -9,10 +9,11 @@
 #define PRESENTATION_NULL_H
 
 #include "Parser.h"
+#include "PrintFormat.h"
+#include "Message.h"
 
 #include <protocolstack/application/message/Incoming.h>
 #include <protocolstack/application/message/Outgoing.h>
-#include <protocolstack/presentation/Message.h>
 
 namespace presentation
 {
@@ -36,7 +37,19 @@ public:
 
 };
 
-Message encode(const message::Outgoing &message);
+class PrintFormat :
+    public presentation::PrintFormat
+{
+public:
+  void incomingHeader() override;
+  void outgoingHeader() override;
+  void footer() override;
+  void value(bool, message::Property, double) override;
+  void value(bool, message::Property, const std::string &) override;
+
+  presentation::Message message() const override;
+
+};
 
 }
 

@@ -21,12 +21,13 @@ TEST(presentation_Null_Test, parser_has_no_data)
   ASSERT_FALSE(parser.hasMore());
 }
 
-TEST(presentation_Null_Test, encoder_returns_empty_message)
+TEST(presentation_Null_Test, print_format_returns_empty_message)
 {
-  message::Outgoing message;
-  message.brightness = 0;
+  presentation::null::PrintFormat testee;
 
-  const auto result = presentation::null::encode(message);
+  testee.outgoingHeader();
+  testee.value(true, message::Property::Brightness, 42);
+  testee.footer();
 
-  ASSERT_EQ(0, result.asBinary().size());
+  ASSERT_EQ("", testee.message().asString());
 }
