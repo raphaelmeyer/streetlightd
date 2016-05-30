@@ -20,32 +20,32 @@ Printer::Printer(PrintFormat &_format) :
 
 void Printer::incomingHeader()
 {
-  format.writeIncomingHeader();
+  format.incomingHeader();
 }
 
 void Printer::incomingFooter()
 {
-  format.writeFooter();
+  format.footer();
 }
 
 void Printer::outgoingHeader()
 {
-  format.writeOutgoingHeader();
+  format.outgoingHeader();
 }
 
 void Printer::outgoingFooter()
 {
-  format.writeFooter();
+  format.footer();
 }
 
-void Printer::visit(Property property, const Value<double> &value)
+void Printer::property(Property property, const Value<double> &value)
 {
-  print(property, value);
+  write(property, value);
 }
 
-void Printer::visit(Property property, const Value<std::string> &value)
+void Printer::property(Property property, const Value<std::string> &value)
 {
-  print(property, value);
+  write(property, value);
 }
 
 }

@@ -18,10 +18,10 @@ namespace message
 void Outgoing::accept(Visitor &visitor) const
 {
   visitor.outgoingHeader();
-  visitor.visit(Property::Brightness, brightness);
-  visitor.visit(Property::Moisture, moisture);
-  visitor.visit(Property::Proximity, proximity);
-  visitor.visit(Property::Info, info);
+  visitor.property(Property::Brightness, brightness);
+  visitor.property(Property::Moisture, moisture);
+  visitor.property(Property::Proximity, proximity);
+  visitor.property(Property::Info, info);
   visitor.outgoingFooter();
 }
 

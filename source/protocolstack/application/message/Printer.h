@@ -30,22 +30,19 @@ public:
   void incomingFooter() override;
   void outgoingHeader() override;
   void outgoingFooter() override;
-  void visit(Property property, const Value<double> &value) override;
-  void visit(Property property, const Value<std::string> &value) override;
+  void property(Property property, const Value<double> &value) override;
+  void property(Property property, const Value<std::string> &value) override;
 
 private:
   bool first{true};
   PrintFormat &format;
 
   template<typename T>
-  void print(Property property, const Value<T> &value)
+  void write(Property property, const Value<T> &value)
   {
     if (value.isValid()) {
-      format.writeSeparator(first);
+      format.value(first, property, value());
       first = false;
-      format.writeKey(property);
-      format.writeKeyValueSeparator();
-      format.writeValue(value());
     }
   }
 

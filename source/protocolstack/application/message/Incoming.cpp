@@ -17,8 +17,8 @@ namespace message
 void Incoming::accept(Visitor &visitor) const
 {
   visitor.incomingHeader();
-  visitor.visit(Property::Luminosity, luminosity);
-  visitor.visit(Property::Warning, warning);
+  visitor.property(Property::Luminosity, luminosity);
+  visitor.property(Property::Warning, warning);
   visitor.incomingFooter();
 }
 

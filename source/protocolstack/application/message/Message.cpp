@@ -13,7 +13,7 @@
 
 std::ostream& operator<<(std::ostream &stream, const message::Message &message)
 {
-  message::DebugFormat format{stream, message::propertyName};
+  message::DebugFormat format{stream};
   message::Printer printer{format};
 
   message.accept(printer);

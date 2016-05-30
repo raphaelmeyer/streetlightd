@@ -25,7 +25,7 @@ public:
   typedef std::vector<std::pair<message::Property, const message::Value<double>*>> VisitDouble;
   VisitDouble visitDouble{};
 
-  void visit(message::Property property, const message::Value<double> &value) override
+  void property(message::Property property, const message::Value<double> &value) override
   {
     visitDouble.emplace_back(property, &value);
   }
@@ -33,7 +33,7 @@ public:
   typedef std::vector<std::pair<message::Property, const message::Value<std::string>*>> VisitString;
   VisitString visitString{};
 
-  void visit(message::Property property, const message::Value<std::string> &value) override
+  void property(message::Property property, const message::Value<std::string> &value) override
   {
     visitString.emplace_back(property, &value);
   }

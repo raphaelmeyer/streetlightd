@@ -8,8 +8,8 @@
 #include "BinaryEncoder.h"
 
 #include <protocolstack/application/message/propertyNumbers.h>
-#include <protocolstack/application/message/Printer.h>
 #include <protocolstack/application/message/PrintFormat.h>
+#include <protocolstack/application/message/Printer.h>
 
 #include <cmath>
 
@@ -18,21 +18,21 @@ namespace presentation
 namespace binary
 {
 
-class Format :
+class BinaryFormat :
     public message::PrintFormat
 {
 public:
-  void writeIncomingHeader() override
+  void incomingHeader() override
   {
     output.clear();
   }
 
-  void writeOutgoingHeader() override
+  void outgoingHeader() override
   {
-    writeIncomingHeader();
+    incomingHeader();
   }
 
-  void writeFooter() override
+  void footer() override
   {
   }
 
@@ -41,28 +41,32 @@ public:
     return output;
   }
 
-  void writeValue(double value) override
+  void writeValue(double value)
   {
     output.push_back(uint8_t(std::round(value * 100)));
   }
 
-  void writeValue(const std::string &value) override
+  void writeValue(const std::string &value)
   {
     output.push_back(value.size());
     output.insert(output.end(), value.begin(), value.end());
   }
 
-  void writeKey(message::Property key) override
+  template<typename T>
+  void write(message::Property property, const T &value)
   {
-    output.push_back(message::propertyNumber(key));
+    output.push_back(message::propertyNumber(property));
+    writeValue(value);
   }
 
-  void writeKeyValueSeparator() override
+  void value(bool, message::Property property, double value) override
   {
+    write(property, value);
   }
 
-  void writeSeparator(bool) override
+  void value(bool, message::Property property, const std::string &value) override
   {
+    write(property, value);
   }
 
 private:
@@ -72,7 +76,7 @@ private:
 
 presentation::Message encode(const message::Outgoing &message)
 {
-  Format format{};
+  BinaryFormat format{};
   message::Printer printer{format};
 
   message.accept(printer);

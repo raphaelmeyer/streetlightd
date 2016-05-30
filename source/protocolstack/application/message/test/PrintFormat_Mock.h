@@ -17,14 +17,11 @@ class PrintFormatMock :
 {
 public:
 
-  MOCK_METHOD0(writeIncomingHeader, void());
-  MOCK_METHOD0(writeOutgoingHeader, void());
-  MOCK_METHOD0(writeFooter, void());
-  MOCK_METHOD1(writeSeparator, void(bool));
-  MOCK_METHOD1(writeKey, void(message::Property));
-  MOCK_METHOD0(writeKeyValueSeparator, void());
-  MOCK_METHOD1(writeValue, void(double));
-  MOCK_METHOD1(writeValue, void(const std::string &));
+  MOCK_METHOD0(incomingHeader, void());
+  MOCK_METHOD0(outgoingHeader, void());
+  MOCK_METHOD0(footer, void());
+  MOCK_METHOD3(value, void(bool, message::Property, double));
+  MOCK_METHOD3(value, void(bool, message::Property, const std::string &));
 
 };
 

@@ -26,9 +26,9 @@ namespace message
  * The methods are called:
  *
  * write*Header();
- * writeSeparator(true)  writeKey(name) writeKeyValueSeparator writeValue("quixli")
- * writeSeparator(false) writeKey(size) writeKeyValueSeparator writeValue(42)
- * writeSeparator(false) writeKey(id)   writeKeyValueSeparator writeValue(1337)
+ * writeValue(true, name, "quixli")
+ * writeValue(false, size, 42)
+ * writeValue(false, id, 1337)
  * writeFooter();
  */
 class PrintFormat
@@ -36,14 +36,11 @@ class PrintFormat
 public:
   virtual ~PrintFormat() = default;
 
-  virtual void writeIncomingHeader() = 0;
-  virtual void writeOutgoingHeader() = 0;
-  virtual void writeFooter() = 0;
-  virtual void writeSeparator(bool first) = 0;
-  virtual void writeKey(message::Property key) = 0;
-  virtual void writeKeyValueSeparator() = 0;
-  virtual void writeValue(double value) = 0;
-  virtual void writeValue(const std::string &value) = 0;
+  virtual void incomingHeader() = 0;
+  virtual void outgoingHeader() = 0;
+  virtual void footer() = 0;
+  virtual void value(bool first, message::Property property, double value) = 0;
+  virtual void value(bool first, message::Property property, const std::string &value) = 0;
 
 };
 

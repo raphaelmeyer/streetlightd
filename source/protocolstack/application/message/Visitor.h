@@ -23,8 +23,8 @@ public:
   virtual void outgoingHeader() = 0;
   virtual void incomingFooter() = 0;
   virtual void outgoingFooter() = 0;
-  virtual void visit(Property property, const Value<double> &value) = 0;
-  virtual void visit(Property property, const Value<std::string> &value) = 0;
+  virtual void property(Property property, const Value<double> &value) = 0;
+  virtual void property(Property property, const Value<std::string> &value) = 0;
 
 };
 

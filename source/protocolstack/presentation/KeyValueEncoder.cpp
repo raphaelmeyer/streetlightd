@@ -8,8 +8,8 @@
 #include "KeyValueEncoder.h"
 
 #include <protocolstack/application/message/propertyNames.h>
-#include <protocolstack/application/message/Printer.h>
 #include <protocolstack/application/message/PrintFormat.h>
+#include <protocolstack/application/message/Printer.h>
 
 #include <sstream>
 #include <functional>
@@ -19,21 +19,21 @@ namespace presentation
 namespace keyvalue
 {
 
-class Format :
+class KeyValueFormat :
     public message::PrintFormat
 {
 public:
-  void writeIncomingHeader() override
+  void incomingHeader() override
   {
     output.clear();
   }
 
-  void writeOutgoingHeader() override
+  void outgoingHeader() override
   {
-    writeIncomingHeader();
+    incomingHeader();
   }
 
-  void writeFooter() override
+  void footer() override
   {
   }
 
@@ -42,28 +42,20 @@ public:
     return output.str();
   }
 
-  void writeValue(double value) override
+  template<typename T>
+  void write(message::Property property, const T &value)
   {
-    output << value << "\n";
+    output << message::propertyName(property) << " " << value << std::endl;
   }
 
-  void writeValue(const std::string &value) override
+  void value(bool, message::Property property, double value) override
   {
-    output << value << "\n";
+    write(property, value);
   }
 
-  void writeKey(message::Property key) override
+  void value(bool, message::Property property, const std::string &value) override
   {
-    output << message::propertyName(key);
-  }
-
-  void writeKeyValueSeparator() override
-  {
-    output << " ";
-  }
-
-  void writeSeparator(bool) override
-  {
+    write(property, value);
   }
 
 private:
@@ -73,7 +65,7 @@ private:
 
 Message encode(const message::Outgoing &message)
 {
-  Format format{};
+  KeyValueFormat format{};
   message::Printer printer{format};
 
   message.accept(printer);

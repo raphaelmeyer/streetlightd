@@ -29,7 +29,7 @@ TEST_F(message_Outgoing_Test, can_print_message)
 
   output << testee;
 
-  ASSERT_EQ("message::Outgoing(brightness=\"0.420000\" info=\"hello world\")", output.str());
+  ASSERT_EQ("message::Outgoing(brightness=\"0.42\" info=\"hello world\")", output.str());
 }
 
 TEST_F(message_Outgoing_Test, visit_header_and_footer)

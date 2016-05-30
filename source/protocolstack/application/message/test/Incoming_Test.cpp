@@ -29,7 +29,7 @@ TEST_F(message_Incoming_Test, can_print_message_)
 
   output << testee;
 
-  ASSERT_EQ("message::Incoming(luminosity=\"0.420000\" warning=\"hello world\")", output.str());
+  ASSERT_EQ("message::Incoming(luminosity=\"0.42\" warning=\"hello world\")", output.str());
 }
 
 TEST_F(message_Incoming_Test, visit_header_and_footer)

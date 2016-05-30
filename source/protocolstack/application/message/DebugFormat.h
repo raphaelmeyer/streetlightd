@@ -10,6 +10,7 @@
 
 #include "PrintFormat.h"
 #include "Property.h"
+#include "propertyNames.h"
 
 #include <ostream>
 #include <functional>
@@ -22,22 +23,27 @@ class DebugFormat :
     public PrintFormat
 {
 public:
-  typedef std::function<std::string(Property)> PropertyNameGetter;
+  DebugFormat(std::ostream &output);
 
-  DebugFormat(std::ostream &output, PropertyNameGetter propertyName);
-
-  void writeIncomingHeader() override;
-  void writeOutgoingHeader() override;
-  void writeFooter() override;
-  void writeSeparator(bool first) override;
-  void writeKey(Property key) override;
-  void writeKeyValueSeparator() override;
-  void writeValue(double value) override;
-  void writeValue(const std::string &value) override;
+  void incomingHeader() override;
+  void outgoingHeader() override;
+  void footer() override;
+  void value(bool first, Property property, double value) override;
+  void value(bool first, Property property, const std::string &value) override;
 
 private:
   std::ostream &output;
-  PropertyNameGetter propertyName{};
+
+  template<typename T>
+  void write(bool first, Property property, const T &value)
+  {
+    if (!first) {
+      output << " ";
+    }
+    output << message::propertyName(property);
+    output << "=";
+    output << "\"" << value << "\"";
+  }
 
 };
 

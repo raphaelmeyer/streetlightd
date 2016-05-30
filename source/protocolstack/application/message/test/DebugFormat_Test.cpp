@@ -9,6 +9,7 @@
 #include "../DebugFormat.h"
 #include "../Value.h"
 #include "../Property.h"
+#include "../propertyNames.h"
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
@@ -20,49 +21,27 @@ class message_DebugFormat_Test :
 {
 public:
   std::stringstream output{};
-  message::Printer::PropertyNameGetter propertyGetter{[](message::Property){return "name";}};
-  message::DebugFormat testee{output, propertyGetter};
+  message::DebugFormat testee{output};
 
 };
 
-TEST_F(message_DebugFormat_Test, uses_value_from_propertyGetter_to_write_key)
+TEST_F(message_DebugFormat_Test, writes_string_value)
 {
-  testee.writeKey(message::Property::Info);
+  testee.value(true, message::Property::Info, "hi");
 
-  ASSERT_EQ("name", output.str());
+  ASSERT_EQ("info=\"hi\"", output.str());
 }
 
-TEST_F(message_DebugFormat_Test, writes_correct_key_value_separator)
+TEST_F(message_DebugFormat_Test, writes_double_value)
 {
-  testee.writeKeyValueSeparator();
+  testee.value(true, message::Property::Warning, 0.3);
 
-  ASSERT_EQ("=", output.str());
+  ASSERT_EQ("warning=\"0.3\"", output.str());
 }
 
-TEST_F(message_DebugFormat_Test, writes_double_value_correct)
+TEST_F(message_DebugFormat_Test, adds_separator_for_second_and_later_values)
 {
-  testee.writeValue(0.3);
+  testee.value(false, message::Property::Moisture, "hi");
 
-  ASSERT_EQ("\"0.300000\"", output.str());
-}
-
-TEST_F(message_DebugFormat_Test, writes_string_value_correct)
-{
-  testee.writeValue("hi");
-
-  ASSERT_EQ("\"hi\"", output.str());
-}
-
-TEST_F(message_DebugFormat_Test, does_not_write_separator_the_first_time)
-{
-  testee.writeSeparator(true);
-
-  ASSERT_EQ("", output.str());
-}
-
-TEST_F(message_DebugFormat_Test, writes_correct_separator_later_times)
-{
-  testee.writeSeparator(false);
-
-  ASSERT_EQ(" ", output.str());
+  ASSERT_EQ(" moisture=\"hi\"", output.str());
 }

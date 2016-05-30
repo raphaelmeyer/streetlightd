@@ -10,52 +10,35 @@
 namespace message
 {
 
-DebugFormat::DebugFormat(std::ostream &_output, PropertyNameGetter _propertyName) :
-  output{_output},
-  propertyName{_propertyName}
+DebugFormat::DebugFormat(std::ostream &_output) :
+  output{_output}
 {
 }
 
-void DebugFormat::writeIncomingHeader()
+void DebugFormat::incomingHeader()
 {
   output << "message::Incoming(";
 }
 
-void DebugFormat::writeOutgoingHeader()
+void DebugFormat::outgoingHeader()
 {
   output << "message::Outgoing(";
 }
 
-void DebugFormat::writeFooter()
+void DebugFormat::footer()
 {
   output << ")";
 }
 
-void DebugFormat::writeKey(Property key)
+void DebugFormat::value(bool first, Property property, double value)
 {
-  output << propertyName(key);
+  write(first, property, value);
 }
 
-void DebugFormat::writeKeyValueSeparator()
+void DebugFormat::value(bool first, Property property, const std::string &value)
 {
-  output << "=";
+  write(first, property, value);
 }
 
-void DebugFormat::writeValue(double value)
-{
-  output << "\"" << std::to_string(value) << "\"";
-}
-
-void DebugFormat::writeValue(const std::string &value)
-{
-  output << "\"" << value << "\"";
-}
-
-void DebugFormat::writeSeparator(bool first)
-{
-  if (!first) {
-    output << " ";
-  }
-}
 
 }
