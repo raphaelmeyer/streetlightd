@@ -5,11 +5,13 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "KeyValueEncoder.h"
+#include "BinaryPrintFormat.h"
+
+#include <cmath>
 
 namespace presentation
 {
-namespace keyvalue
+namespace binary
 {
 
 void PrintFormat::incomingHeader()
@@ -28,7 +30,18 @@ void PrintFormat::footer()
 
 Message PrintFormat::message() const
 {
-  return output.str();
+  return output;
+}
+
+void PrintFormat::writeValue(double value)
+{
+  output.push_back(uint8_t(std::round(value * 100)));
+}
+
+void PrintFormat::writeValue(const std::__cxx11::string &value)
+{
+  output.push_back(value.size());
+  output.insert(output.end(), value.begin(), value.end());
 }
 
 void PrintFormat::value(bool, message::Property property, double value)

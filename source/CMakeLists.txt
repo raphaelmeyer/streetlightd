@@ -88,11 +88,11 @@ file(GLOB_RECURSE TEST_SOURCES
     protocolstack/application/Forwarder.cpp
     protocolstack/application/Debug.cpp
     protocolstack/application/Offline.cpp
-    protocolstack/presentation/KeyValueEncoder.cpp
+    protocolstack/presentation/KeyValuePrintFormat.cpp
     protocolstack/presentation/KeyValueParser.cpp
-    protocolstack/presentation/JsonEncoder.cpp
+    protocolstack/presentation/JsonPrintFormat.cpp
     protocolstack/presentation/JsonParser.cpp
-    protocolstack/presentation/BinaryEncoder.cpp
+    protocolstack/presentation/BinaryPrintFormat.cpp
     protocolstack/presentation/BinaryParser.cpp
     protocolstack/presentation/Message.cpp
     protocolstack/presentation/Null.cpp

@@ -5,8 +5,8 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#ifndef PRESENTATION_JSON_ENCODER_H
-#define PRESENTATION_JSON_ENCODER_H
+#ifndef PRESENTATION_JSON_PRINTFORMAT_H
+#define PRESENTATION_JSON_PRINTFORMAT_H
 
 #include "PrintFormat.h"
 #include "Message.h"

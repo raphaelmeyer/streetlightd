@@ -9,11 +9,11 @@
 
 #include "Presentation.h"
 #include "BinaryParser.h"
-#include "BinaryEncoder.h"
+#include "BinaryPrintFormat.h"
 #include "JsonParser.h"
-#include "JsonEncoder.h"
+#include "JsonPrintFormat.h"
 #include "KeyValueParser.h"
-#include "KeyValueEncoder.h"
+#include "KeyValuePrintFormat.h"
 #include "Null.h"
 
 namespace presentation

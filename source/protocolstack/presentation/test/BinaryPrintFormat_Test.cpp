@@ -5,7 +5,7 @@
  * SPDX-License-Identifier:	GPL-3.0+
  */
 
-#include "../BinaryEncoder.h"
+#include "../BinaryPrintFormat.h"
 
 #include <protocolstack/application/message/Outgoing.h>
 #include <protocolstack/application/message/propertyNumbers.h>
