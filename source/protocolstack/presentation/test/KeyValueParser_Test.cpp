@@ -39,12 +39,10 @@ TEST_F(KeyValueParser_Test, does_nothing_for_an_empty_message)
   ASSERT_FALSE(testee.hasMore());
 }
 
-TEST_F(KeyValueParser_Test, throws_error_for_wrong_format)
+TEST_F(KeyValueParser_Test, throws_error_for_unknown_property)
 {
-  testee.reset("one-word\n");
-  ASSERT_THROW(testee.parseProperty(), std::invalid_argument);
+  testee.reset("unknown value");
 
-  testee.reset("two words\n");
   ASSERT_THROW(testee.parseProperty(), std::invalid_argument);
 }
 
@@ -76,6 +74,16 @@ TEST_F(KeyValueParser_Test, whitespaces_in_string_are_kept)
   testee.parse(svalue);
 
   ASSERT_EQ("a    b", svalue);
+}
+
+TEST_F(KeyValueParser_Test, parse_empty_string_property)
+{
+  testee.reset("warning ");
+  testee.parseProperty();
+
+  testee.parse(svalue);
+
+  ASSERT_EQ("", svalue);
 }
 
 TEST_F(KeyValueParser_Test, decode_warning)

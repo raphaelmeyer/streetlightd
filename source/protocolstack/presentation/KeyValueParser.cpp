@@ -32,7 +32,7 @@ static std::pair<std::string,std::string> split(const std::string line)
 {
   const auto spacePos = line.find(' ');
   if (spacePos == std::string::npos) {
-    return {};
+    return {line, ""};
   }
   const auto key = line.substr(0, spacePos);
   const auto value = trim(line.substr(spacePos));
