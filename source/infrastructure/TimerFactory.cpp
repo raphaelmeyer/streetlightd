@@ -18,6 +18,7 @@ TimerFactory::TimerFactory(DBus::Connection &_dbus) :
 Timer *TimerFactory::produce(const TimerConfiguration &configuration) const
 {
   if (configuration.externalTimer) {
+    dbus.request_name("ch.bbv.streetlightd");
     return new DbusTimer(dbus);
   } else {
     return new InternalTimer();

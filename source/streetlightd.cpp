@@ -57,7 +57,6 @@ int main(int argc, char **argv)
 
   // DBus creation
   DBus::Connection connection = DBus::Connection::SessionBus();
-  connection.request_name("ch.bbv.streetlightd");
   dbus::BrightnessSensor brightness{connection, configuration};
   dbus::MoistureSensor moisture{connection, configuration};
   dbus::ProximitySensor proximity{connection, configuration};
