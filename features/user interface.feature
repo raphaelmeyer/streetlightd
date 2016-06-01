@@ -37,6 +37,7 @@ Scenario: print the help
                                        for azure-* sessions, this is the device name
     --password=<password>              password for the session
                                        for azure-* sessions, this is the key
+    --service=<name>                   connect to the service <name> instead of ch.bbv.streetlight
     --external-timer                   trigger updates via DBus
 
     """

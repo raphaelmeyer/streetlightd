@@ -30,6 +30,10 @@ def step_impl(context):
 def step_impl(context):
 	context.application = subprocess.Popen(['session-test', 'simple-mqtt', 'localhost', 'lamp1', '', 'hello world'])
 
+@when(u'I start streetlightd in the offline mode with the argument "{arg}"')
+def step_impl(context, arg):
+	startStreetlightd(context, ['--application=offline', '--presentation=none', '--session=none', arg])
+
 @when(u'I run {application} with no arguments')
 def step_impl(context, application):
 	context.app = subprocess.Popen([application], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -45,4 +49,10 @@ def step_impl(context):
 	expected = context.text
 	output = context.app.stdout.read()
 	assert output == expected, 'expected to see:\n' + expected + '\ngot:\n' + output + '\n'
+
+@then(u'I expect no error')
+def step_impl(context):
+	context.application.terminate()
+	status = context.application.wait()
+	assert status == 0
 

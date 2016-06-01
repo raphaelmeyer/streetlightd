@@ -16,6 +16,8 @@
 
 #include <dbus-c++/dbus.h>
 
+#include "Configuration.h"
+
 namespace dbus
 {
 
@@ -26,8 +28,8 @@ class DbusInterface :
     public DBus::ObjectProxy
 {
 public:
-  DbusInterface(DBus::Connection& connection) :
-    DBus::ObjectProxy(connection, "/ch/bbv/streetlight", "ch.bbv.streetlight")
+  DbusInterface(DBus::Connection& connection, const Configuration &configuration) :
+    DBus::ObjectProxy(connection, "/ch/bbv/streetlight", configuration.serviceName.c_str())
   {
   }
 };

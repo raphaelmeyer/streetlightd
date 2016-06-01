@@ -8,13 +8,21 @@ import time
 import subprocess
 
 
+def runStreetlightd(context, serviceName):
+	#TODO make it independent of working directory
+	context.dbus = subprocess.Popen(['python', 'steps/streetlight.py', serviceName])
+	bus = dbus.SessionBus()
+	while not (dbus.UTF8String(serviceName) in bus.list_names()):
+		time.sleep(0.01)
+
+
 @given(u'I have a DBus streetlight')
 def step_impl(context):
-	#TODO make it independent of working directory
-	context.dbus = subprocess.Popen(['python', 'steps/streetlight.py'])
-	bus = dbus.SessionBus()
-	while not (dbus.UTF8String('ch.bbv.streetlight') in bus.list_names()):
-		time.sleep(0.01)
+	runStreetlightd(context, 'ch.bbv.streetlight')
+
+@given(u'I have a DBus streetlight with the name {serviceName}')
+def step_impl(context, serviceName):
+	runStreetlightd(context, serviceName)
 
 @given(u'the brightness is {value:g}')
 def step_impl(context, value):

@@ -5,11 +5,13 @@
 
 def after_scenario(context, scenario):
 	if hasattr(context, 'application'):
-		context.application.terminate()
-		context.application.wait()
+		if context.application.poll() == None:
+			context.application.terminate()
+			context.application.wait()
 	if hasattr(context, 'dbus'):
-		context.dbus.terminate()
-		context.dbus.wait()
+		if context.dbus.poll() == None:
+			context.dbus.terminate()
+			context.dbus.wait()
 	if hasattr(context, 'mqtt'):
 		context.mqtt.cleanup()
 

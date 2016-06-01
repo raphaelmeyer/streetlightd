@@ -10,16 +10,17 @@ import dbus.service
 import dbus.mainloop.glib
 import gobject
 import glib
+import sys
 
 class Streetlight(dbus.service.Object):
-    def __init__(self):
+    def __init__(self, serviceName):
         self.session_bus = dbus.SessionBus()
 	self.brightness = float('nan')
 	self.moisture = float('nan')
 	self.proximity = float('nan')
 	self.luminosity = float('nan')
 	self.warning = ''
-        name = dbus.service.BusName("ch.bbv.streetlight", bus=self.session_bus)
+        name = dbus.service.BusName(serviceName, bus=self.session_bus)
         dbus.service.Object.__init__(self, name, '/ch/bbv/streetlight')
 
     @dbus.service.method(dbus.PROPERTIES_IFACE, in_signature='ss', out_signature='v')
@@ -64,6 +65,9 @@ class Streetlight(dbus.service.Object):
 if __name__ == '__main__':
     dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
     loop = gobject.MainLoop()
-    streetlight = Streetlight()
+    serviceName = "ch.bbv.streetlight"
+    if len(sys.argv) == 2:
+        serviceName = sys.argv[1]
+    streetlight = Streetlight(serviceName)
     loop.run()
 

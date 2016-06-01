@@ -14,6 +14,7 @@
 #include <protocolstack/StackFactory.h>
 #include <protocolstack/session/Configuration.h>
 #include <infrastructure/TimerConfiguration.h>
+#include <dbus/Configuration.h>
 
 #include <Poco/Util/OptionSet.h>
 #include <string>
@@ -25,7 +26,8 @@ namespace cli
 class Configuration :
     public StackConfiguration,
     public session::Configuration,
-    public TimerConfiguration
+    public TimerConfiguration,
+    public dbus::Configuration
 {
 };
 
@@ -57,6 +59,7 @@ private:
   std::map<Streetlightd::Layer, std::string> fillEnumValues() const;
   void fillStackConfig(StackConfiguration &config, std::map<Layer, std::string> enumValues) const;
   void fillSessionConfig(session::Configuration &config) const;
+  void fillDbusConfig(dbus::Configuration &config) const;
   void fillTimerConfig(TimerConfiguration &config) const;
 };
 

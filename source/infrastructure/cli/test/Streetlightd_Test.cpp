@@ -200,6 +200,7 @@ TEST_F(Streetlightd_Test, the_password_argument_has_a_informative_description)
 TEST_F(Streetlightd_Test, do_not_use_external_timer_by_default)
 {
   fillDefaultEnums();
+  ON_CALL(parser, isValid()).WillByDefault(testing::Return(true));
 
   const auto result = testee.parse({});
 
@@ -216,3 +217,40 @@ TEST_F(Streetlightd_Test, can_specify_to_use_external_timer)
 
   ASSERT_TRUE(result.externalTimer);
 }
+
+TEST_F(Streetlightd_Test, provide_a_default_service_to_connect_to)
+{
+  fillDefaultEnums();
+  ON_CALL(parser, isValid()).WillByDefault(testing::Return(true));
+  ON_CALL(parser, value("service", "ch.bbv.streetlight")).WillByDefault(testing::Return("ch.bbv.streetlight"));
+
+  const auto result = testee.parse({});
+
+  ASSERT_EQ("ch.bbv.streetlight", result.serviceName);
+}
+
+TEST_F(Streetlightd_Test, specify_service_name_to_connect_to)
+{
+  fillDefaultEnums();
+  ON_CALL(parser, isValid()).WillByDefault(testing::Return(true));
+  ON_CALL(parser, value("service", testing::_)).WillByDefault(testing::Return("new service name"));
+
+  const auto result = testee.parse({});
+
+  ASSERT_EQ("new service name", result.serviceName);
+}
+
+TEST_F(Streetlightd_Test, the_service_name_argument_has_a_informative_description)
+{
+  const std::string expected{
+    "connect to the service <name> instead of ch.bbv.streetlight"
+  };
+  cli::ParserDummy dummy;
+  cli::Streetlightd parser{dummy};
+  parser.parse({});
+
+  const auto testee = dummy.parseOptions.getOption("service");
+
+  ASSERT_EQ(expected, testee.description());
+}
+

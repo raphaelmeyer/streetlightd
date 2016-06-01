@@ -15,6 +15,8 @@ namespace cli
 static const std::string HOST_ARGUMENT = "host";
 static const std::string USER_ARGUMENT = "user";
 static const std::string PASSWORD_ARGUMENT = "password";
+static const std::string SERVICE_ARGUMENT = "service";
+static const std::string SERVICE_DEFAULT = "ch.bbv.streetlight";
 static const std::string TIMER_ARGUMENT = "external-timer";
 
 Streetlightd::Streetlightd(Parser &_parser) :
@@ -63,6 +65,7 @@ Configuration Streetlightd::parse(const std::vector<std::string> &arguments)
   Configuration config{};
   fillStackConfig(config, enumValues);
   fillSessionConfig(config);
+  fillDbusConfig(config);
   fillTimerConfig(config);
   return config;
 }
@@ -95,6 +98,11 @@ void Streetlightd::fillSessionConfig(session::Configuration &config) const
   config.password = parser.value(PASSWORD_ARGUMENT, "");
 }
 
+void Streetlightd::fillDbusConfig(dbus::Configuration &config) const
+{
+  config.serviceName = parser.value(SERVICE_ARGUMENT, SERVICE_DEFAULT);
+}
+
 void Streetlightd::fillTimerConfig(TimerConfiguration &config) const
 {
   config.externalTimer = parser.contains(TIMER_ARGUMENT);
@@ -113,6 +121,7 @@ Poco::Util::OptionSet Streetlightd::createOptions() const
   options.addOption(Poco::Util::Option{HOST_ARGUMENT,     "", "host to connect to\nfor azure-* sessions, this is <iot hub name>.azure-devices.net", false}.argument("<" + HOST_ARGUMENT + ">"));
   options.addOption(Poco::Util::Option{USER_ARGUMENT,     "", "username for the session\nfor azure-* sessions, this is the device name", false}.argument("<" + USER_ARGUMENT + ">"));
   options.addOption(Poco::Util::Option{PASSWORD_ARGUMENT, "", "password for the session\nfor azure-* sessions, this is the key", false}.argument("<" + PASSWORD_ARGUMENT + ">"));
+  options.addOption(Poco::Util::Option{SERVICE_ARGUMENT,  "", "connect to the service <name> instead of " + SERVICE_DEFAULT, false}.argument("<name>"));
   options.addOption(Poco::Util::Option{TIMER_ARGUMENT,    "", "trigger updates via DBus", false});
   return options;
 }

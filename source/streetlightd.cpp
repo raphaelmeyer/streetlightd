@@ -58,11 +58,11 @@ int main(int argc, char **argv)
   // DBus creation
   DBus::Connection connection = DBus::Connection::SessionBus();
   connection.request_name("ch.bbv.streetlightd");
-  dbus::BrightnessSensor brightness{connection};
-  dbus::MoistureSensor moisture{connection};
-  dbus::ProximitySensor proximity{connection};
-  dbus::LuminosityActor luminosity{connection};
-  dbus::WarningActor warning{connection};
+  dbus::BrightnessSensor brightness{connection, configuration};
+  dbus::MoistureSensor moisture{connection, configuration};
+  dbus::ProximitySensor proximity{connection, configuration};
+  dbus::LuminosityActor luminosity{connection, configuration};
+  dbus::WarningActor warning{connection, configuration};
 
   //  Timer creation
   TimerFactory timerFactory{connection};
