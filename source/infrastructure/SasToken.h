@@ -23,6 +23,7 @@ public:
 
   SasTokenFactory(const std::string &encodedKey, const std::string &scope);
   SasTokenFactory(const std::string &encodedKey, const std::string &scope, GetTime getTime);
+  SasTokenFactory(const std::string &encodedKey, const std::string &scope, long long seconds);
 
   std::string produce() const;
 

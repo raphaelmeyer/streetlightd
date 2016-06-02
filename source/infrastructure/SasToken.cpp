@@ -108,10 +108,17 @@ SasTokenFactory::SasTokenFactory(const std::string &_encodedKey, const std::stri
 {
 }
 
+SasTokenFactory::SasTokenFactory(const std::string &_encodedKey, const std::string &_scope, long long _seconds):
+    key{sastoken::decode(_encodedKey)},
+    scope{_scope},
+    getTime{currentTimeReader()},
+    validityDuration{std::chrono::seconds(_seconds)}
+{
+}
+
 std::string SasTokenFactory::produce() const
 {
   const auto expiration = calcExpirationString();
-
   const auto secret = sastoken::secret(scope, expiration);
   const auto signature = sastoken::hash(key, secret);
   const auto encodedSignature = sastoken::urlEncode(sastoken::encode(signature));

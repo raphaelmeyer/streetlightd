@@ -22,8 +22,11 @@ include_directories("/usr/include/dbus-c++-1")
 
 include_directories ("protocolstack/session/amqp/azure-iot-sdks/c/iothub_client/inc/")
 include_directories ("protocolstack/session/amqp/azure-iot-sdks/c/azure-uamqp-c/azure-c-shared-utility/c/inc/")
+include_directories ("protocolstack/session/amqp/azure-iot-sdks/c/azure-uamqp-c/inc")
 
+#add_subdirectory ("protocolstack/session/amqp/azure-iot-sdks/c/" )
 add_subdirectory ("protocolstack/session/amqp/azure-iot-sdks/c/" EXCLUDE_FROM_ALL)
+#add_subdirectory ("protocolstack/session/amqp/azure-iot-sdks/c/azure-uamqp-c")
 
 file(GLOB RAW_SOURCES
     *.h
@@ -66,6 +69,7 @@ file(GLOB SESSION_SOURCES
     protocolstack/session/http/*.h
     protocolstack/session/http/*.cpp
     protocolstack/session/amqp/AmqpSession.cpp
+    protocolstack/session/amqp_websockets/iothub_certs.c
     )
 
 file(GLOB_RECURSE TEST_SOURCES
@@ -100,10 +104,10 @@ file(GLOB_RECURSE TEST_SOURCES
     )
 
 add_executable(streetlightd streetlightd.cpp ${RAW_SOURCES} ${SESSION_SOURCES})
-target_link_libraries(streetlightd mosquittopp dbus-c++-1 pthread PocoUtil jsoncpp PocoNet PocoNetSSL PocoFoundation iothub_client iothub_client_amqp_transport uamqp ssl crypto crypto++)
+target_link_libraries(streetlightd mosquittopp dbus-c++-1 pthread PocoUtil jsoncpp PocoNet PocoNetSSL PocoFoundation iothub_client iothub_client_amqp_transport uamqp ssl crypto crypto++ uamqp aziotsharedutil websockets)
 
 add_executable(session-test session-test.cpp ${SESSION_SOURCES})
-target_link_libraries(session-test pthread mosquittopp PocoNet PocoNetSSL PocoFoundation crypto++ iothub_client iothub_client_amqp_transport uamqp ssl crypto)
+target_link_libraries(session-test pthread mosquittopp PocoNet PocoNetSSL PocoFoundation crypto++ iothub_client iothub_client_amqp_transport uamqp ssl crypto websockets)
 
 add_executable(azure-sas-token azure-sas-token.cpp ${SAS_SOURCES})
 target_link_libraries(azure-sas-token PocoUtil crypto++ PocoFoundation)
@@ -111,8 +115,8 @@ target_link_libraries(azure-sas-token PocoUtil crypto++ PocoFoundation)
 add_executable(unit-test ${TEST_SOURCES})
 target_link_libraries(unit-test pthread PocoUtil jsoncpp crypto++ PocoFoundation)
 
-find_package(GTest REQUIRED)
-include_directories(${GTEST_INCLUDE_DIRS})
+#find_package(GTest REQUIRED)
+#include_directories(${GTEST_INCLUDE_DIRS})
 set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../cmake-findgmock)
 find_package(GMock REQUIRED)
 include_directories(${GMOCK_INCLUDE_DIRS})

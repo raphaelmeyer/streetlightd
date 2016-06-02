@@ -8,6 +8,7 @@
 #include "Factory.h"
 
 #include "AzureAmqp.h"
+#include "AzureAmqpWs.h"
 #include "AzureHttp.h"
 #include "mqtt/Azure.h"
 #include "mqtt/Simple.h"
@@ -48,6 +49,7 @@ Factory<Session*> factory()
   Factory<Session*> factory;
   factory.add("none", []{return new session::Null();});
   factory.add("azure-amqp", []{return new AzureAmqp();});
+  factory.add("azure-amqp-ws", []{return new AzureAmqpWs();});
   factory.add("azure-http", []{return new AzureHttp();});
   factory.add("azure-mqtt", []{return new AzureMqtt();});
   factory.add("simple-mqtt", []{return new SimpleMqtt();});
