@@ -1,3 +1,4 @@
+#include <cstdlib>
 extern "C"
 {
 //#include <stdlib.h>
@@ -6,6 +7,7 @@ extern "C"
 #endif
 //#include <stdio.h>
 //#include <stdbool.h>
+
 #include "platform.h"
 #include "message_sender.h"
 #include "message_receiver.h"
