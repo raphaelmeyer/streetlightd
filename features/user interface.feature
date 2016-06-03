@@ -27,6 +27,7 @@ Scenario: print the help
                                        none
     -s<value>, --session=<value>       <value> is one of:
                                        azure-amqp
+                                       azure-amqp-ws
                                        azure-http
                                        azure-mqtt
                                        none
