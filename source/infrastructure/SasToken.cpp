@@ -111,8 +111,8 @@ SasTokenFactory::SasTokenFactory(const std::string &_encodedKey, const std::stri
 SasTokenFactory::SasTokenFactory(const std::string &_encodedKey, const std::string &_scope, long long _seconds):
     key{sastoken::decode(_encodedKey)},
     scope{_scope},
-    getTime{currentTimeReader()},
-    validityDuration{std::chrono::seconds(_seconds)}
+    validityDuration{std::chrono::seconds(_seconds)},
+    getTime{currentTimeReader()}
 {
 }
 
