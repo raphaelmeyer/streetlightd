@@ -24,9 +24,9 @@ include_directories ("protocolstack/session/amqp/azure-iot-sdks/c/iothub_client/
 include_directories ("protocolstack/session/amqp/azure-iot-sdks/c/azure-uamqp-c/azure-c-shared-utility/c/inc/")
 include_directories ("protocolstack/session/amqp/azure-iot-sdks/c/azure-uamqp-c/inc")
 
-#add_subdirectory ("protocolstack/session/amqp/azure-iot-sdks/c/" )
+set (use_wsio ON CACHE INTERNAL "")
+set (skip_unittests ON CACHE INTERNAL "")
 add_subdirectory ("protocolstack/session/amqp/azure-iot-sdks/c/" EXCLUDE_FROM_ALL)
-#add_subdirectory ("protocolstack/session/amqp/azure-iot-sdks/c/azure-uamqp-c")
 
 file(GLOB RAW_SOURCES
     *.h
