@@ -100,13 +100,3 @@ TEST_F(Forwarder_Test, writes_the_luminosity_when_received_a_new_value)
 
   ASSERT_EQ(vd{0.45}, luminosity);
 }
-
-TEST_F(Forwarder_Test, writes_the_warning_when_received_a_new_value)
-{
-  message::Incoming message;
-  message.warning = "hello world";
-
-  testee.received(message);
-
-  ASSERT_EQ(vs{"hello world"}, warning);
-}

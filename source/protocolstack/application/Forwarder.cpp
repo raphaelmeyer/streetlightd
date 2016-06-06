@@ -23,9 +23,6 @@ void Forwarder::received(const message::Incoming &message)
   if (message.luminosity.isValid()) {
     luminosityActor(message.luminosity());
   }
-  if (message.warning.isValid()) {
-    warningActor(message.warning());
-  }
 }
 
 void Forwarder::setBrightnessSensor(Sensor value)
