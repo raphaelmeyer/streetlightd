@@ -14,7 +14,7 @@ namespace keyvalue
 
 void PrintFormat::incomingHeader()
 {
-  output.clear();
+  output.str(std::string{});
 }
 
 void PrintFormat::outgoingHeader()

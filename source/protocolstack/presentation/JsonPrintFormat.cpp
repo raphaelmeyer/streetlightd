@@ -14,7 +14,7 @@ namespace json
 
 void PrintFormat::incomingHeader()
 {
-  output.clear();
+  output.str(std::string{});
   output << "{";
 }
 
@@ -38,7 +38,7 @@ void PrintFormat::writeValue(double value)
   output << value;
 }
 
-void PrintFormat::writeValue(const std::__cxx11::string &value)
+void PrintFormat::writeValue(const std::string &value)
 {
   output << "\"" << value << "\"";
 }
@@ -55,7 +55,7 @@ void PrintFormat::value(bool first, message::Property property, double value)
   write(first, property, value);
 }
 
-void PrintFormat::value(bool first, message::Property property, const std::__cxx11::string &value)
+void PrintFormat::value(bool first, message::Property property, const std::string &value)
 {
   write(first, property, value);
 }

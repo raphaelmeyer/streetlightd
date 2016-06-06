@@ -61,3 +61,16 @@ TEST_F(JsonPrintFormat_Test, encode_full)
 
   ASSERT_EQ("{\"brightness\":0.78,\"moisture\":0.12,\"info\":\"hello world\"}", testee.message().asString());
 }
+
+TEST_F(JsonPrintFormat_Test, old_messages_are_cleared)
+{
+  testee.outgoingHeader();
+  testee.value(true, message::Property::Brightness, 0.78);
+  testee.footer();
+
+  testee.outgoingHeader();
+  testee.footer();
+
+  ASSERT_EQ("{}", testee.message().asString());
+}
+
