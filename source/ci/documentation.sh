@@ -2,6 +2,6 @@
 
 export PATH=`pwd`:${PATH}
 
-doxygen/generate.sh
-doxygen Doxyfile
+/home/user/source/doxygen/generate.sh
+doxygen /home/user/source/Doxyfile
 

@@ -6,10 +6,10 @@ services:
   - docker
 
 before_install:
-  - docker build -t streetlight-amd64 ci/
+  - docker build -t streetlightd-amd64 streetlightd-amd64/
 
 script:
-  - ./run-amd64 ci/build.sh
-  - ./run-amd64 ci/test.sh
-  - ./run-amd64 ci/documentation.sh
+  - ./run-amd64 /home/user/source/ci/build.sh
+  - ./run-amd64 /home/user/source/ci/test.sh
+  - ./run-amd64 /home/user/source/ci/documentation.sh
 

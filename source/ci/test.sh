@@ -15,6 +15,6 @@ export PATH=`pwd`:${PATH}
 cd features
 
 # test
-unit-test
+./unit-test
 behave
 
