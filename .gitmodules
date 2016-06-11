@@ -1,6 +1,6 @@
-[submodule "source/protocolstack/session/amqp/azure-iot-sdks"]
-	path = source/protocolstack/session/amqp/azure-iot-sdks
+[submodule "source/source/protocolstack/session/amqp/azure-iot-sdks"]
+	path = source/source/protocolstack/session/amqp/azure-iot-sdks
 	url = https://github.com/Azure/azure-iot-sdks.git
-[submodule "cmake-findgmock"]
-	path = cmake-findgmock
+[submodule "source/cmake-findgmock"]
+	path = source/cmake-findgmock
 	url = https://github.com/triglav/cmake-findgmock.git
