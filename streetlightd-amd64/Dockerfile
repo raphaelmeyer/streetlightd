@@ -27,12 +27,7 @@ RUN pip install behave paho-mqtt
 COPY gmock-install.sh /home/root/
 RUN /home/root/gmock-install.sh
 
-RUN useradd -ms /bin/bash user
-ENV HOME /home/user
-
-RUN mkdir -p /workspace ; chown -R user:user /workspace
-
-USER user
+RUN mkdir -p /workspace
 
 VOLUME ["/workspace"]
 WORKDIR /workspace

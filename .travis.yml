@@ -9,7 +9,7 @@ before_install:
   - docker build -t streetlightd-amd64 streetlightd-amd64/
 
 script:
-  - ./run-amd64 /home/user/source/ci/build.sh
-  - ./run-amd64 /home/user/source/ci/test.sh
-  - ./run-amd64 /home/user/source/ci/documentation.sh
+  - ./run-amd64 /home/root/source/ci/build.sh
+  - ./run-amd64 /home/root/source/ci/test.sh
+  - ./run-amd64 /home/root/source/ci/documentation.sh
 
