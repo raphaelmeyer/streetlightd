@@ -1,7 +1,7 @@
-# streetlightd [![Build Status](https://travis-ci.org/bbvch/streetlightd.svg?branch=master)](https://travis-ci.org/bbvch/streetlightd)
+# streetlightd [![Build Status](https://travis-ci.org/raphaelmeyer/streetlightd.svg?branch=master)](https://travis-ci.org/bbvch/raphaelmeyer)
 
 This is a program which connects the Microsoft Azure Cloud (C) with D-Bus.
-It is the counter part to [street-light-simulator](https://github.com/bbvch/street-light-simulator).
+It is the counter part to [street-light-simulator](https://github.com/raphaelmeyer/street-light-simulator).
 
 # What
 
@@ -22,7 +22,7 @@ This program is authored by [bbv Software Services AG](https://www.bbv.ch).
 
 Clone this repopsitory:
 
-    git clone https://github.com/bbvch/streetlightd.git
+    git clone https://github.com/raphaelmeyer/streetlightd.git
     cd streetlightd
     git submodule update --init --recursive
 
