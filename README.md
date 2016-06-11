@@ -1,4 +1,4 @@
-# streetlightd [![Build Status](https://travis-ci.org/raphaelmeyer/streetlightd.svg?branch=master)](https://travis-ci.org/raphaelmeyer/streetlightd)
+# streetlightd [![Build Status](https://travis-ci.org/raphaelmeyer/streetlightd.svg?branch=develop%2Fgathering)](https://travis-ci.org/raphaelmeyer/streetlightd)
 
 This is a program which connects the Microsoft Azure Cloud (C) with D-Bus.
 It is the counter part to [street-light-simulator](https://github.com/raphaelmeyer/street-light-simulator).
