@@ -12,9 +12,10 @@ service mosquitto start
 
 # set paths
 export PATH=`pwd`:${PATH}
-cd features
 
 # test
 ./unit-test
+
+cd /home/root/source/features
 behave
 
