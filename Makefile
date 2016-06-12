@@ -62,6 +62,7 @@ doc:
 clean:
 	rm -rf artifacts
 	./run-amd64 make clean
+	./run-raspbian make clean
 
 ################################################################
 
