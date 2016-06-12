@@ -16,14 +16,14 @@ if [ $# -ge 2 ] ; then
   IMAGE=$2
 fi
 
-ID=`${DIR}/workspace-id.sh ${1} ${IMAGE}`
-
-if [ ! -z ${ID} ] ; then
-  echo ${ID}
-  exit 0
+if [ -f ${FILE} ] ; then
+  ID=$(cat ${FILE})
+  if [ ! -z $ID ] ; then
+    PS=$(docker ps -a -f id=${ID} --format {{.ID}})
+    if [ ! -z ${PS} ] && [[ ${ID} == ${PS}* ]] ; then
+      echo $ID
+      exit 0
+    fi
+  fi
 fi
-
-ID=$(docker create ${IMAGE})
-echo $ID > ${FILE}
-echo ${ID}
 
