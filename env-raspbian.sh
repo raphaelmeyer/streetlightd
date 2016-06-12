@@ -7,8 +7,8 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 SRC_HOST=${DIR}/source
 SRC_GUEST=/home/user/source
 
-WORKSPACE=`./workspace.sh "raspbian"`
-ROOTFS=`./workspace-id.sh "rootfs" "raphaelmeyer/rootfs:1.0.0"`
+WORKSPACE=`${DIR}/workspace.sh "raspbian"`
+ROOTFS=`${DIR}/workspace-id.sh "rootfs" "raphaelmeyer/rootfs:1.0.0"`
 
 if [ -z ${ROOTFS} ] ; then
   echo "Error: Missing rootfs container."
