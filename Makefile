@@ -37,7 +37,7 @@ target: target-workspace artifacts
 	./copy-raspbian /workspace/streetlightd artifacts/raspbian
 
 target-workspace:
-	./run-raspbian cmake -DCMAKE_TOOLCHAIN_FILE=/opt/cmake/raspbian.cmake /home/root/source
+	./run-raspbian cmake -DCMAKE_TOOLCHAIN_FILE=/opt/cmake/raspbian.cmake /home/user/source
 
 ################################################################
 
