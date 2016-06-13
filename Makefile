@@ -34,11 +34,11 @@ target: target-daemon target-sas-token
 
 target-daemon: target-buildfolder artifacts
 	cmake --build _build --target streetlightd
-	cp _build/streetlightd _artifacts/
+	cp _build/streetlightd _artifacts/alarm/
 
 target-sas-token: target-buildfolder artifacts
 	cmake --build _build --target azure-sas-token
-	cp _build/azure-sas-token _artifacts/
+	cp _build/azure-sas-token _artifacts/alarm/
 
 target-buildfolder:
 	mkdir -p _build
@@ -48,6 +48,7 @@ target-buildfolder:
 
 artifacts:
 	mkdir -p _artifacts/amd64
+	mkdir -p _artifacts/alarm
 
 ################################################################
 
