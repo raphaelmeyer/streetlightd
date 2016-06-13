@@ -32,11 +32,11 @@ host-workspace:
 
 target: target-daemon target-sas-token
 
-target-daemon: target-buildfolder
+target-daemon: target-buildfolder artifacts
 	cmake --build _build --target streetlightd
 	cp _build/streetlightd _artifacts/
 
-target-sas-token: target-buildfolder
+target-sas-token: target-buildfolder artifacts
 	cmake --build _build --target azure-sas-token
 	cp _build/azure-sas-token _artifacts/
 
