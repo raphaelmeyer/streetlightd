@@ -46,15 +46,10 @@ target-buildfolder:
 
 ################################################################
 
+.PHONY: artifacts
 artifacts:
 	mkdir -p _artifacts/amd64
 	mkdir -p _artifacts/alarm
-
-################################################################
-
-.PHONY: rootfs
-rootfs:
-	./rootfs.sh
 
 ################################################################
 
