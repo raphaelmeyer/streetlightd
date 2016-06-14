@@ -1,6 +1,5 @@
 # vi
 *.swp
 
-/artifacts/
-/rootfs/
+/_artifacts/
 
