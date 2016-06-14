@@ -7,7 +7,6 @@ services:
 
 before_install:
   - docker build -t streetlightd-amd64 streetlightd-amd64/
-  - docker build -t streetlightd-raspbian streetlightd-raspbian/
 
 script:
   - make ci
